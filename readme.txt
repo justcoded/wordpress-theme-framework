@@ -72,6 +72,8 @@ Built in wrapper for Titan Framework to rapidly build Admin option pages
 = Theme Build Example =
 You can find theme build example in plugin folder under "themes" folder.
 
+Don't forget to copy `just-theme-framework-checker.php` as well!
+
 = Have a feedback? =
 Write to us on our github repository:
 https://github.com/justcoded/just-theme-framework
