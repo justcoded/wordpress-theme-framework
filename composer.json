@@ -1,5 +1,7 @@
 {
   "name": "justcoded/just-theme-framework",
+  "description": "Lightweight MVC theming framework for developers who want to better organize their own custom themes with an MVC approach.",
+  "keywords": ["plugin","wordpress","theme framework","mvc"],
   "type": "wordpress-plugin",
   "authors": [
     {
