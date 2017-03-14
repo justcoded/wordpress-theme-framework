@@ -60,7 +60,8 @@ if ( ! class_exists( 'JustThemeFrameworkChecker' ) ) {
 		 */
 		public function __construct() {
 
-			if ( ! is_admin() && ! $this->check_requirements() ) {
+			global $pagenow;
+			if ( ! is_admin() &&  'wp-login.php' !== $pagenow && ! $this->check_requirements() ) {
 				throw new Exception( 'Your theme requires Just Theme Framework and Titan Framework plugins to be installed and activated.' );
 			}
 			add_action( 'admin_notices', array( $this, 'display_requirements_admin_notice' ) );
@@ -100,7 +101,7 @@ if ( ! class_exists( 'JustThemeFrameworkChecker' ) ) {
 						esc_html( $plugin_details[0] ),
 						esc_attr( $plugin_details[1] )
 					);
-				} elseif ( ! $this->is_plugin_active( $plugin_file ) ) {
+				} elseif ( ! is_plugin_active( $plugin_file ) ) {
 					$warnings[] = sprintf( '<strong>%s</strong> plugin should be activated. <a href="%s">Manage Plugins &raquo;</a>',
 						esc_html( $plugin_details[0] ),
 						esc_attr( admin_url( 'plugins.php' ) )

@@ -92,5 +92,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 1.1 =
+	* Bug fix: Allow wp-login.php when theme is active, but requirements are not met.
+	* New: Support for ACF and JCF inside Models. Now you can use "field_{fieldname}" magic property or get_field() method inside models.
 = Version 1.0 =
 	* Our mini-framework launch.

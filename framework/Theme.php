@@ -374,7 +374,7 @@ abstract class Theme {
 	 * @return int
 	 */
 	public function filter_jpeg_quality() {
-		// limit jpeg_quality between 10 and 100%
+		// limit jpeg_quality between 10 and 100%.
 		$quality = max( 10, min( $this->jpeg_quality, 100 ) );
 		return $quality;
 	}
