@@ -1,0 +1,35 @@
+{
+  "name": "justcoded/just-theme-framework",
+  "type": "package",
+  "authors": [
+    {
+      "name": "Alex Prokopenko",
+      "email": "aprokopenko@justcoded.com",
+      "homepage": "http://justcoded.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "aprokopenko@justcoded.com",
+    "issues": "https://github.com/justcoded/just-theme-framework/issues"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    }
+  ],
+  "require": {
+    "php": ">=5.5",
+    "johnpbloch/wordpress": ">=4.7",
+    "composer/installers": "~1.0"
+  },
+  "extra": {
+    "installer-paths": {
+      "wp-content/plugins/just-theme-framework": ["justcoded/just-theme-framework"]
+    }
+  },
+  "license": [
+    "GPL-3.0+"
+  ]
+}
