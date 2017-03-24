@@ -35,9 +35,11 @@ class Autoptimize {
 	 */
 	public function __construct() {
 		// autooptimize patches.
-		add_filter( 'autoptimize_filter_js_unmovable', array( $this, 'js_unmovable' ) );
+		add_filter( 'autoptimize_filter_js_unmovable', array( $this, 'js_is_unmovable' ) );
 		add_filter( 'autoptimize_filter_js_domove', array( $this, 'js_move_first' ) );
 		add_filter( 'autoptimize_filter_js_movelast', array( $this, 'js_move_last' ) );
+		add_filter( 'autoptimize_filter_js_dontmove', array( $this, 'js_dontmove' ) );
+		add_filter( 'autoptimize_filter_js_exclude', array( $this, 'js_exclude' ) );
 
 		if ( MULTISITE ) {
 			$this->remember_main_blog_vars();
@@ -143,11 +145,11 @@ class Autoptimize {
 	/**
 	 * Enable back feature to move all scripts to bottom
 	 *
-	 * @param string $value script to be checked.
+	 * @param boolean $value Can scripts be moved between each other. Return false to allow movements.
 	 *
-	 * @return bool
+	 * @return boolean
 	 */
-	public function js_unmovable( $value ) {
+	public function js_is_unmovable( $value ) {
 		return false;
 	}
 
@@ -159,6 +161,9 @@ class Autoptimize {
 	 * @return array
 	 */
 	public function js_move_first( $scripts ) {
+		$scripts[] = '/jquery.js';
+		$scripts[] = '/jquery.min.js';
+		$scripts[] = 'var _wpcf7';
 		return $scripts;
 	}
 
@@ -172,4 +177,27 @@ class Autoptimize {
 	public function js_move_last( $scripts ) {
 		return $scripts;
 	}
+
+	/**
+	 * Add scripts which should not be moved at all.
+	 *
+	 * @param array $scripts Scripts to leave as is.
+	 *
+	 * @return array
+	 */
+	public function js_dontmove( $scripts ) {
+		return $scripts;
+	}
+
+	/**
+	 * Exclude scripts from optimization.
+	 *
+	 * @param string $exclude_js Comma separated list to be excluded from processing.
+	 *
+	 * @return array
+	 */
+	public function js_exclude( $exclude_js ) {
+		return $exclude_js;
+	}
+
 }
