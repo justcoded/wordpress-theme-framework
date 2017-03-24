@@ -92,7 +92,7 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
-= Version 1.1.1 =
+= Version 1.1.1 - 24 March 2017 =
 	* Improvements: Support of Autoptimize plugin improved, added more hooks. Set to move jquery.js, CF7 scripts first, just before optimized cached file.
 = Version 1.1 =
 	* Bug fix: Allow wp-login.php when theme is active, but requirements are not met.
