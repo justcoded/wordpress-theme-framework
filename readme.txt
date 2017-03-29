@@ -92,6 +92,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 1.1.2 - 29 March 2017 =
+	* Code style: Fixed code style according to latest WPCS 0.11
 = Version 1.1.1 - 24 March 2017 =
 	* Improvements: Support of Autoptimize plugin improved, added more hooks. Set to move jquery.js, CF7 scripts first, just before optimized cached file.
 = Version 1.1 =

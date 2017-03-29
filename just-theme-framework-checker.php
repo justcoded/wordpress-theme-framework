@@ -110,9 +110,9 @@ if ( ! class_exists( 'JustThemeFrameworkChecker' ) ) {
 			}
 
 			$html = '<div class="error"><h3>Please fix the errors below to use current activated theme:</h3><p>' . implode( '</p><p>', $warnings ) . '</p></div>';
-			echo $html;
+			echo wp_kses( $html, 'post' );
 		}
 	}
 
 	$_jtf_checker = new JustThemeFrameworkChecker();
-}
+} // End if().

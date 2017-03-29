@@ -189,7 +189,10 @@ abstract class Taxonomy {
 			'show_in_quick_edit' => $this->is_quick_editable,
 
 			'query_var' => $this->query_var,
-			'rewrite'   => array( 'slug' => $this::$SLUG, 'with_front' => ! $this->rewrite_singular ),
+			'rewrite'   => array(
+				'slug' => $this::$SLUG,
+				'with_front' => ! $this->rewrite_singular,
+			),
 		);
 
 		if ( ! empty( $this->capabilities ) ) {

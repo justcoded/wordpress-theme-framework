@@ -269,7 +269,7 @@ abstract class PostType {
 			'exclude_from_search' => ! $this->is_searchable,
 			'has_archive'         => $this->has_archive,
 
-			'show_ui'       => !empty($this->has_admin_menu),
+			'show_ui'       => ! empty( $this->has_admin_menu ),
 			'show_in_menu'  => $this->has_admin_menu,
 			'menu_position' => $this->admin_menu_pos,
 			'menu_icon'     => $this->admin_menu_icon,
@@ -322,10 +322,12 @@ abstract class PostType {
 	 * @return string  Modified template file path
 	 */
 	public function views( $template ) {
-		// Example of overwrite.
-		if ( is_singular( $this::$ID ) ) {
-			// TODO: place your code here.
-		}
+		/**
+		 * Example of overwrite:
+		 *  if ( is_singular( $this::$ID ) ) {
+		 *     $template = View::locate('section/template');
+		 * 	}
+		 */
 
 		return $template;
 	}

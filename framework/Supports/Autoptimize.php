@@ -83,7 +83,7 @@ class Autoptimize {
 	public function add_dns_prefetch( $content ) {
 		$prefetch_domains = array();
 
-		// find external scripts in LINK, SCRIPT, IMG tags
+		// find external scripts in LINK, SCRIPT, IMG tags.
 		$tags_matches = array();
 		if ( preg_match_all( '#<link.*>#Usmi', $content, $matches ) ) {
 			$tags_matches = array_merge( $tags_matches, $matches[0] );

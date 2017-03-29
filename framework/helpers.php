@@ -98,7 +98,7 @@ if ( ! function_exists( 'pa' ) ) {
 		$key   = $key['basename'] . ':' . $ar[0]['line'];
 		$print = array( $key => $mixed );
 		echo( '<pre>' . htmlentities( print_r( $print, 1 ) ) . '</pre>' );
-		if ( $stop == 1 ) {
+		if ( ! empty( $stop ) ) {
 			exit();
 		}
 	}

@@ -55,7 +55,7 @@ class View {
 		$content = ob_get_clean();
 
 		// reset query to protect header from unclosed query in the content.
-		wp_reset_query();
+		wp_reset_postdata();
 
 		// render under the existing context.
 		include array_pop( static::$_processing );

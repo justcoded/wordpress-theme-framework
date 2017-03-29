@@ -27,8 +27,8 @@ class JustCustomFields {
 	 *
 	 * @return string
 	 */
-	public function jcf_config_filepath($path, $source_settings) {
-		if ( $source_settings == Settings::CONF_SOURCE_FS_THEME ) {
+	public function jcf_config_filepath( $path, $source_settings ) {
+		if ( Settings::CONF_SOURCE_FS_THEME === $source_settings ) {
 			$path = get_stylesheet_directory() . '/config/just-custom-fields.json';
 		}
 		return $path;

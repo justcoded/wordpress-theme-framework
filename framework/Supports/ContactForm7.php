@@ -107,7 +107,7 @@ class ContactForm7 extends PostType {
 		$form_request['_REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'];
 
 		$post_content = implode( "\n", $form_request );
-		$post_title   = substr( strip_tags( implode( " * ", $form_request ) ), 0, 64 ) . '...';
+		$post_title   = substr( strip_tags( implode( ' * ', $form_request ) ), 0, 64 ) . '...';
 
 		$args = array(
 			'post_title'   => $post_title,
@@ -119,7 +119,7 @@ class ContactForm7 extends PostType {
 
 		$post_id = wp_insert_post( $args );
 
-		$form_request = base64_encode( json_encode( $form_request ) );
+		$form_request = base64_encode( wp_json_encode( $form_request ) );
 		add_post_meta( $post_id, 'form_request', ( $form_request ) );
 		add_post_meta( $post_id, 'remote_addr', $_SERVER['REMOTE_ADDR'] );
 		add_post_meta( $post_id, 'request_uri', $_SERVER['REQUEST_URI'] );
@@ -130,7 +130,7 @@ class ContactForm7 extends PostType {
 	/**
 	 * Create new columns in posts grid page
 	 *
-	 * @param $columns
+	 * @param array $columns Columns available in posts list.
 	 *
 	 * @return mixed
 	 */
@@ -147,7 +147,7 @@ class ContactForm7 extends PostType {
 	/**
 	 * Create new sortable columns in posts grid page
 	 *
-	 * @param $columns
+	 * @param array $columns Columns available in posts list.
 	 *
 	 * @return mixed
 	 */
@@ -160,7 +160,7 @@ class ContactForm7 extends PostType {
 	/**
 	 * Insert data into new columns
 	 *
-	 * @param $column
+	 * @param string $column Column to print data for.
 	 */
 	public function print_grid_data( $column ) {
 		global $post;
@@ -169,13 +169,13 @@ class ContactForm7 extends PostType {
 			case 'form_title':
 				$form_id    = wp_get_post_parent_id( $post->ID );
 				$form_title = get_the_title( $form_id );
-				echo $form_title;
+				echo wp_kses( $form_title, '' );
 				break;
 			case 'remote_addr':
-				echo get_post_meta( $post->ID, 'remote_addr', true );
+				echo esc_html( get_post_meta( $post->ID, 'remote_addr', true ) );
 				break;
 			case 'request_uri':
-				echo get_post_meta( $post->ID, 'request_uri', true );
+				echo esc_html( get_post_meta( $post->ID, 'request_uri', true ) );
 				break;
 		}
 	}
@@ -185,11 +185,14 @@ class ContactForm7 extends PostType {
 	 */
 	public function add_grid_filter_controls() {
 		global $typenow;
-		if ( $typenow != self::$ID ) {
+		if ( $typenow !== self::$ID ) {
 			return;
 		}
 
-		$forms_list = get_posts( array( 'post_type' => 'wpcf7_contact_form' ) );
+		$forms_list = get_posts( array(
+			'post_type' => 'wpcf7_contact_form',
+			)
+		);
 
 		$select = '<select name="parent_form">';
 		$select .= '<option value="">All Forms</option>';
@@ -205,13 +208,13 @@ class ContactForm7 extends PostType {
 	/**
 	 * Create query in posts filter
 	 *
-	 * @param \WP_Query $query
+	 * @param \WP_Query $query Current query object.
 	 *
 	 * @return bool
 	 */
 	public function apply_filter_query( $query ) {
 		global $pagenow;
-		if ( $pagenow != 'edit.php' || $query->query_vars['post_type'] !== self::$ID || empty( $_GET['parent_form'] ) ) {
+		if ( $pagenow !== 'edit.php' || $query->query_vars['post_type'] !== self::$ID || empty( $_GET['parent_form'] ) ) {
 			return false;
 		}
 
@@ -222,18 +225,16 @@ class ContactForm7 extends PostType {
 
 	/**
 	 * Add new custom metabox in single post
-	 *
 	 */
 	public function add_metabox() {
 		add_meta_box( 'form_request_info', __( 'Request Info', $this->textdomain ), array(
 			$this,
-			'render_form_request_fields'
+			'render_form_request_fields',
 		), self::$ID, 'normal', 'default' );
 	}
 
 	/**
 	 * Render form request in metabox
-	 *
 	 */
 	public function render_form_request_fields() {
 		global $post;
@@ -241,14 +242,14 @@ class ContactForm7 extends PostType {
 		$form_request = get_post_meta( $post->ID, 'form_request', true );
 		$form_request = json_decode( base64_decode( $form_request ), true );
 		if ( empty( $form_request ) ) {
-			print __( 'Unable to decode the response.', $this->textdomain );
+			esc_html_e( 'Unable to decode the response.', $this->textdomain );
 		}
 
 		$output = '';
 		$output .= '<table class="form-table">';
 
 		foreach ( $form_request as $key => $field ) {
-			if ( in_array( $key, $this->system_fields ) ) {
+			if ( in_array( $key, $this->system_fields, true ) ) {
 				continue;
 			}
 
@@ -270,14 +271,14 @@ class ContactForm7 extends PostType {
 		$remote_addr = get_post_meta( $post->ID, 'remote_addr', true );
 		$request_uri = get_post_meta( $post->ID, 'request_uri', true );
 
-		$output .= "<tfoot>
-			<tr>" . $this->print_field_label( 'IP Address' ) . "<td><span>" . esc_html( $remote_addr ) . "</span></td></tr> 
-			<tr>" . $this->print_field_label( 'Request Uri' ) . "<td><span>" . esc_html( $request_uri ) . "</span></td></tr> 
-		</tfoot>";
+		$output .= '<tfoot>
+			<tr>' . $this->print_field_label( 'IP Address' ) . '<td><span>' . esc_html( $remote_addr ) . '</span></td></tr> 
+			<tr>' . $this->print_field_label( 'Request Uri' ) . '<td><span>' . esc_html( $request_uri ) . '</span></td></tr> 
+		</tfoot>';
 
 		$output .= '</table>';
 
-		// few adjustments to post UI, unable to edit title and make Publish button read "Mark as read"
+		// few adjustments to post UI, unable to edit title and make Publish button read "Mark as read".
 		$output .= "<script>
 			jQuery('#save-post').hide();
 			jQuery('#publish').attr('value', 'Mark as read');
@@ -290,7 +291,7 @@ class ContactForm7 extends PostType {
 	/**
 	 * Prepare HTML for field label
 	 *
-	 * @param string $key
+	 * @param string $key Field key.
 	 *
 	 * @return string
 	 */

@@ -113,7 +113,7 @@ abstract class Theme {
 		add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
 		add_action( 'after_setup_theme', array( $this, 'register_widgets' ) );
 
-		add_filter('jpeg_quality', array( $this, 'filter_jpeg_quality') );
+		add_filter( 'jpeg_quality', array( $this, 'filter_jpeg_quality' ) );
 
 		// activate hooks to clean up rewrite rules.
 		add_action( 'after_switch_theme', array( $this, 'activate' ) );
@@ -136,7 +136,7 @@ abstract class Theme {
 		remove_action( 'wp_head', 'start_post_rel_link' );
 		remove_action( 'wp_head', 'index_rel_link' );
 		remove_action( 'wp_head', 'adjacent_posts_rel_link' );
-		add_action( 'wp_enqueue_scripts', array( $this, 'removeBaseStylesheet' ), 20 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'remove_base_stylesheet' ), 20 );
 		if ( ! is_admin() ) {
 			add_filter( 'script_loader_src', array( $this, 'remove_assets_query_string' ), 15, 1 );
 			add_filter( 'style_loader_src', array( $this, 'remove_assets_query_string' ), 15, 1 );
@@ -149,7 +149,7 @@ abstract class Theme {
 	/**
 	 * Remove default stylesheet
 	 */
-	public function removeBaseStylesheet() {
+	public function remove_base_stylesheet() {
 		/* @var $theme \WP_Theme */
 		$theme      = wp_get_theme();
 		$stylesheet = $theme->get_stylesheet();
@@ -311,7 +311,6 @@ abstract class Theme {
 			$base_uri = get_template_directory_uri() . '/assets/js/';
 		}
 
-
 		foreach ( $scripts as $filename ) {
 			wp_enqueue_script( '_jmvt-' . preg_replace( '/(\.(.+?))$/', '', $filename ), $base_uri . $filename, $dependencies, $this->version, true );
 		}
@@ -384,7 +383,10 @@ abstract class Theme {
 	 */
 	public function insert_rewrite_rules() {
 		global $wp_rewrite;
-		$non_wp_rules             = array( 'cms\/?$' => 'cms/wp-admin/', 'wp-admin\/?$' => 'cms/wp-admin/' );
+		$non_wp_rules             = array(
+			'cms\/?$' => 'cms/wp-admin/',
+			'wp-admin\/?$' => 'cms/wp-admin/',
+		);
 		$wp_rewrite->non_wp_rules = $non_wp_rules + $wp_rewrite->non_wp_rules;
 	}
 
