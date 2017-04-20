@@ -39,6 +39,14 @@ abstract class Theme {
 	public $post_thumbnails = true;
 
 	/**
+	 * Enable support SVG uploads.
+	 * Used with define( 'ALLOW_UNFILTERED_UPLOADS', true ) in wp-config.php
+	 *
+	 * @var boolean
+	 */
+	public $svg_uploads = true;
+
+	/**
 	 * Available image sizes in Media upload dialog to insert correctly resized image.
 	 *
 	 * @var array
@@ -230,6 +238,10 @@ abstract class Theme {
 			add_filter( 'show_admin_bar', '__return_false' );
 		}
 
+		if ( $this->svg_uploads ) {
+			add_filter( 'upload_mimes', array( $this, 'svg_mime_types' ) );
+		}
+
 		if ( ! empty( $this->html5 ) && is_array( $this->html5 ) ) {
 			add_theme_support( 'html5', $this->html5 );
 		}
@@ -376,6 +388,18 @@ abstract class Theme {
 		// limit jpeg_quality between 10 and 100%.
 		$quality = max( 10, min( $this->jpeg_quality, 100 ) );
 		return $quality;
+	}
+
+	/**
+	 * Add new mime type for uploads images
+	 *
+	 * @param array $mimes image mimes types.
+	 *
+	 * @return array
+	 */
+	public function svg_mime_types( $mimes ) {
+		$mimes['svg'] = 'image/svg+xml';
+		return $mimes;
 	}
 
 	/**
