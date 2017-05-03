@@ -39,12 +39,17 @@ abstract class Theme {
 	public $post_thumbnails = true;
 
 	/**
-	 * Enable support SVG uploads.
-	 * Used with define( 'ALLOW_UNFILTERED_UPLOADS', true ) in wp-config.php
+	 * Add allowed mime types for upload.
+	 * Will be added to a standard WordPress list.
 	 *
-	 * @var boolean
+	 * If you need SVG uploads, you should also add the line below to your `wp-config.php` file:
+	 *      define( 'ALLOW_UNFILTERED_UPLOADS', true )
+	 *
+	 * @var array
 	 */
-	public $svg_uploads = true;
+	public $upload_mime_types = array(
+		'svg' => 'image/svg+xml',
+	);
 
 	/**
 	 * Available image sizes in Media upload dialog to insert correctly resized image.
@@ -238,8 +243,8 @@ abstract class Theme {
 			add_filter( 'show_admin_bar', '__return_false' );
 		}
 
-		if ( $this->svg_uploads ) {
-			add_filter( 'upload_mimes', array( $this, 'svg_mime_types' ) );
+		if ( $this->upload_mime_types ) {
+			add_filter( 'upload_mimes', array( $this, 'add_upload_mimes' ) );
 		}
 
 		if ( ! empty( $this->html5 ) && is_array( $this->html5 ) ) {
@@ -391,14 +396,17 @@ abstract class Theme {
 	}
 
 	/**
-	 * Add new mime type for uploads images
+	 * Filters list of allowed mime types and file extensions.
+	 * By default we add new extensions, which are defined in $this->upload_mime_types property
 	 *
-	 * @param array $mimes image mimes types.
+	 * @param array $mimes    Mime types keyed by the file extension regex corresponding to
+	 *                        those types. 'swf' and 'exe' removed from full list. 'htm|html' also
+	 *                        removed depending on '$user' capabilities.
 	 *
 	 * @return array
 	 */
-	public function svg_mime_types( $mimes ) {
-		$mimes['svg'] = 'image/svg+xml';
+	public function add_upload_mimes( $mimes ) {
+		$mimes = array_merge( $mimes, $this->upload_mime_types );
 		return $mimes;
 	}
 
