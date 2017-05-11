@@ -1,5 +1,5 @@
 <?php
-namespace JustCoded\ThemeFramework\SOPanels;
+namespace JustCoded\ThemeFramework\PageBuilder\Layouts;
 
 /**
  * Class RowLayout

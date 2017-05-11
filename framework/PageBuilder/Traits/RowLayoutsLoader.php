@@ -1,20 +1,67 @@
 <?php
 
 
-namespace JustCoded\ThemeFramework\SOPanels\Traits;
+namespace JustCoded\ThemeFramework\PageBuilder\Traits;
 
+
+use JustCoded\ThemeFramework\PageBuilder\Layouts\RowLayout;
 
 trait RowLayoutsLoader {
 	/**
-	 * Adjust Page Builder Layout group options.
-	 * Remove standard fields for margin/gutter/padding/strech.
-	 * Add custom Row Layout which will affect row/cell classes
+	 * Default RowLayout to be loaded if it's not specified by Row settings manually
+	 *
+	 * @var string
+	 */
+	public $default_row_layout = '\JustCoded\ThemeFramework\PageBuilder\RwdRowLayout';
+
+	/**
+	 * Define is layout currently in use for specific row.
+	 *
+	 * @var null|RowLayout
+	 */
+	public $_row_layout = null;
+
+	/**
+	 * RowLayoutsLoader contructor
+	 * (have to be called inside class constructor)
+	 */
+	public function row_layouts_loader() {
+		// custom row layout option.
+		add_filter( 'siteorigin_panels_row_style_fields', array( $this, 'add_row_options' ) );
+
+		// custom styles hooks.
+		add_filter( 'siteorigin_panels_row_attributes', array( $this, 'set_row_wrapper_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_row_style_attributes', array( $this, 'set_row_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_row_cell_attributes', array( $this, 'set_cell_wrapper_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_cell_style_attributes', array( $this, 'set_cell_attributes' ), 10, 2 );
+
+		add_filter( 'siteorigin_panels_before_row', array( $this, 'set_row_before' ), 10, 3 );
+		add_filter( 'siteorigin_panels_after_row', array( $this, 'set_row_after' ), 10, 3 );
+
+		// registers default layout.
+		if ( ! empty( $this->default_row_layout ) ) {
+			$this->register_row_layout( $this->default_row_layout, 'Default' );
+		}
+	}
+
+	/**
+	 * Adds new layout option.
 	 *
 	 * @param array $fields siteorigin standard fields.
 	 *
 	 * @return array modified fields.
 	 */
-	abstract public function update_row_style_fields( $fields );
+	public function add_row_options( $fields ) {
+		$layouts                = $this->get_list_layouts();
+		$fields['row_template'] = array(
+			'name'     => 'Row layout',
+			'type'     => 'select',
+			'group'    => 'layout',
+			'options'  => $layouts,
+			'priority' => 10,
+		);
+		return $fields;
+	}
 
 	/**
 	 * Register row layouts available
@@ -59,15 +106,9 @@ trait RowLayoutsLoader {
 	 *
 	 * @param array $style_data  style settings.
 	 *
-	 * @return SiteOriginLayout|null
+	 * @return RowLayout|null
 	 */
 	protected function check_layout_in_use( $style_data ) {
-		if ( isset( $style_data['style'] ) ) {
-			$style_data = $style_data['style'];
-		} elseif ( isset( $style_data['grids'][ $this->_row_index ]['style'] ) ) {
-			$style_data = $style_data['grids'][ $this->_row_index ]['style'];
-		}
-
 		if ( ! empty( $style_data['row_template'] ) ) {
 			$layout_key = $style_data['row_template'];
 			if ( isset( $this->layouts[ $layout_key ] ) ) {
@@ -89,19 +130,8 @@ trait RowLayoutsLoader {
 	 * @return mixed
 	 */
 	public function set_row_wrapper_attributes( $attributes, $panel_data ) {
-		$this->_row_index ++;
-		$this->_col_index = - 1;
-
-		// remove siteorigin id, class and apply our default.
-		if ( isset( $attributes['id'] ) ) {
-			unset( $attributes['id'] );
-		}
-		$attributes['class'] = 'jpnl-row-wrap jpnl-cols-' . $panel_data['cells'];
-
-		if ( $layout = $this->check_layout_in_use( $panel_data ) ) {
-			$layout->row_index = $this->_row_index;
-			$layout->col_index = $this->_col_index;
-			$attributes        = $layout->row_wrapper( $attributes, $panel_data );
+		if ( $this->_row_layout ) {
+			$attributes        = $this->_row_layout->row_wrapper( $attributes, $panel_data );
 		}
 
 		return $attributes;
@@ -109,6 +139,7 @@ trait RowLayoutsLoader {
 
 	/**
 	 * Row hook callback
+	 * This one called before "wrapper" because of SO logic.
 	 *
 	 * @param array $attributes  row div attributes.
 	 * @param array $style_data  row style settings array.
@@ -116,14 +147,11 @@ trait RowLayoutsLoader {
 	 * @return mixed
 	 */
 	public function set_row_attributes( $attributes, $style_data ) {
-		// remove siteorigin id, class and apply our default.
-		if ( isset( $attributes['id'] ) ) {
-			unset( $attributes['id'] );
-		}
-		$attributes['class'] = array( 'jpnl-row' );
-
-		if ( $layout = $this->check_layout_in_use( $style_data ) ) {
-			$attributes = $layout->row( $attributes, $style_data );
+		$this->_row_layout = $this->check_layout_in_use( $style_data );
+		if ( $this->_row_layout ) {
+			$this->_row_layout->row_index = $this->_row_index;
+			$this->_row_layout->col_index = $this->_col_index;
+			$attributes = $this->_row_layout->row( $attributes, $style_data );
 		}
 
 		return $attributes;
@@ -138,21 +166,10 @@ trait RowLayoutsLoader {
 	 * @return mixed
 	 */
 	public function set_cell_wrapper_attributes( $attributes, $panel_data ) {
-		$this->_col_index ++;
-		$this->_cell_index ++;
-		$this->_widget_index = - 1;
-
-		// remove siteorigin id, class and apply our default.
-		if ( isset( $attributes['id'] ) ) {
-			unset( $attributes['id'] );
-		}
-		$attributes['class'] = 'jpnl-cell-wrap jpnl-col-index-' . $this->_col_index;
-
-		if ( $layout = $this->check_layout_in_use( $panel_data ) ) {
-
-			$layout->col_index  = $this->_col_index;
-			$layout->cell_index = $this->_cell_index;
-			$attributes         = $layout->cell_wrapper( $attributes, $panel_data );
+		if ( $this->_row_layout ) {
+			$this->_row_layout->col_index  = $this->_col_index;
+			$this->_row_layout->cell_index = $this->_cell_index;
+			$attributes = $this->_row_layout->cell_wrapper( $attributes, $panel_data );
 		}
 
 		return $attributes;
@@ -167,14 +184,8 @@ trait RowLayoutsLoader {
 	 * @return mixed
 	 */
 	public function set_cell_attributes( $attributes, $style_data ) {
-		// remove siteorigin id, class and apply our default.
-		if ( isset( $attributes['id'] ) ) {
-			unset( $attributes['id'] );
-		}
-		$attributes['class'] = array( 'jpnl-cell' );
-
-		if ( $layout = $this->check_layout_in_use( $style_data ) ) {
-			$attributes = $layout->cell( $attributes, $style_data );
+		if ( $this->_row_layout ) {
+			$attributes = $this->_row_layout->cell( $attributes, $style_data );
 		}
 
 		return $attributes;
@@ -190,8 +201,8 @@ trait RowLayoutsLoader {
 	 * @return mixed
 	 */
 	public function set_row_before( $html, $panel_data, $grid_data ) {
-		if ( $layout = $this->check_layout_in_use( $panel_data ) ) {
-			$html = $layout->before_row( $html, $panel_data, $grid_data );
+		if ( $this->_row_layout ) {
+			$html = $this->_row_layout->before_row( $html, $panel_data, $grid_data );
 		}
 
 		return $html;
@@ -207,12 +218,11 @@ trait RowLayoutsLoader {
 	 * @return mixed
 	 */
 	public function set_row_after( $html, $panel_data, $grid_data ) {
-		if ( $layout = $this->check_layout_in_use( $panel_data ) ) {
-			$html = $layout->after_row( $html, $panel_data, $grid_data );
+		if ( $this->_row_layout ) {
+			$html = $this->_row_layout->after_row( $html, $panel_data, $grid_data );
 		}
 
 		return $html;
 	}
-
 
 }

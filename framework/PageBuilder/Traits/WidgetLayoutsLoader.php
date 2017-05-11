@@ -1,18 +1,49 @@
 <?php
 
 
-namespace JustCoded\ThemeFramework\SOPanels\Traits;
+namespace JustCoded\ThemeFramework\PageBuilder\Traits;
 
+use JustCoded\ThemeFramework\PageBuilder\Layouts\WidgetLayout;
 
 trait WidgetLayoutsLoader {
+
 	/**
-	 * Modify Widget object fields, which are shown at the right of widget editing
+	 * Current widget layout in use.
 	 *
-	 * @param array $fields standard fields options.
-	 *
-	 * @return array modified fields options.
+	 * @var null|WidgetLayout
 	 */
-	abstract public function update_widget_style_fields( $fields );
+	public $_widget_layout = null;
+
+	/**
+	 * WidgetLayoutsLoader contructor
+	 * (have to be called inside class constructor)
+	 */
+	public function widget_layouts_loader() {
+		add_filter( 'siteorigin_panels_widget_style_fields', array( $this, 'add_widget_options' ), 10, 2 );
+		add_filter( 'siteorigin_panels_widget_style_attributes', array( $this, 'set_widget_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_widget_classes', array( $this, 'set_widget_wrapper_classes' ), 10, 3 );
+	}
+
+	/**
+	 * Adds new layout option.
+	 *
+	 * @param array $fields siteorigin standard fields.
+	 *
+	 * @return array modified fields.
+	 */
+	public function add_widget_options( $fields ) {
+		$layouts = $this->get_list_widgets();
+		if ( ! empty( $layouts ) ) {
+			$fields['widget_template'] = array(
+				'name'     => 'Widget layout',
+				'type'     => 'select',
+				'group'    => 'layout',
+				'options'  => $layouts,
+				'priority' => 10,
+			);
+		}
+		return $fields;
+	}
 
 	/**
 	 * Register widget layouts available
@@ -26,6 +57,22 @@ trait WidgetLayoutsLoader {
 
 		$widget_layout                        = new $class_name;
 		$this->widgets[ $widget_layout::$ID ] = $widget_layout;
+	}
+
+	/**
+	 * Return list of available layouts
+	 *
+	 * @return array   (id, title) pairs
+	 */
+	protected function get_list_widgets() {
+		$list = array(
+			'' => 'Default',
+		);
+		foreach ( $this->widgets as $key => $lt ) {
+			$list[ $key ] = $lt::$TITLE;
+		}
+
+		return $list;
 	}
 
 	/**
@@ -57,20 +104,12 @@ trait WidgetLayoutsLoader {
 	 * @return array
 	 */
 	public function set_widget_attributes( $attributes, $style_data ) {
-		// clean up all. this disable the div at all.
-		if ( isset( $attributes['id'] ) ) {
-			unset( $attributes['id'] );
-		}
-		if ( isset( $attributes['class'] ) ) {
-			unset( $attributes['class'] );
-		}
-
-		$this->_widget_index ++;
 		$this->_widget_styles = $style_data;
 
-		if ( $layout = $this->check_widget_layout_in_use( $style_data ) ) {
-			$layout->widget_index = $this->_widget_index;
-			$attributes           = $layout->widget( $attributes, $style_data );
+		$this->_widget_layout = $this->check_widget_layout_in_use( $style_data );
+		if ( $this->_widget_layout ) {
+			$this->_widget_layout->widget_index = $this->_widget_index;
+			$attributes  = $this->_widget_layout->widget( $attributes, $style_data );
 		}
 
 		return $attributes;
@@ -86,31 +125,11 @@ trait WidgetLayoutsLoader {
 	 * @return array
 	 */
 	public function set_widget_wrapper_classes( $classes, $widget, $instance ) {
-		$classes = array(
-			'jpnl-widget-wrapper',
-			'jpnl-wi-' . $this->_widget_index,
-		);
-		if ( $layout = $this->check_widget_layout_in_use( $this->_widget_styles ) ) {
-			$classes = $layout->wrapper_classes( $classes, $this->_widget_styles, $widget, $instance );
+		if ( $this->_widget_layout ) {
+			$classes = $this->_widget_layout->wrapper_classes( $classes, $this->_widget_styles, $widget, $instance );
 		}
 		$this->_widget_styles = null;
 
 		return $classes;
-	}
-
-	/**
-	 * Return list of available layouts
-	 *
-	 * @return array   (id, title) pairs
-	 */
-	protected function get_list_widgets() {
-		$list = array(
-			'' => 'Default',
-		);
-		foreach ( $this->widgets as $key => $lt ) {
-			$list[ $key ] = $lt::$TITLE;
-		}
-
-		return $list;
 	}
 }
