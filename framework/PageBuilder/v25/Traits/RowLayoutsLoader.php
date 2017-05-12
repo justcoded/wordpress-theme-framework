@@ -8,7 +8,7 @@ trait RowLayoutsLoader {
 	/**
 	 * Registered row layouts
 	 *
-	 * @var array
+	 * @var RowLayout[]
 	 */
 	protected $layouts = array();
 
@@ -65,6 +65,14 @@ trait RowLayoutsLoader {
 			'options'  => $layouts,
 			'priority' => 10,
 		);
+
+		// add additional options from layouts.
+		foreach ( $this->layouts as $layout ) {
+			if ( $options = $layout->options() ) {
+				$fields = array_merge( $fields, $options );
+			}
+		}
+
 		return $fields;
 	}
 

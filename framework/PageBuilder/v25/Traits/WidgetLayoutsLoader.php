@@ -55,6 +55,14 @@ trait WidgetLayoutsLoader {
 				'priority' => 10,
 			);
 		}
+
+		// add additional options from layouts.
+		foreach ( $this->widgets as $layout ) {
+			if ( $options = $layout->options() ) {
+				$fields = array_merge( $fields, $options );
+			}
+		}
+
 		return $fields;
 	}
 

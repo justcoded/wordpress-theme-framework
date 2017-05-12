@@ -42,6 +42,28 @@ class WidgetLayout {
 	}
 
 	/**
+	 * Additional options to add into Row option controls
+	 *
+	 * Field element should has a format similar to this:
+	 *
+	 *      '{field}' => array(
+	 *				'name'     => '{Field Title}',
+	 *				'type'     => 'select',  // available: text, select, color, measurement
+	 *				'group'    => 'layout',  // available: attributes, layout, design
+	 *				'options'  => array(     // select options
+	 *				    'No',
+	 *				    'Yes',
+	 *			    ),
+	 *				'priority' => 15,        // order weigth
+	 *			),
+	 *
+	 * @return array
+	 */
+	public function options() {
+		return array();
+	}
+
+	/**
 	 * Adjust html attributes widget row div
 	 *
 	 * @param array $attributes  html attributes.
