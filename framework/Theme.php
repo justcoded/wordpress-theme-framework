@@ -124,7 +124,7 @@ abstract class Theme {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
 
 		add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
-		add_action( 'after_setup_theme', array( $this, 'register_widgets' ) );
+		add_action( 'widgets_init', array( $this, 'register_widgets' ) );
 
 		add_filter( 'jpeg_quality', array( $this, 'filter_jpeg_quality' ) );
 

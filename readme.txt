@@ -92,6 +92,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 1.2.1 - 12 May 2017 =
+	* Improvement: Change wp hook to widgets_init for register_widget method
 = Version 1.2 - 12 May 2017 =
 	* Refactor: Update Page Builder classes to work with new Site Origin Page Builder 2.5+
 	* New: Added version folder prefix for Page Builder to be able to have different patches inside in future.
