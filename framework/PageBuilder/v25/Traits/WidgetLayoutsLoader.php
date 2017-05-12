@@ -1,18 +1,31 @@
 <?php
 
+namespace JustCoded\ThemeFramework\PageBuilder\v25\Traits;
 
-namespace JustCoded\ThemeFramework\PageBuilder\Traits;
-
-use JustCoded\ThemeFramework\PageBuilder\Layouts\WidgetLayout;
+use JustCoded\ThemeFramework\PageBuilder\v25\Layouts\WidgetLayout;
 
 trait WidgetLayoutsLoader {
+
+	/**
+	 * Registered widgets layouts
+	 *
+	 * @var array
+	 */
+	protected $widgets = array();
 
 	/**
 	 * Current widget layout in use.
 	 *
 	 * @var null|WidgetLayout
 	 */
-	public $_widget_layout = null;
+	protected $_widget_layout = null;
+
+	/**
+	 * Widget styles settings cache variable
+	 *
+	 * @var null
+	 */
+	protected $_widget_styles = null;
 
 	/**
 	 * WidgetLayoutsLoader contructor

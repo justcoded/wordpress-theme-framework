@@ -1,9 +1,9 @@
 <?php
-namespace JustCoded\ThemeFramework\PageBuilder;
+namespace JustCoded\ThemeFramework\PageBuilder\v25;
 
-use JustCoded\ThemeFramework\PageBuilder\Traits\HtmlCleanup;
-use JustCoded\ThemeFramework\PageBuilder\Traits\RowLayoutsLoader;
-use JustCoded\ThemeFramework\PageBuilder\Traits\WidgetLayoutsLoader;
+use JustCoded\ThemeFramework\PageBuilder\v25\Traits\HtmlCleanup;
+use JustCoded\ThemeFramework\PageBuilder\v25\Traits\RowLayoutsLoader;
+use JustCoded\ThemeFramework\PageBuilder\v25\Traits\WidgetLayoutsLoader;
 
 /**
  * Class SiteOriginPanelsLoader
@@ -54,21 +54,7 @@ class PageBuilderLoader {
 	 *
 	 * @var string
 	 */
-	public $default_layout_namespace = '\JustCoded\ThemeFramework\PageBuilder';
-
-	/**
-	 * Registered row layouts
-	 *
-	 * @var array
-	 */
-	protected $layouts = array();
-
-	/**
-	 * Registered widgets layouts
-	 *
-	 * @var array
-	 */
-	protected $widgets = array();
+	public $default_layout_namespace = '\JustCoded\ThemeFramework\PageBuilder\v25';
 
 	/**
 	 * Current row index to be rendered
@@ -97,13 +83,6 @@ class PageBuilderLoader {
 	 * @var int
 	 */
 	protected $_widget_index = - 1;
-
-	/**
-	 * Widget styles settings cache variable
-	 *
-	 * @var null
-	 */
-	protected $_widget_styles = null;
 
 	/**
 	 * Main class constructor

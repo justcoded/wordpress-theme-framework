@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: alex
- * Date: 5/11/17
- * Time: 16:35
- */
 
-namespace JustCoded\ThemeFramework\PageBuilder\Traits;
-
+namespace JustCoded\ThemeFramework\PageBuilder\v25\Traits;
 
 trait HtmlCleanup {
 
@@ -62,7 +55,7 @@ trait HtmlCleanup {
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = 'pc-container';
+		$attributes['class'] = 'pb-container';
 
 		return $attributes;
 	}
@@ -79,7 +72,7 @@ trait HtmlCleanup {
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = 'pc-row-wrapper pc-row-cols-' . count( $panel_data['cells'] );
+		$attributes['class'] = 'pb-row-wrapper pb-row-cols-' . count( $panel_data['cells'] );
 
 		return $attributes;
 	}
@@ -99,7 +92,7 @@ trait HtmlCleanup {
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = array( 'pc-row' );
+		$attributes['class'] = array( 'pb-row' );
 
 		return $attributes;
 	}
@@ -120,7 +113,7 @@ trait HtmlCleanup {
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = 'pc-col-wrapper pc-col-num-' . ( $this->_col_index + 1 );
+		$attributes['class'] = 'pb-col-wrapper pb-col-num-' . ( $this->_col_index + 1 );
 
 		return $attributes;
 	}
@@ -137,7 +130,7 @@ trait HtmlCleanup {
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = array( 'pc-col' );
+		$attributes['class'] = array( 'pb-col' );
 
 		return $attributes;
 	}
@@ -174,7 +167,7 @@ trait HtmlCleanup {
 		}
 
 		$class = preg_replace( '/(so-panel\s|widget\s|panel\-)/', '', $attributes['class'] );
-		$attributes['class'] = 'pc-widget-wrapper pc-widget-num-' . ( $this->_widget_index + 1 ) . ' ' . $class;
+		$attributes['class'] = 'pb-widget-wrapper pb-widget-num-' . ( $this->_widget_index + 1 ) . ' ' . $class;
 
 		return $attributes;
 	}
@@ -191,7 +184,7 @@ trait HtmlCleanup {
 	public function clean_widget_wrapper_classes( $classes, $widget ) {
 		$this->_widget_index ++;
 
-		$classes['class'] = array( 'pc-widget' );
+		$classes['class'] = array( 'pb-widget' );
 		return $classes;
 	}
 }

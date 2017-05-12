@@ -1,5 +1,5 @@
 <?php
-namespace JustCoded\ThemeFramework\PageBuilder\Layouts;
+namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
 
 /**
  * Class Grid12RowLayout
@@ -41,7 +41,7 @@ class RwdRowLayout extends RowLayout {
 		$grid = $panel_data['grids'][ $cell['grid'] ];
 
 		$cell_postfix    = round( $this->grid_size_columns * $cell['weight'] );
-		$bootstrap_class = 'pc-col-sz-' . $cell_postfix;
+		$bootstrap_class = 'pb-col-sz-' . $cell_postfix;
 
 		$attributes['class'] .= ' ' . $bootstrap_class;
 

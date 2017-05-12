@@ -1,25 +1,30 @@
 <?php
 
+namespace JustCoded\ThemeFramework\PageBuilder\v25\Traits;
 
-namespace JustCoded\ThemeFramework\PageBuilder\Traits;
-
-
-use JustCoded\ThemeFramework\PageBuilder\Layouts\RowLayout;
+use JustCoded\ThemeFramework\PageBuilder\v25\Layouts\RowLayout;
 
 trait RowLayoutsLoader {
+	/**
+	 * Registered row layouts
+	 *
+	 * @var array
+	 */
+	protected $layouts = array();
+
 	/**
 	 * Default RowLayout to be loaded if it's not specified by Row settings manually
 	 *
 	 * @var string
 	 */
-	public $default_row_layout = '\JustCoded\ThemeFramework\PageBuilder\RwdRowLayout';
+	public $default_row_layout = '\JustCoded\ThemeFramework\PageBuilder\v25\RwdRowLayout';
 
 	/**
 	 * Define is layout currently in use for specific row.
 	 *
 	 * @var null|RowLayout
 	 */
-	public $_row_layout = null;
+	protected $_row_layout = null;
 
 	/**
 	 * RowLayoutsLoader contructor

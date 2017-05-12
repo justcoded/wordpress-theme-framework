@@ -1,5 +1,5 @@
 <?php
-namespace JustCoded\ThemeFramework\PageBuilder\Layouts;
+namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
 
 /**
  * Class WidgetLayout
