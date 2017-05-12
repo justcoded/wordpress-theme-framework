@@ -1,5 +1,5 @@
 <?php
-namespace JustCoded\ThemeFramework\SOPanels;
+namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
 
 /**
  * Class WidgetLayout
@@ -42,17 +42,25 @@ class WidgetLayout {
 	}
 
 	/**
-	 * Replace wrapper classes string
+	 * Additional options to add into Row option controls
 	 *
-	 * @param array  $classes html attribute.
-	 * @param array  $style_data selected style options.
-	 * @param string $widget widget class name.
-	 * @param array  $instance widget data.
+	 * Field element should has a format similar to this:
+	 *
+	 *      '{field}' => array(
+	 *				'name'     => '{Field Title}',
+	 *				'type'     => 'select',  // available: text, select, color, measurement
+	 *				'group'    => 'layout',  // available: attributes, layout, design
+	 *				'options'  => array(     // select options
+	 *				    'No',
+	 *				    'Yes',
+	 *			    ),
+	 *				'priority' => 15,        // order weigth
+	 *			),
 	 *
 	 * @return array
 	 */
-	public function wrapper_classes( array $classes, $style_data, $widget, $instance ) {
-		return $classes;
+	public function options() {
+		return array();
 	}
 
 	/**
@@ -65,6 +73,20 @@ class WidgetLayout {
 	 */
 	public function widget( $attributes, $style_data ) {
 		return $attributes;
+	}
+
+	/**
+	 * Replace inner div classes string
+	 *
+	 * @param array  $classes html attribute.
+	 * @param array  $style_data selected style options.
+	 * @param string $widget widget class name.
+	 * @param array  $instance widget data.
+	 *
+	 * @return array
+	 */
+	public function widget_inner_classes( array $classes, $style_data, $widget, $instance ) {
+		return $classes;
 	}
 
 }

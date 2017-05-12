@@ -92,6 +92,12 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 1.2 - 12 May 2017 =
+	* Refactor: Update Page Builder classes to work with new Site Origin Page Builder 2.5+
+	* New: Added version folder prefix for Page Builder to be able to have different patches inside in future.
+	* New: Page Builder Row/Widget layouts changed structure to container - style container (instead of wrapper - container) to match origin Page Builder logic
+	* New: Base class for quick widgets creating based on Site Origin Widgets Bundle pack
+	* New: Autoptimize class has new exceptions for Wordfence plugin by default.
 = Version 1.1.3 - 20 April 2017 =
 	* New: Enables SVG uploads support by default
 = Version 1.1.2 - 29 March 2017 =

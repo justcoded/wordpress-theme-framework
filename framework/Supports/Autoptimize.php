@@ -175,6 +175,9 @@ class Autoptimize {
 	 * @return array
 	 */
 	public function js_move_last( $scripts ) {
+		// Wordfence plugin scripts.
+		$scripts[] = 'hid';
+		$scripts[] = 'wordfence_logHuman';
 		return $scripts;
 	}
 
