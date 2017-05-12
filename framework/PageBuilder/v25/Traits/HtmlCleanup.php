@@ -14,13 +14,13 @@ trait HtmlCleanup {
 
 		// html attributes filters.
 		add_filter( 'siteorigin_panels_layout_attributes', array( $this, 'clean_panels_container_attributes' ), 10, 3 );
-		add_filter( 'siteorigin_panels_row_attributes', array( $this, 'clean_row_wrapper_attributes' ), 10, 2 );
-		add_filter( 'siteorigin_panels_row_style_attributes', array( $this, 'clean_row_attributes' ), 10, 2 );
-		add_filter( 'siteorigin_panels_row_cell_attributes', array( $this, 'clean_cell_wrapper_attributes' ), 10, 2 );
-		add_filter( 'siteorigin_panels_cell_style_attributes', array( $this, 'clean_cell_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_row_attributes', array( $this, 'clean_row_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_row_style_attributes', array( $this, 'clean_row_inner_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_row_cell_attributes', array( $this, 'clean_cell_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_cell_style_attributes', array( $this, 'clean_cell_inner_attributes' ), 10, 2 );
 
 		add_filter( 'siteorigin_panels_widget_attributes', array( $this, 'clean_widget_attributes' ), 10, 2 );
-		add_filter( 'siteorigin_panels_widget_style_attributes', array( $this, 'clean_widget_wrapper_classes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_widget_style_attributes', array( $this, 'clean_widget_inner_classes' ), 10, 2 );
 
 		add_filter( 'siteorigin_panels_row_style_classes', array( $this, 'clean_css_classes' ) );
 		add_filter( 'siteorigin_panels_cell_style_classes', array( $this, 'clean_css_classes' ) );
@@ -68,31 +68,32 @@ trait HtmlCleanup {
 	 *
 	 * @return mixed
 	 */
-	public function clean_row_wrapper_attributes( $attributes, $panel_data ) {
+	public function clean_row_attributes( $attributes, $panel_data ) {
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = 'pb-row-wrapper pb-row-cols-' . count( $panel_data['cells'] );
+		$attributes['class'] = 'pb-row pb-row-cols-' . count( $panel_data['cells'] );
 
 		return $attributes;
 	}
 
 	/**
 	 * Row hook callback
+	 * called before row attributes hooks.
 	 *
 	 * @param array $attributes row div attributes.
 	 * @param array $style_data row style settings array.
 	 *
 	 * @return mixed
 	 */
-	public function clean_row_attributes( $attributes, $style_data ) {
+	public function clean_row_inner_attributes( $attributes, $style_data ) {
 		$this->_row_index ++;
 		$this->_col_index = - 1;
 
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = array( 'pb-row' );
+		$attributes['class'] = array( 'pb-row-inner' );
 
 		return $attributes;
 	}
@@ -105,7 +106,7 @@ trait HtmlCleanup {
 	 *
 	 * @return mixed
 	 */
-	public function clean_cell_wrapper_attributes( $attributes, $panel_data ) {
+	public function clean_cell_attributes( $attributes, $panel_data ) {
 		$this->_col_index ++;
 		$this->_cell_index ++;
 		$this->_widget_index = - 1;
@@ -113,7 +114,7 @@ trait HtmlCleanup {
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = 'pb-col-wrapper pb-col-num-' . ( $this->_col_index + 1 );
+		$attributes['class'] = 'pb-cell pb-cell-num-' . ( $this->_col_index + 1 );
 
 		return $attributes;
 	}
@@ -126,11 +127,11 @@ trait HtmlCleanup {
 	 *
 	 * @return mixed
 	 */
-	public function clean_cell_attributes( $attributes, $style_data ) {
+	public function clean_cell_inner_attributes( $attributes, $style_data ) {
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = array( 'pb-col' );
+		$attributes['class'] = array( 'pb-cell-inner' );
 
 		return $attributes;
 	}
@@ -166,8 +167,8 @@ trait HtmlCleanup {
 			unset( $attributes['id'] );
 		}
 
-		$class = preg_replace( '/(so-panel\s|widget\s|panel\-)/', '', $attributes['class'] );
-		$attributes['class'] = 'pb-widget-wrapper pb-widget-num-' . ( $this->_widget_index + 1 ) . ' ' . $class;
+		$class = preg_replace( '/(so-panel\s|widget\s|panel\-|first-child|last-child)/', '', $attributes['class'] );
+		$attributes['class'] = 'pb-widget pb-widget-num-' . ( $this->_widget_index + 1 ) . ' ' . trim( $class );
 
 		return $attributes;
 	}
@@ -181,10 +182,10 @@ trait HtmlCleanup {
 	 *
 	 * @return array
 	 */
-	public function clean_widget_wrapper_classes( $classes, $widget ) {
+	public function clean_widget_inner_classes( $classes, $widget ) {
 		$this->_widget_index ++;
 
-		$classes['class'] = array( 'pb-widget' );
+		$classes['class'] = array( 'pb-widget-inner' );
 		return $classes;
 	}
 }

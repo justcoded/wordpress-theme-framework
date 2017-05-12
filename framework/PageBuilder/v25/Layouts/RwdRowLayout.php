@@ -36,7 +36,7 @@ class RwdRowLayout extends RowLayout {
 	 *
 	 * @return array    update attributes
 	 */
-	public function cell_wrapper( $attributes, $panel_data ) {
+	public function cell( $attributes, $panel_data ) {
 		$cell = $panel_data['grid_cells'][ $this->cell_index ];
 		$grid = $panel_data['grids'][ $cell['grid'] ];
 

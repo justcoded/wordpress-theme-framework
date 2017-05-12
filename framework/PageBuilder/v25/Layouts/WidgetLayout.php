@@ -42,20 +42,6 @@ class WidgetLayout {
 	}
 
 	/**
-	 * Replace wrapper classes string
-	 *
-	 * @param array  $classes html attribute.
-	 * @param array  $style_data selected style options.
-	 * @param string $widget widget class name.
-	 * @param array  $instance widget data.
-	 *
-	 * @return array
-	 */
-	public function wrapper_classes( array $classes, $style_data, $widget, $instance ) {
-		return $classes;
-	}
-
-	/**
 	 * Adjust html attributes widget row div
 	 *
 	 * @param array $attributes  html attributes.
@@ -65,6 +51,20 @@ class WidgetLayout {
 	 */
 	public function widget( $attributes, $style_data ) {
 		return $attributes;
+	}
+
+	/**
+	 * Replace inner div classes string
+	 *
+	 * @param array  $classes html attribute.
+	 * @param array  $style_data selected style options.
+	 * @param string $widget widget class name.
+	 * @param array  $instance widget data.
+	 *
+	 * @return array
+	 */
+	public function widget_inner_classes( array $classes, $style_data, $widget, $instance ) {
+		return $classes;
 	}
 
 }

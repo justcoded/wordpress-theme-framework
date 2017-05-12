@@ -34,7 +34,7 @@ trait WidgetLayoutsLoader {
 	public function widget_layouts_loader() {
 		add_filter( 'siteorigin_panels_widget_style_fields', array( $this, 'add_widget_options' ), 10, 2 );
 		add_filter( 'siteorigin_panels_widget_style_attributes', array( $this, 'set_widget_attributes' ), 10, 2 );
-		add_filter( 'siteorigin_panels_widget_classes', array( $this, 'set_widget_wrapper_classes' ), 10, 3 );
+		add_filter( 'siteorigin_panels_widget_classes', array( $this, 'set_widget_inner_classes' ), 10, 3 );
 	}
 
 	/**
@@ -137,9 +137,9 @@ trait WidgetLayoutsLoader {
 	 *
 	 * @return array
 	 */
-	public function set_widget_wrapper_classes( $classes, $widget, $instance ) {
+	public function set_widget_inner_classes( $classes, $widget, $instance ) {
 		if ( $this->_widget_layout ) {
-			$classes = $this->_widget_layout->wrapper_classes( $classes, $this->_widget_styles, $widget, $instance );
+			$classes = $this->_widget_layout->widget_inner_classes( $classes, $this->_widget_styles, $widget, $instance );
 		}
 		$this->_widget_styles = null;
 

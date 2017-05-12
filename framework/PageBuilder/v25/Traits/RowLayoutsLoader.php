@@ -35,10 +35,10 @@ trait RowLayoutsLoader {
 		add_filter( 'siteorigin_panels_row_style_fields', array( $this, 'add_row_options' ) );
 
 		// custom styles hooks.
-		add_filter( 'siteorigin_panels_row_attributes', array( $this, 'set_row_wrapper_attributes' ), 10, 2 );
-		add_filter( 'siteorigin_panels_row_style_attributes', array( $this, 'set_row_attributes' ), 10, 2 );
-		add_filter( 'siteorigin_panels_row_cell_attributes', array( $this, 'set_cell_wrapper_attributes' ), 10, 2 );
-		add_filter( 'siteorigin_panels_cell_style_attributes', array( $this, 'set_cell_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_row_attributes', array( $this, 'set_row_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_row_style_attributes', array( $this, 'set_row_inner_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_row_cell_attributes', array( $this, 'set_cell_attributes' ), 10, 2 );
+		add_filter( 'siteorigin_panels_cell_style_attributes', array( $this, 'set_cell_inner_attributes' ), 10, 2 );
 
 		add_filter( 'siteorigin_panels_before_row', array( $this, 'set_row_before' ), 10, 3 );
 		add_filter( 'siteorigin_panels_after_row', array( $this, 'set_row_after' ), 10, 3 );
@@ -134,9 +134,9 @@ trait RowLayoutsLoader {
 	 *
 	 * @return mixed
 	 */
-	public function set_row_wrapper_attributes( $attributes, $panel_data ) {
+	public function set_row_attributes( $attributes, $panel_data ) {
 		if ( $this->_row_layout ) {
-			$attributes        = $this->_row_layout->row_wrapper( $attributes, $panel_data );
+			$attributes        = $this->_row_layout->row( $attributes, $panel_data );
 		}
 
 		return $attributes;
@@ -144,19 +144,19 @@ trait RowLayoutsLoader {
 
 	/**
 	 * Row hook callback
-	 * This one called before "wrapper" because of SO logic.
+	 * This one called before "row" because of SO logic.
 	 *
 	 * @param array $attributes  row div attributes.
 	 * @param array $style_data  row style settings array.
 	 *
 	 * @return mixed
 	 */
-	public function set_row_attributes( $attributes, $style_data ) {
+	public function set_row_inner_attributes( $attributes, $style_data ) {
 		$this->_row_layout = $this->check_layout_in_use( $style_data );
 		if ( $this->_row_layout ) {
 			$this->_row_layout->row_index = $this->_row_index;
 			$this->_row_layout->col_index = $this->_col_index;
-			$attributes = $this->_row_layout->row( $attributes, $style_data );
+			$attributes = $this->_row_layout->row_inner( $attributes, $style_data );
 		}
 
 		return $attributes;
@@ -170,11 +170,11 @@ trait RowLayoutsLoader {
 	 *
 	 * @return mixed
 	 */
-	public function set_cell_wrapper_attributes( $attributes, $panel_data ) {
+	public function set_cell_attributes( $attributes, $panel_data ) {
 		if ( $this->_row_layout ) {
 			$this->_row_layout->col_index  = $this->_col_index;
 			$this->_row_layout->cell_index = $this->_cell_index;
-			$attributes = $this->_row_layout->cell_wrapper( $attributes, $panel_data );
+			$attributes = $this->_row_layout->cell( $attributes, $panel_data );
 		}
 
 		return $attributes;
@@ -188,9 +188,9 @@ trait RowLayoutsLoader {
 	 *
 	 * @return mixed
 	 */
-	public function set_cell_attributes( $attributes, $style_data ) {
+	public function set_cell_inner_attributes( $attributes, $style_data ) {
 		if ( $this->_row_layout ) {
-			$attributes = $this->_row_layout->cell( $attributes, $style_data );
+			$attributes = $this->_row_layout->cell_inner( $attributes, $style_data );
 		}
 
 		return $attributes;

@@ -63,7 +63,7 @@ class RowLayout {
 	 *
 	 * @return array    update attributes
 	 */
-	public function row_wrapper( $attributes, $panel_data ) {
+	public function row( $attributes, $panel_data ) {
 		return $attributes;
 	}
 
@@ -75,7 +75,7 @@ class RowLayout {
 	 *
 	 * @return array    update attributes
 	 */
-	public function row( $attributes, $style_data ) {
+	public function row_inner( $attributes, $style_data ) {
 		return $attributes;
 	}
 
@@ -87,7 +87,7 @@ class RowLayout {
 	 *
 	 * @return array    update attributes
 	 */
-	public function cell_wrapper( $attributes, $panel_data ) {
+	public function cell( $attributes, $panel_data ) {
 		return $attributes;
 	}
 
@@ -99,7 +99,7 @@ class RowLayout {
 	 *
 	 * @return array    update attributes
 	 */
-	public function cell( $attributes, $style_data ) {
+	public function cell_inner( $attributes, $style_data ) {
 		return $attributes;
 	}
 
