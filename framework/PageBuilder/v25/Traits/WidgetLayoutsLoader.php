@@ -46,15 +46,21 @@ trait WidgetLayoutsLoader {
 	 */
 	public function add_widget_options( $fields ) {
 		$layouts = $this->get_list_widgets();
-		if ( ! empty( $layouts ) ) {
-			$fields['widget_template'] = array(
-				'name'     => 'Widget layout',
-				'type'     => 'select',
-				'group'    => 'layout',
-				'options'  => $layouts,
-				'priority' => 10,
-			);
+		if ( empty( $layouts ) ) {
+			unset( $fields['background'] );
+			unset( $fields['background_image_attachment'] );
+			unset( $fields['background_display'] );
+			unset( $fields['border_color'] );
+			return $fields;
 		}
+
+		$fields['widget_template'] = array(
+			'name'     => 'Widget layout',
+			'type'     => 'select',
+			'group'    => 'layout',
+			'options'  => $layouts,
+			'priority' => 10,
+		);
 
 		// add additional options from layouts.
 		foreach ( $this->widgets as $layout ) {
@@ -86,9 +92,7 @@ trait WidgetLayoutsLoader {
 	 * @return array   (id, title) pairs
 	 */
 	protected function get_list_widgets() {
-		$list = array(
-			'' => 'Default',
-		);
+
 		foreach ( $this->widgets as $key => $lt ) {
 			$list[ $key ] = $lt::$TITLE;
 		}
@@ -110,6 +114,8 @@ trait WidgetLayoutsLoader {
 			if ( isset( $this->widgets[ $layout_key ] ) ) {
 				return $this->widgets[ $layout_key ];
 			}
+		} elseif ( ! empty( $this->widgets ) ) {
+			return reset( $this->widgets );
 		}
 
 		return null;

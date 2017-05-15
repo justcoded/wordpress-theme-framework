@@ -6,7 +6,7 @@ namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
  *
  * @package JustCoded\ThemeFramework\SOPanels
  */
-class RowLayout {
+class RowLayout extends Layout {
 	/**
 	 * Row Layout identifier
 	 * should be overwritten in child class
@@ -98,6 +98,11 @@ class RowLayout {
 	 * @return array    update attributes
 	 */
 	public function row_inner( $attributes, $style_data ) {
+		$style_class = "pb-style-r{$this->row_index}";
+		if ( ! empty( $style_data['background_image_attachment'] ) ) {
+			$attributes['class'][] = $style_class;
+		}
+		$attributes['style'] = $this->generate_inline_styles( $style_data, $style_class );
 		return $attributes;
 	}
 

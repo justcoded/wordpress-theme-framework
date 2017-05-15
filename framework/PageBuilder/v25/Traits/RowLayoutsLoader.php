@@ -13,13 +13,6 @@ trait RowLayoutsLoader {
 	protected $layouts = array();
 
 	/**
-	 * Default RowLayout to be loaded if it's not specified by Row settings manually
-	 *
-	 * @var string
-	 */
-	public $default_row_layout = '\JustCoded\ThemeFramework\PageBuilder\v25\RwdRowLayout';
-
-	/**
 	 * Define is layout currently in use for specific row.
 	 *
 	 * @var null|RowLayout
@@ -42,11 +35,6 @@ trait RowLayoutsLoader {
 
 		add_filter( 'siteorigin_panels_before_row', array( $this, 'set_row_before' ), 10, 3 );
 		add_filter( 'siteorigin_panels_after_row', array( $this, 'set_row_after' ), 10, 3 );
-
-		// registers default layout.
-		if ( ! empty( $this->default_row_layout ) ) {
-			$this->register_row_layout( $this->default_row_layout, 'Default' );
-		}
 	}
 
 	/**
@@ -58,6 +46,14 @@ trait RowLayoutsLoader {
 	 */
 	public function add_row_options( $fields ) {
 		$layouts                = $this->get_list_layouts();
+		if ( empty( $layouts ) ) {
+			unset( $fields['background'] );
+			unset( $fields['background_image_attachment'] );
+			unset( $fields['background_display'] );
+			unset( $fields['border_color'] );
+			return $fields;
+		}
+
 		$fields['row_template'] = array(
 			'name'     => 'Row layout',
 			'type'     => 'select',
@@ -103,9 +99,6 @@ trait RowLayoutsLoader {
 	protected function get_list_layouts() {
 		$list = array();
 
-		if ( empty( $this->default_row_layout ) ) {
-			$list[''] = 'Default';
-		}
 		foreach ( $this->layouts as $key => $lt ) {
 			$list[ $key ] = $lt::$TITLE;
 		}
@@ -127,7 +120,7 @@ trait RowLayoutsLoader {
 			if ( isset( $this->layouts[ $layout_key ] ) ) {
 				return $this->layouts[ $layout_key ];
 			}
-		} elseif ( ! empty( $this->default_row_layout ) ) {
+		} elseif ( ! empty( $this->layouts ) ) {
 			return reset( $this->layouts );
 		}
 

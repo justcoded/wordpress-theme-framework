@@ -6,7 +6,7 @@ namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
  *
  * @package JustCoded\ThemeFramework\SOPanels
  */
-class WidgetLayout {
+class WidgetLayout extends Layout {
 	/**
 	 * Widget Layout identifier
 	 * should be overwritten in child class
@@ -29,6 +29,13 @@ class WidgetLayout {
 	 * @var integer
 	 */
 	public $widget_index;
+
+	/**
+	 * Unique widget index.
+	 *
+	 * @var integer
+	 */
+	public static $unique_index;
 
 	/**
 	 * WidgetLayout constructor.
@@ -72,6 +79,11 @@ class WidgetLayout {
 	 * @return array    update attributes
 	 */
 	public function widget( $attributes, $style_data ) {
+		$style_class = 'pb-style-w' . ( (int) self::$unique_index ++ );
+		if ( ! empty( $style_data['background_image_attachment'] ) ) {
+			$attributes['class'][] = $style_class;
+		}
+		$attributes['style'] = $this->generate_inline_styles( $style_data, $style_class );
 		return $attributes;
 	}
 

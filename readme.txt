@@ -92,6 +92,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 1.2.2 - 12 May 2017 =
+	* Hotfix: Page Builder design options (background, borders) were missing in new version. Fixed.
 = Version 1.2.1 - 12 May 2017 =
 	* Improvement: Change wp hook to widgets_init for register_widget method
 = Version 1.2 - 12 May 2017 =
