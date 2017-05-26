@@ -1,25 +1,32 @@
 <?php
-namespace JustCoded\ThemeFramework\SOPanels;
+namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
 
 /**
  * Class Grid12RowLayout
  *
  * @package JustCoded\ThemeFramework\SOPanels
  */
-class Grid12RowLayout extends RowLayout {
+class RwdRowLayout extends RowLayout {
 	/**
 	 * ID
 	 *
 	 * @var string
 	 */
-	public static $ID = 'grid-12';
+	public static $ID = 'grid12';
 
 	/**
 	 * Title
 	 *
 	 * @var string
 	 */
-	public static $TITLE = 'Auto Grid: 12 columns';
+	public static $TITLE = 'Responsive Columns';
+
+	/**
+	 * Grid max columns size
+	 *
+	 * @var int
+	 */
+	public $grid_size_columns = 12;
 
 	/**
 	 * Adjust html attributes for cell wrapper
@@ -29,12 +36,12 @@ class Grid12RowLayout extends RowLayout {
 	 *
 	 * @return array    update attributes
 	 */
-	public function cell_wrapper( $attributes, $panel_data ) {
+	public function cell( $attributes, $panel_data ) {
 		$cell = $panel_data['grid_cells'][ $this->cell_index ];
 		$grid = $panel_data['grids'][ $cell['grid'] ];
 
-		$cell_postfix    = round( 12 * $cell['weight'] );
-		$bootstrap_class = 'jgrid-col-' . $cell_postfix;
+		$cell_postfix    = round( $this->grid_size_columns * $cell['weight'] );
+		$bootstrap_class = 'pb-col-sz-' . $cell_postfix;
 
 		$attributes['class'] .= ' ' . $bootstrap_class;
 
