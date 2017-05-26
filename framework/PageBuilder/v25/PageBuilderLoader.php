@@ -116,6 +116,15 @@ class PageBuilderLoader {
 	}
 
 	/**
+	 * Check that widgets bundle plugin is installed and activated
+	 *
+	 * @return bool
+	 */
+	public static function widgets_bundle_active() {
+		return is_plugin_active( 'so-widgets-bundle/so-widgets-bundle.php' );
+	}
+
+	/**
 	 * Init row/widgets layouts and change disabled plugins list.
 	 * Called at the end of the __contruct() method
 	 *
