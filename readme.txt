@@ -92,7 +92,7 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
-= Develop =
+= Version 1.2.3 - 26 May 2017 =
 	* Hotfix: PageBuilderWidget raise fatal error when Site Origin Widgets Bundle plugin is not installed or deactivated.
 = Version 1.2.2 - 12 May 2017 =
 	* Hotfix: Page Builder design options (background, borders) were missing in new version. Fixed.
