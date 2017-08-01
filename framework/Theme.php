@@ -1,4 +1,5 @@
 <?php
+
 namespace JustCoded\ThemeFramework;
 
 use JustCoded\ThemeFramework\Supports\Autoptimize;
@@ -182,11 +183,11 @@ abstract class Theme {
 	public function remove_assets_query_string( $src ) {
 		if ( strpos( $src, '?ver' ) !== false ) {
 			$src_parts = explode( '?ver', $src, 2 );
-			$src = array_shift( $src_parts );
+			$src       = array_shift( $src_parts );
 		}
 		if ( strpos( $src, '&ver' ) !== false ) {
 			$src_parts = explode( '&ver', $src, 2 );
-			$src = array_shift( $src_parts );
+			$src       = array_shift( $src_parts );
 		}
 
 		return $src;
@@ -202,7 +203,7 @@ abstract class Theme {
 	 * Theme activation hook.
 	 * Flush rewrite rules on activate
 	 *
-	 * @param string         $oldname previous active theme name.
+	 * @param string $oldname previous active theme name.
 	 * @param string|boolean $oldtheme previous active theme.
 	 */
 	public function activate( $oldname, $oldtheme = false ) {
@@ -213,7 +214,7 @@ abstract class Theme {
 	 * Theme deactivation hook.
 	 * Flush rewrite rules on activate
 	 *
-	 * @param string         $newname new active theme name.
+	 * @param string $newname new active theme name.
 	 * @param string|boolean $newtheme new active theme.
 	 */
 	public function deactivate( $newname, $newtheme = '' ) {
@@ -285,8 +286,8 @@ abstract class Theme {
 	 * Register array of css files one-by-one.
 	 * You can set general dependencies for all of them
 	 *
-	 * @param array       $styles Array of css files to register.
-	 * @param array       $dependencies Array of script files which should be registered before this.
+	 * @param array $styles Array of css files to register.
+	 * @param array $dependencies Array of script files which should be registered before this.
 	 * @param null|string $base_uri Uri prefix for all scripts from.
 	 *
 	 * @return void|null
@@ -311,8 +312,8 @@ abstract class Theme {
 	 * Register array of script files one-by-one.
 	 * You can set general dependencies for all of them
 	 *
-	 * @param array       $scripts Array of script files to register.
-	 * @param array       $dependencies Array of script files which should be registered before this.
+	 * @param array $scripts Array of script files to register.
+	 * @param array $dependencies Array of script files which should be registered before this.
 	 * @param null|string $base_uri Uri prefix for all scripts from.
 	 *
 	 * @return void|null
@@ -379,7 +380,7 @@ abstract class Theme {
 	 * Adds loading of custom features provided by 3d-party plugins.
 	 */
 	public function support_plugins() {
-        new JustLoadMore();
+		new JustLoadMore();
 		new JustResponsiveImages();
 		new JustCustomFields();
 		new JustPostPreview();
@@ -394,6 +395,7 @@ abstract class Theme {
 	public function filter_jpeg_quality() {
 		// limit jpeg_quality between 10 and 100%.
 		$quality = max( 10, min( $this->jpeg_quality, 100 ) );
+
 		return $quality;
 	}
 
@@ -401,7 +403,7 @@ abstract class Theme {
 	 * Filters list of allowed mime types and file extensions.
 	 * By default we add new extensions, which are defined in $this->upload_mime_types property
 	 *
-	 * @param array $mimes    Mime types keyed by the file extension regex corresponding to
+	 * @param array $mimes Mime types keyed by the file extension regex corresponding to
 	 *                        those types. 'swf' and 'exe' removed from full list. 'htm|html' also
 	 *                        removed depending on '$user' capabilities.
 	 *
@@ -409,6 +411,7 @@ abstract class Theme {
 	 */
 	public function add_upload_mimes( $mimes ) {
 		$mimes = array_merge( $mimes, $this->upload_mime_types );
+
 		return $mimes;
 	}
 
@@ -418,7 +421,7 @@ abstract class Theme {
 	public function insert_rewrite_rules() {
 		global $wp_rewrite;
 		$non_wp_rules             = array(
-			'cms\/?$' => 'cms/wp-admin/',
+			'cms\/?$'      => 'cms/wp-admin/',
 			'wp-admin\/?$' => 'cms/wp-admin/',
 		);
 		$wp_rewrite->non_wp_rules = $non_wp_rules + $wp_rewrite->non_wp_rules;
