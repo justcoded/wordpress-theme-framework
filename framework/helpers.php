@@ -40,25 +40,27 @@ function parent_assets( $path, $echo = true ) {
  *
  * @param WP_Query $wp_query Query to use in pagination checks.
  * @param string   $label     Content for link text.
+ * @param string   $load_more_attr attribute for default load more link. Required options: data-selector="grid" id="jtf-load-more", additional options: data-container="div" data-attribute="class"
  *
  * @return string|void HTML-formatted next posts page link.
  */
-function cpt_next_posts_link( WP_Query $wp_query, $label ) {
-	$paged    = $wp_query->query_vars['paged'];
-	$max_page = $wp_query->max_num_pages;
+function cpt_next_posts_link( WP_Query $wp_query, $label, $load_more_attr = '' ) {
+    $paged    = $wp_query->query_vars['paged'];
+    $max_page = $wp_query->max_num_pages;
 
-	$nextpage = intval( $paged ) + 1;
+    $nextpage = intval( $paged ) + 1;
 
-	if ( null === $label ) {
-		$label = __( 'Next Page &raquo;' );
-	}
+    if ( null === $label ) {
+        $label = __( 'Next Page &raquo;' );
+    }
 
-	if ( $nextpage <= $max_page ) {
-		$attr = apply_filters( 'next_posts_link_attributes', '' );
-		$attr = apply_filters( 'jtf_next_posts_link_attributes', $attr );
+    if ( $nextpage <= $max_page ) {
+        $attr = apply_filters( 'next_posts_link_attributes', '' );
+        $attr = apply_filters( 'jtf_next_posts_link_attributes', $attr );
+        $load_more_attr = apply_filters( 'jtf_load_more_attributes', $load_more_attr );
 
-		return '<a href="' . next_posts( $max_page, false ) . "\" $attr>" . preg_replace( '/&([^#])(?![a-z]{1,8};)/i', '&#038;$1', $label ) . '</a>';
-	}
+        return '<a href="' . next_posts( $max_page, false ) . "\" $attr $load_more_attr>" . preg_replace( '/&([^#])(?![a-z]{1,8};)/i', '&#038;$1', $label ) . '</a>';
+    }
 }
 
 /**
