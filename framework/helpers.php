@@ -38,11 +38,12 @@ function parent_assets( $path, $echo = true ) {
  * Alias for plugins_url with pre-defined second parameter
  * Mostly used to set paths for assets
  *
- * @param string $path  asset or callback path
+ * @param string $path asset or callback path
+ *
  * @return string
  */
 function jtf_plugin_url( $path ) {
-	return plugins_url($path, dirname(__FILE__));
+	return plugins_url( $path, dirname( __FILE__ ) );
 }
 
 

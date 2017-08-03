@@ -42,8 +42,8 @@ class JustLoadMore {
 	public function load_more_callback( $html ) {
 		$text = '';
 		if ( isset( $_POST['jtf-selector'] ) ) {
-			$selector  = trim( $_POST['jtf-selector'] );
-			$attribute = isset( $_POST['jtf-attribute'] ) ? trim( $_POST['jtf-attribute'] ) : 'class';
+			$selector                 = trim( $_POST['jtf-selector'] );
+			$attribute                = isset( $_POST['jtf-attribute'] ) ? trim( $_POST['jtf-attribute'] ) : 'class';
 			$doc                      = new \DOMDocument();
 			$doc->recover             = true;
 			$doc->strictErrorChecking = false;
