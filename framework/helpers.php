@@ -51,7 +51,7 @@ function jtf_plugin_url( $path ) {
  *
  * @param WP_Query $wp_query Query to use in pagination checks.
  * @param string $label Content for link text.
- * @param string $load_more_attr attribute for default load more link. Required options: data-selector="grid" class="jtf-load-more", additional options: data-container="div" data-attribute="class"
+ * @param string $load_more_attr attribute for default load more link. Required options: data-selector="grid" class="jtf-load-more", additional options: data-attribute="class"
  *
  * @return string|void HTML-formatted next posts page link.
  */
