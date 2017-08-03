@@ -203,7 +203,7 @@ abstract class Theme {
 	 * Theme activation hook.
 	 * Flush rewrite rules on activate
 	 *
-	 * @param string $oldname previous active theme name.
+	 * @param string         $oldname previous active theme name.
 	 * @param string|boolean $oldtheme previous active theme.
 	 */
 	public function activate( $oldname, $oldtheme = false ) {
@@ -214,7 +214,7 @@ abstract class Theme {
 	 * Theme deactivation hook.
 	 * Flush rewrite rules on activate
 	 *
-	 * @param string $newname new active theme name.
+	 * @param string         $newname new active theme name.
 	 * @param string|boolean $newtheme new active theme.
 	 */
 	public function deactivate( $newname, $newtheme = '' ) {
@@ -258,7 +258,7 @@ abstract class Theme {
 		 * This can affect "width" attribute for images. If required can be overwritten in app file.
 		 *
 		 * @global int $GLOBALS ['content_width']
-		 * @name $content_width
+		 * @name       $content_width
 		 * @link https://codex.wordpress.org/Content_Width
 		 */
 		$GLOBALS['content_width'] = '';
@@ -286,8 +286,8 @@ abstract class Theme {
 	 * Register array of css files one-by-one.
 	 * You can set general dependencies for all of them
 	 *
-	 * @param array $styles Array of css files to register.
-	 * @param array $dependencies Array of script files which should be registered before this.
+	 * @param array       $styles Array of css files to register.
+	 * @param array       $dependencies Array of script files which should be registered before this.
 	 * @param null|string $base_uri Uri prefix for all scripts from.
 	 *
 	 * @return void|null
@@ -312,8 +312,8 @@ abstract class Theme {
 	 * Register array of script files one-by-one.
 	 * You can set general dependencies for all of them
 	 *
-	 * @param array $scripts Array of script files to register.
-	 * @param array $dependencies Array of script files which should be registered before this.
+	 * @param array       $scripts Array of script files to register.
+	 * @param array       $dependencies Array of script files which should be registered before this.
 	 * @param null|string $base_uri Uri prefix for all scripts from.
 	 *
 	 * @return void|null

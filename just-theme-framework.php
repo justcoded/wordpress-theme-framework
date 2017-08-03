@@ -19,4 +19,4 @@ require_once( dirname( __FILE__ ) . '/framework/Autoload.php' );
 // Include small helper functions
 require_once( dirname( __FILE__ ) . '/framework/helpers.php' );
 
-new JustCoded\ThemeFramework\Autoload('JustCoded\ThemeFramework', dirname( __FILE__ ) . '/framework');
+new JustCoded\ThemeFramework\Autoload( 'JustCoded\ThemeFramework', dirname( __FILE__ ) . '/framework' );

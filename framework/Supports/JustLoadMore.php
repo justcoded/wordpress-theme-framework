@@ -17,11 +17,9 @@ class JustLoadMore {
 	 */
 	function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
-		if ( isset( $_POST['jtf_load_more'] ) ) {
-			if ( ! defined( 'JTF_LOAD_MORE_AJAX' ) ) {
-				define( 'JTF_LOAD_MORE_AJAX', true );
-				ob_start( [ $this, 'load_more_callback' ] );
-			}
+		if ( isset( $_POST['jtf_load_more'] ) && ! defined( 'JTF_LOAD_MORE_AJAX' ) ) {
+			define( 'JTF_LOAD_MORE_AJAX', true );
+			ob_start( [ $this, 'ob_get_clean' ] );
 		}
 	}
 
@@ -29,7 +27,7 @@ class JustLoadMore {
 	 * registered scripts
 	 */
 	public function register_assets() {
-		wp_enqueue_script( '_jmvt-load_more', jtf_plugin_url( 'assets/js/load_more.js' ), [ 'jquery' ] );
+		wp_enqueue_script( '_jtf-load_more', jtf_plugin_url( 'assets/js/load_more.js' ), [ 'jquery' ] );
 	}
 
 	/**
@@ -39,7 +37,7 @@ class JustLoadMore {
 	 *
 	 * @return string
 	 */
-	public function load_more_callback( $html ) {
+	public function ob_get_clean( $html ) {
 		$text = '';
 		if ( isset( $_POST['jtf-selector'] ) ) {
 			$selector                 = trim( $_POST['jtf-selector'] );
