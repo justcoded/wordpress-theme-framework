@@ -43,16 +43,15 @@ class JustLoadMore {
 		$text = '';
 		if ( isset( $_POST['jtf-selector'] ) ) {
 			$selector  = trim( $_POST['jtf-selector'] );
-			$container = isset( $_POST['jtf-container'] ) ? trim( $_POST['jtf-container'] ) : 'div';
-			$attribute = isset( $_POST['jtf-attribute'] ) ? trim( $_POST['jtf-attribute'] ) : 'class';;
+			$attribute = isset( $_POST['jtf-attribute'] ) ? trim( $_POST['jtf-attribute'] ) : 'class';
 			$doc                      = new \DOMDocument();
 			$doc->recover             = true;
 			$doc->strictErrorChecking = false;
 
 			@$doc->loadHTML( $html );
 			$xpath = new \DOMXpath( $doc );
-			$divs  = $xpath->query( '//' . $container . '[@' . $attribute . '="' . $selector . '"]/*' );
-			$count = $xpath->query( '//' . $container . '[@' . $attribute . '="' . $selector . '"]/*' )->length;
+			$divs  = $xpath->query( '//*[@' . $attribute . '="' . $selector . '"]/*' );
+			$count = $xpath->query( '//*[@' . $attribute . '="' . $selector . '"]/*' )->length;
 			for ( $i = 0; $i < $count; $i ++ ) {
 				$text .= $doc->saveHTML( $divs->item( $i ) );
 			}

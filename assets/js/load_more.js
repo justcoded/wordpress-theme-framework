@@ -8,14 +8,12 @@ function initLoadMore() {
         var $loadmore = jQuery(this),
             link = $loadmore.attr('href'),
             selector = $loadmore.attr('data-selector'),
-            container = $loadmore.attr('data-container'),
             attribute = $loadmore.attr('data-attribute'),
             cont = ( (attribute == 'class' ) ? '.' : '#') + selector;
         jQuery.post(
             link,
             {
                 'jtf-selector': selector,
-                'jtf-container': container,
                 'jtf-attribute': attribute,
                 'jtf_load_more': true
             },
