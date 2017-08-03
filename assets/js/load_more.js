@@ -3,12 +3,13 @@ jQuery(document).ready(function () {
 })
 
 function initLoadMore() {
-    jQuery('#jtf-load-more').on('click', function (e) {
+    jQuery('.jtf-load-more').on('click', function (e) {
         e.preventDefault();
-        var link = jQuery('#jtf-load-more').attr('href'),
-            selector = jQuery('#jtf-load-more').attr('data-selector'),
-            container = jQuery('#jtf-load-more').attr('data-container'),
-            attribute = jQuery('#jtf-load-more').attr('data-attribute'),
+        var $loadmore = jQuery(this),
+            link = $loadmore.attr('href'),
+            selector = $loadmore.attr('data-selector'),
+            container = $loadmore.attr('data-container'),
+            attribute = $loadmore.attr('data-attribute'),
             cont = ( (attribute == 'class' ) ? '.' : '#') + selector;
         jQuery.post(
             link,
@@ -19,13 +20,17 @@ function initLoadMore() {
                 'jtf_load_more': true
             },
             function (data) {
-                if (!data) jQuery('#jtf-load-more').hide();
+                if (!jQuery.trim(data)) {
+                    $loadmore.hide();
+                }
                 jQuery(cont).append(data);
                 var currentpage = link.match(/page\/([0-9]+)/)[1];
                 currentpage = ++currentpage;
-                jQuery('#jtf-load-more').attr('href', link.replace(/\/page\/[0-9]+/, '/page/' + currentpage));
+                $loadmore.attr('href', link.replace(/\/page\/[0-9]+/, '/page/' + currentpage));
             }
-        );
+        ).fail(function () {
+            $loadmore.hide();
+        });
         return false;
     });
 }
