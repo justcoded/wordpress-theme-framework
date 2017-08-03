@@ -8,20 +8,22 @@ function initLoadMore() {
     var $loadmore = jQuery(this),
       link = $loadmore.attr('href'),
       selector = $loadmore.attr('data-selector'),
-      attribute = $loadmore.attr('data-attribute'),
-      cont = ( (attribute == 'class' ) ? '.' : '#') + selector;
+      container = $loadmore.attr('data-container');
     jQuery.post(
       link,
       {
-        'jtf-selector': selector,
-        'jtf-attribute': attribute,
+        'jtf_selector': selector,
         'jtf_load_more': true
       },
       function (data) {
         if (!jQuery.trim(data)) {
           $loadmore.hide();
         }
-        jQuery(cont).append(data);
+        if (container) {
+          jQuery(container).append(data);
+        } else {
+          jQuery(selector).append(data);
+        }
         var currentpage = link.match(/page\/([0-9]+)/)[1];
         currentpage = ++currentpage;
         $loadmore.attr('href', link.replace(/\/page\/[0-9]+/, '/page/' + currentpage));

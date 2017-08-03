@@ -39,9 +39,13 @@ class JustLoadMore {
 	 */
 	public function ob_get_clean( $html ) {
 		$text = '';
-		if ( isset( $_POST['jtf-selector'] ) ) {
-			$selector                 = trim( $_POST['jtf-selector'] );
-			$attribute                = isset( $_POST['jtf-attribute'] ) ? trim( $_POST['jtf-attribute'] ) : 'class';
+		if ( isset( $_POST['jtf_selector'] ) ) {
+			$selector                 = trim( $_POST['jtf_selector'] );
+			$attribute = substr($selector, 0,1);
+			if( $attribute == '.' || $attribute == '#'){
+				$selector = substr( $selector, 1);
+			}
+			$attribute = ( $attribute == '#' ) ? $attribute = 'id' : $attribute = 'class';
 			$doc                      = new \DOMDocument();
 			$doc->recover             = true;
 			$doc->strictErrorChecking = false;
