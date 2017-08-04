@@ -4,7 +4,7 @@
 Plugin Name: Just Theme Framework
 Description: Lightweight MVC theming framework for developers who want to better organize their own custom themes with an MVC approach.
 Tags: mvc theme, theme boilerplate, oop theme, mini framework
-Version: 1.2.2
+Version: 1.2.4
 Author: JustCoded / Alex Prokopenko
 Author URI: http://justcoded.com/
 License: GPL3
@@ -19,4 +19,4 @@ require_once( dirname( __FILE__ ) . '/framework/Autoload.php' );
 // Include small helper functions
 require_once( dirname( __FILE__ ) . '/framework/helpers.php' );
 
-new JustCoded\ThemeFramework\Autoload('JustCoded\ThemeFramework', dirname( __FILE__ ) . '/framework');
+new JustCoded\ThemeFramework\Autoload( 'JustCoded\ThemeFramework', dirname( __FILE__ ) . '/framework' );

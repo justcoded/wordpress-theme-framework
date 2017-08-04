@@ -61,7 +61,7 @@ if ( ! class_exists( 'JustThemeFrameworkChecker' ) ) {
 		public function __construct() {
 
 			global $pagenow;
-			if ( ! is_admin() &&  'wp-login.php' !== $pagenow && ! $this->check_requirements() ) {
+			if ( ! is_admin() && 'wp-login.php' !== $pagenow && ! $this->check_requirements() ) {
 				throw new Exception( 'Your theme requires Just Theme Framework and Titan Framework plugins to be installed and activated.' );
 			}
 			add_action( 'admin_notices', array( $this, 'display_requirements_admin_notice' ) );
