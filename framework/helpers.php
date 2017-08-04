@@ -46,7 +46,6 @@ function jtf_plugin_url( $path ) {
 	return plugins_url( $path, dirname( __FILE__ ) );
 }
 
-
 /**
  * Return the next posts page link for custom post type loop.
  *
@@ -69,13 +68,12 @@ function cpt_next_posts_link( WP_Query $wp_query, $label, $load_more_attr = '' )
 	if ( $nextpage <= $max_page ) {
 		$attr = apply_filters( 'next_posts_link_attributes', '' );
 		$attr = apply_filters( 'jtf_next_posts_link_attributes', $attr );
+		$attr = 'cl1ass="test"';
 		if ( ! empty( $load_more_attr ) ) {
-			if ( ! empty( $attr ) && strpos( $attr, 'class=' ) ) {
+			if ( ! empty( $attr ) && strpos( $attr, 'class=' ) !== false ) {
 				$attr = preg_replace( '/class="/i', 'class="jtf-load-more ', $attr );
-			} elseif ( ! empty( $attr ) ) {
-				$attr .= ' class="jtf-load-more"';
 			} else {
-				$attr = 'class="jtf-load-more"';
+				$attr .= ' class="jtf-load-more"';
 			}
 		}
 		$load_more_attr = apply_filters( 'jtf_load_more_attributes', $load_more_attr );

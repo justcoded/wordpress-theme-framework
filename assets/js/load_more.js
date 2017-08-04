@@ -21,8 +21,7 @@ function initLoadMore() {
         }
         jQuery(container).append(data);
         var currentpage = link.match(/page\/([0-9]+)/)[1];
-        currentpage = ++currentpage;
-        $loadmore.attr('href', link.replace(/\/page\/[0-9]+/, '/page/' + currentpage));
+        $loadmore.attr('href', link.replace(/\/page\/[0-9]+/, '/page/' + ++currentpage));
       }
     ).fail(function () {
       $loadmore.hide();
