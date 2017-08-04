@@ -1,4 +1,5 @@
 <?php
+
 namespace JustCoded\ThemeFramework;
 
 use JustCoded\ThemeFramework\Supports\Autoptimize;
@@ -7,6 +8,7 @@ use JustCoded\ThemeFramework\Supports\JustPostPreview;
 use JustCoded\ThemeFramework\Supports\JustResponsiveImages;
 use JustCoded\ThemeFramework\Supports\JustTinymce;
 use JustCoded\ThemeFramework\Web\TemplateHierarchy;
+use JustCoded\ThemeFramework\Supports\JustLoadMore;
 use JustCoded\ThemeFramework\Web\View;
 
 /**
@@ -181,11 +183,11 @@ abstract class Theme {
 	public function remove_assets_query_string( $src ) {
 		if ( strpos( $src, '?ver' ) !== false ) {
 			$src_parts = explode( '?ver', $src, 2 );
-			$src = array_shift( $src_parts );
+			$src       = array_shift( $src_parts );
 		}
 		if ( strpos( $src, '&ver' ) !== false ) {
 			$src_parts = explode( '&ver', $src, 2 );
-			$src = array_shift( $src_parts );
+			$src       = array_shift( $src_parts );
 		}
 
 		return $src;
@@ -256,7 +258,7 @@ abstract class Theme {
 		 * This can affect "width" attribute for images. If required can be overwritten in app file.
 		 *
 		 * @global int $GLOBALS ['content_width']
-		 * @name $content_width
+		 * @name       $content_width
 		 * @link https://codex.wordpress.org/Content_Width
 		 */
 		$GLOBALS['content_width'] = '';
@@ -378,6 +380,7 @@ abstract class Theme {
 	 * Adds loading of custom features provided by 3d-party plugins.
 	 */
 	public function support_plugins() {
+		new JustLoadMore();
 		new JustResponsiveImages();
 		new JustCustomFields();
 		new JustPostPreview();
@@ -392,6 +395,7 @@ abstract class Theme {
 	public function filter_jpeg_quality() {
 		// limit jpeg_quality between 10 and 100%.
 		$quality = max( 10, min( $this->jpeg_quality, 100 ) );
+
 		return $quality;
 	}
 
@@ -399,7 +403,7 @@ abstract class Theme {
 	 * Filters list of allowed mime types and file extensions.
 	 * By default we add new extensions, which are defined in $this->upload_mime_types property
 	 *
-	 * @param array $mimes    Mime types keyed by the file extension regex corresponding to
+	 * @param array $mimes Mime types keyed by the file extension regex corresponding to
 	 *                        those types. 'swf' and 'exe' removed from full list. 'htm|html' also
 	 *                        removed depending on '$user' capabilities.
 	 *
@@ -407,6 +411,7 @@ abstract class Theme {
 	 */
 	public function add_upload_mimes( $mimes ) {
 		$mimes = array_merge( $mimes, $this->upload_mime_types );
+
 		return $mimes;
 	}
 
@@ -416,7 +421,7 @@ abstract class Theme {
 	public function insert_rewrite_rules() {
 		global $wp_rewrite;
 		$non_wp_rules             = array(
-			'cms\/?$' => 'cms/wp-admin/',
+			'cms\/?$'      => 'cms/wp-admin/',
 			'wp-admin\/?$' => 'cms/wp-admin/',
 		);
 		$wp_rewrite->non_wp_rules = $non_wp_rules + $wp_rewrite->non_wp_rules;

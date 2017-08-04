@@ -92,6 +92,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 1.2.4 - 1 August 2017 =
+    * New: Added default Ajax Load More functionality
 = Version 1.2.3 - 26 May 2017 =
 	* Hotfix: PageBuilderWidget raise fatal error when Site Origin Widgets Bundle plugin is not installed or deactivated.
 = Version 1.2.2 - 12 May 2017 =
