@@ -8,7 +8,7 @@ function initLoadMore() {
     var $loadmore = jQuery(this),
       link = $loadmore.attr('href'),
       selector = $loadmore.attr('data-selector'),
-      container = $loadmore.attr('data-container');
+      container = $loadmore.attr('data-container') || selector;
     jQuery.post(
       link,
       {
@@ -19,11 +19,7 @@ function initLoadMore() {
         if (!jQuery.trim(data)) {
           $loadmore.hide();
         }
-        if (container) {
-          jQuery(container).append(data);
-        } else {
-          jQuery(selector).append(data);
-        }
+        jQuery(container).append(data);
         var currentpage = link.match(/page\/([0-9]+)/)[1];
         currentpage = ++currentpage;
         $loadmore.attr('href', link.replace(/\/page\/[0-9]+/, '/page/' + currentpage));

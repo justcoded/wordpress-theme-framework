@@ -40,12 +40,12 @@ class JustLoadMore {
 	public function ob_get_clean( $html ) {
 		$text = '';
 		if ( isset( $_POST['jtf_selector'] ) ) {
-			$selector                 = trim( $_POST['jtf_selector'] );
-			$attribute = substr($selector, 0,1);
-			if( $attribute == '.' || $attribute == '#'){
-				$selector = substr( $selector, 1);
+			$selector  = trim( $_POST['jtf_selector'] );
+			$attribute = substr( $selector, 0, 1 );
+			if ( $attribute == '.' || $attribute == '#' ) {
+				$selector = substr( $selector, 1 );
 			}
-			$attribute = ( $attribute == '#' ) ? $attribute = 'id' : $attribute = 'class';
+			$attribute                = ( $attribute == '#' ) ? $attribute = 'id' : $attribute = 'class';
 			$doc                      = new \DOMDocument();
 			$doc->recover             = true;
 			$doc->strictErrorChecking = false;
@@ -53,8 +53,7 @@ class JustLoadMore {
 			@$doc->loadHTML( $html );
 			$xpath = new \DOMXpath( $doc );
 			$divs  = $xpath->query( '//*[@' . $attribute . '="' . $selector . '"]/*' );
-			$count = $xpath->query( '//*[@' . $attribute . '="' . $selector . '"]/*' )->length;
-			for ( $i = 0; $i < $count; $i ++ ) {
+			for ( $i = 0; $i < $divs->length; $i ++ ) {
 				$text .= $doc->saveHTML( $divs->item( $i ) );
 			}
 		}
