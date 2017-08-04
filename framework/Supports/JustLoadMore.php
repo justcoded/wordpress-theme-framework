@@ -19,7 +19,7 @@ class JustLoadMore {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
 		if ( isset( $_POST['jtf_load_more'] ) && ! defined( 'JTF_LOAD_MORE_AJAX' ) ) {
 			define( 'JTF_LOAD_MORE_AJAX', true );
-			add_filter( 'autoptimize_filter_noptimize', [ $this, 'disable_autooptimaze' ] );
+			add_filter( 'autoptimize_filter_noptimize', [ $this, 'disable_autoptimize' ] );
 
 			ob_start( [ $this, 'ob_get_clean' ] );
 		}
