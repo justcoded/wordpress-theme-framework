@@ -28,7 +28,7 @@ class JustLoadMore {
 	/**
 	 * disable autooptimaze if using load more
 	 */
-	public function disable_autooptimaze() {
+	public function disable_autoptimize() {
 		return true;
 	}
 
