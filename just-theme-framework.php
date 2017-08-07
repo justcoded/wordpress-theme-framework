@@ -4,7 +4,7 @@
 Plugin Name: Just Theme Framework
 Description: Lightweight MVC theming framework for developers who want to better organize their own custom themes with an MVC approach.
 Tags: mvc theme, theme boilerplate, oop theme, mini framework
-Version: 1.2.4
+Version: 1.2.5
 Author: JustCoded / Alex Prokopenko
 Author URI: http://justcoded.com/
 License: GPL3

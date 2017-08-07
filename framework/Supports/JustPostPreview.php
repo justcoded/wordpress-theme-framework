@@ -30,7 +30,7 @@ class JustPostPreview {
 		if ( ! empty( $templates ) ) {
 			$template = basename( reset( $templates ) );
 
-			$this->patches_templates = array_merge( array(
+			$templates = array_merge( array(
 				get_stylesheet_directory() . '/views/just-post-preview/' . $template,
 				get_template_directory() . '/views/just-post-preview/' . $template,
 			), $templates );
