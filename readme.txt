@@ -92,6 +92,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 1.2.5 - 7 August 2017 =
+    * Bugfix: Just Post Preview plugin support: templates hierarchy hook works wrong
 = Version 1.2.4 - 1 August 2017 =
     * New: Added default Ajax Load More functionality
 = Version 1.2.3 - 26 May 2017 =
