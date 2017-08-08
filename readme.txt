@@ -91,8 +91,11 @@ https://github.com/justcoded/just-theme-framework
 To upgrade remove the old plugin folder. After than follow the installation steps 1-2.
 
 == Changelog ==
-= Version 1.2.5 - 8 August 2017 =
-    * Remove test info from helper
+
+= Version 1.2.6 - 8 August 2017 =
+    * Bugfix: Remove test info from helper
+= Version 1.2.5 - 7 August 2017 =
+    * Bugfix: Just Post Preview plugin support: templates hierarchy hook works wrong
 = Version 1.2.4 - 1 August 2017 =
     * New: Added default Ajax Load More functionality
 = Version 1.2.3 - 26 May 2017 =
