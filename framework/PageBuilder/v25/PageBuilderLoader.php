@@ -37,6 +37,7 @@ class PageBuilderLoader {
 		'WP_Widget_Pages',
 		'WP_Widget_Calendar',
 		'WP_Widget_Archives',
+		'WP_Widget_Media_Image',
 		'WP_Widget_Meta',
 		'WP_Widget_Categories',
 		'WP_Widget_RSS',
@@ -45,6 +46,7 @@ class PageBuilderLoader {
 		'WP_Widget_Recent_Comments',
 		'WP_Widget_Tag_Cloud',
 		'WP_Nav_Menu_Widget',
+		'WP_Widget_Custom_HTML',
 
 		'SiteOrigin_Panels_Widgets_PostContent',
 	);

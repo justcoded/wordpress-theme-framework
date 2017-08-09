@@ -68,7 +68,6 @@ function cpt_next_posts_link( WP_Query $wp_query, $label, $load_more_attr = '' )
 	if ( $nextpage <= $max_page ) {
 		$attr = apply_filters( 'next_posts_link_attributes', '' );
 		$attr = apply_filters( 'jtf_next_posts_link_attributes', $attr );
-		$attr = 'cl1ass="test"';
 		if ( ! empty( $load_more_attr ) ) {
 			if ( ! empty( $attr ) && strpos( $attr, 'class=' ) !== false ) {
 				$attr = preg_replace( '/class="/i', 'class="jtf-load-more ', $attr );

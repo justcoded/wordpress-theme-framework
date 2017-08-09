@@ -12,6 +12,8 @@ trait HtmlCleanup {
 		// detach inline css.
 		add_action( 'init', array( $this, 'remove_siteorigin_inline_styles' ) );
 
+		add_action( 'siteorigin_panels_data', array( $this, 'panels_data' ), 10, 2 );
+
 		// html attributes filters.
 		add_filter( 'siteorigin_panels_layout_attributes', array( $this, 'clean_panels_container_attributes' ), 10, 3 );
 		add_filter( 'siteorigin_panels_row_attributes', array( $this, 'clean_row_attributes' ), 10, 2 );
@@ -40,6 +42,24 @@ trait HtmlCleanup {
 		remove_filter( 'wp_enqueue_scripts', array( $so_panels, 'generate_post_css' ) );
 		remove_filter( 'wp_head', array( $so_panels, 'cached_post_css' ) );
 		return $content;
+	}
+
+	/**
+	 * Run before render starts.
+	 *
+	 * @param array $panels_data  Panels data array.
+	 * @param int   $post_id      Post id.
+	 *
+	 * @return mixed
+	 */
+	public function panels_data( $panels_data, $post_id ) {
+		// for some reason render is called twice, so we need to reset indexes at render start.
+		$this->_row_index = -1;
+		$this->_col_index = -1;
+		$this->_cell_index = -1;
+		$this->_widget_index = -1;
+
+		return $panels_data;
 	}
 
 	/**
