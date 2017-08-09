@@ -94,6 +94,7 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 = Version 1.2.6 - 9 August 2017 =
     * Hotfix: Page Builder 2.5.10 update. Removed notices (for some reason builder render called twice in new builder version).
+    * Bugfix: Remove test info from load more helper
 = Version 1.2.5 - 7 August 2017 =
     * Bugfix: Just Post Preview plugin support: templates hierarchy hook works wrong
 = Version 1.2.4 - 1 August 2017 =
