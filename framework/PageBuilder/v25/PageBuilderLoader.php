@@ -105,6 +105,9 @@ class PageBuilderLoader {
 		// disable layouts directory: feature to import some layout from web (it won't work in our theme).
 		add_filter( 'siteorigin_panels_layouts_directory_enabled', array( $this, 'disabled_layouts_directory' ) );
 
+		// add own hook for custom widgets preview.
+		add_action( 'wp_ajax_so_widgets_preview', array( $this, 'widget_preview' ), 5 );
+
 		$this->init();
 	}
 
@@ -253,4 +256,72 @@ class PageBuilderLoader {
 		return false;
 	}
 
+	/**
+	 * Custom ajax action for custom widgets preview.
+	 */
+	public function widget_preview() {
+		if ( empty( $_POST['class'] ) ) {
+			exit();
+		}
+		if ( empty( $_REQUEST['_widgets_nonce'] )
+		     || ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) {
+			return;
+		}
+
+		// we use namespaces, but widget factory miss first trailing slash. And WP pass double slashes in the middle.
+		$class = '\\' . trim( str_replace( '\\\\', '\\', $_POST['class'] ), '\\' );
+
+		// Get the widget from the widget factory.
+		global $wp_widget_factory;
+		$widget = ! empty( $wp_widget_factory->widgets[ $class ] ) ? $wp_widget_factory->widgets[ $class ] : false;
+
+		if ( ! is_a( $widget, '\JustCoded\ThemeFramework\PageBuilder\v25\PageBuilderWidget' ) ) {
+			return;
+		}
+
+		$instance = json_decode( stripslashes_deep( $_POST['data'] ), true );
+		/* @var $widget SiteOrigin_Widget */
+		$instance               = $widget->update( $instance, $instance );
+		$instance['is_preview'] = true;
+
+		wp_enqueue_style( 'dashicons' );
+		wp_enqueue_style( 'so-widget-preview', plugin_dir_url( SOW_BUNDLE_BASE_FILE ) . 'base/css/preview.css', array(), rand( 0,65536 ) );
+		wp_enqueue_style( 'jtf-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/css/widget-preview.css', array(), rand( 0,65536 ) );
+
+		wp_enqueue_script( 'jtc-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/js/widget-preview.js', array( 'jquery' ) );
+		$sowb = \SiteOrigin_Widgets_Bundle::single();
+		$sowb->register_general_scripts();
+
+		ob_start();
+		$widget->preview( array(
+			'before_widget' => '',
+			'after_widget'  => '',
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		), $instance );
+		$widget_preview = ob_get_clean();
+
+		?>
+		<html>
+		<head>
+			<title><?php _e( 'Widget Example' ); ?></title>
+			<?php
+			wp_print_scripts();
+			wp_print_styles();
+			siteorigin_widget_print_styles();
+			?>
+		</head>
+		<body>
+		<?php // A lot of themes use entry-content as their main content wrapper. ?>
+		<div class="entry-content">
+			<div class="widget-preview">
+				<?php echo $widget_preview; ?>
+			</div>
+		</div>
+		</body>
+		</html>
+
+		<?php
+		exit();
+	}
 }

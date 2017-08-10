@@ -92,6 +92,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 1.3 - 10 August 2017 =
+    * New: Ability to set preview images for widgets based on SiteOrigin Widgets Bundle.
 = Version 1.2.6 - 9 August 2017 =
     * Hotfix: Page Builder 2.5.10 update. Removed notices (for some reason builder render called twice in new builder version).
     * Bugfix: Remove test info from load more helper
