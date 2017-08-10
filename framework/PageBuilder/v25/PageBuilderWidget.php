@@ -39,6 +39,37 @@ if ( ! PageBuilderLoader::widgets_bundle_active() ) {
  * Class PageBuilderWidget
  */
 class PageBuilderWidget extends \SiteOrigin_Widget {
+
+	public $preview_folder = 'assets/widgets';
+
+	/**
+	 * PageBuilderWidget Constructor.
+	 *
+	 * @param string $id Widget ID.
+	 * @param string $name Widget Name.
+	 * @param array  $widget_options Optional Normal WP_Widget widget options and a few extras.
+	 *   - help: A URL which, if present, causes a help link to be displayed on the Edit Widget modal.
+	 *   - instance_storage: Whether or not to temporarily store instances of this widget.
+	 *   - has_preview: Whether or not this widget has a preview to display. If false, the form does not output a
+	 *                  'Preview' button.
+	 * @param array  $control_options Optional Normal WP_Widget control options.
+	 * @param array  $form_options Optional An array describing the form fields used to configure SiteOrigin widgets.
+	 * @param mixed  $base_folder Optional  Some folder.
+	 */
+	function __construct(
+		$id,
+		$name,
+		$widget_options = array(),
+		$control_options = array(),
+		$form_options = array(),
+		$base_folder = false
+	) {
+		parent::__construct( $id, $name, $widget_options, $control_options, $form_options, $base_folder );
+
+		// add hook to be able to overwrite widget label, printed in page builder rows grid.
+		add_filter( 'siteorigin_widgets_sanitize_instance_' . $this->id_base, array( $this, 'before_update' ), 10, 3 );
+	}
+
 	/**
 	 * Form fields configuration
 	 *
@@ -72,4 +103,89 @@ class PageBuilderWidget extends \SiteOrigin_Widget {
 	public function widget( $args, $instance ) {
 		throw new \Exception( 'PageBuilderWidget::widget() : You should overwrite widget() method inside your own class.' );
 	}
+
+	/**
+	 * Method called before saving instance to database.
+	 *
+	 * @param array             $new_instance  Array of widget field values.
+	 * @param array             $form_options  Array of form field options.
+	 * @param PageBuilderWidget $widget  Widget class instance.
+	 *
+	 * @return array
+	 */
+	public function before_update( $new_instance, $form_options, $widget ) {
+		return $new_instance;
+	}
+
+	/**
+	 * Get an array of variables to make available to templates. By default, just return an array. Should be overwritten by child widgets.
+	 *
+	 * @param array      $instance  Instance values.
+	 * @param array|null $args Args.
+	 *
+	 * @return array Instance validated values (with default values).
+	 */
+	public function get_template_variables( $instance, $args ) {
+		$form_options = $this->get_widget_form();
+		$instance     = $this->add_defaults( $form_options, $instance );
+		$instance     = $this->modify_instance( $instance );
+		return $instance;
+	}
+
+	/**
+	 * Return a list of images to be shown as preview.
+	 * By default it's widget {id_base}.png with $this->name
+	 *
+	 * @return array
+	 */
+	public function get_preview_images() {
+		return array(
+			$this->id_base . '.png' => $this->name . ' View Example',
+		);
+	}
+
+	/**
+	 * Print widget preview inside an iframe from PageBuilder previewer.
+	 */
+	public function preview() {
+		$images = $this->get_preview_images();
+		?>
+			<p class="preview-note"><small>* Examples are shown with demo data.</small></p>
+			<div class="preview-items">
+				<?php foreach ( $images as $img => $caption ) :
+					if ( is_numeric( $img ) ) {
+						$img = $caption;
+						$caption = $this->name;
+					}
+					if ( false === strpos( $img, 'http' ) ) {
+						$img_path = '/' . $this->preview_folder . '/' . $img;
+						if ( file_exists( get_stylesheet_directory() . $img_path ) ) {
+							$img = get_stylesheet_directory_uri() . $img_path;
+						} else {
+							$img = get_template_directory_uri() . $img_path;
+						}
+					}
+					?>
+					<div class="preview-item text-center">
+						<p class="image-caption"><?php echo esc_html( $caption ); ?></p>
+						<p class="image"><img src="<?php echo esc_attr( $img ); ?>"></p>
+					</div>
+				<?php endforeach; ?>
+			</div>
+			<?php if ( 1 < count( $images ) ) : ?>
+				<div class="preview-nav">
+					<a class="next pull-right" href="#"><span class="dashicons dashicons-arrow-right-alt2"></span></a>
+					<a class="prev pull-left" href="#"><span class="dashicons dashicons-arrow-left-alt2"></span></a>
+				</div>
+			<?php endif; ?>
+		<?php
+	}
+
+	/**
+	 * Can be overwritten by child widgets to make variables available to javascript via ajax calls. These are designed to be used in the admin.
+	 */
+	function get_javascript_variables() {
+
+	}
+
 }
