@@ -1,0 +1,29 @@
+.text-center {
+	text-align: center;
+}
+.preview-item .image img{
+	max-width: 80%;
+}
+.preview-note{
+	text-align: right;
+	color: #555;
+	font-style: italic;
+	position: absolute;
+	top:10px;
+	right:20px;
+}
+.preview-nav a{
+	text-decoration: none;
+	color:#333;
+	position: absolute;
+	top:50%;
+}
+.preview-nav a.pull-right{
+	right:40px;
+}
+.preview-nav a.pull-left{
+	left:10px;
+}
+.preview-nav .dashicons {
+	font-size: 48px;
+}
