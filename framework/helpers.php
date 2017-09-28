@@ -74,6 +74,7 @@ function cpt_next_posts_link( WP_Query $wp_query, $label, $load_more_attr = '' )
 			} else {
 				$attr .= ' class="jtf-load-more"';
 			}
+			$load_more_attr .= ' data-pagecount="' . $max_page . '"';
 		}
 		$load_more_attr = apply_filters( 'jtf_load_more_attributes', $load_more_attr );
 
