@@ -11,7 +11,9 @@ abstract class ThemeSettings {
 	 *
 	 * @var \TitanFramework
 	 */
-	protected static $tf;
+	public static $tf;
+
+	public static $panel;
 
 	/**
 	 * Theme Settings constructor
