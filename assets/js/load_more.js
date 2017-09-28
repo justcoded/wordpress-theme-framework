@@ -6,7 +6,7 @@ function initLoadMore() {
   var loadmore_active = false;
   jQuery('.jtf-load-more').on('click', function (e) {
     e.preventDefault();
-    if (loadmore_activiti) return false;
+    if (loadmore_active) return false;
     loadmore_active = true;
     var $loadmore = jQuery(this),
       link = $loadmore.attr('href'),
