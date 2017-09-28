@@ -92,6 +92,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 1.3.2 - 28 September 2017 =
+    * Bugfix: Hide Loadmore button after load last page, fix multiclick
 = Version 1.3.1 - 11 August 2017 =
     * Bugfix: Missing css and js for Page Builder widgets preview
 = Version 1.3 - 10 August 2017 =
