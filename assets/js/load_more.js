@@ -3,11 +3,11 @@ jQuery(document).ready(function () {
 })
 
 function initLoadMore() {
-  var loadmore_active = false;
+  var loading = false;
   jQuery('.jtf-load-more').on('click', function (e) {
     e.preventDefault();
-    if (loadmore_active) return false;
-    loadmore_active = true;
+    if (loading) return false;
+    loading = true;
     var $loadmore = jQuery(this),
       link = $loadmore.attr('href'),
       pagecount = $loadmore.attr('data-pagecount'),
@@ -29,7 +29,7 @@ function initLoadMore() {
         if (currentpage > pagecount) {
           $loadmore.hide();
         }
-        loadmore_active = false;
+        loading = false;
       }
     ).fail(function () {
       $loadmore.hide();
