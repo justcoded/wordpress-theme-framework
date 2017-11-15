@@ -6,7 +6,7 @@ use JustCoded\ThemeFramework\Objects\Post_Type;
 /**
  * Class for save requests from plugin's Contact Form 7 forms
  */
-class ContactForm7 extends Post_Type {
+class Contact_Form7 extends Post_Type {
 	/**
 	 * ID
 	 *

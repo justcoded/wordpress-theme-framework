@@ -4,11 +4,11 @@ namespace JustCoded\ThemeFramework;
 
 use JustCoded\ThemeFramework\Supports\Autoptimize;
 use JustCoded\ThemeFramework\Supports\JustCustomFields;
-use JustCoded\ThemeFramework\Supports\JustPostPreview;
+use JustCoded\ThemeFramework\Supports\Just_Post_Preview;
 use JustCoded\ThemeFramework\Supports\JustResponsiveImages;
-use JustCoded\ThemeFramework\Supports\JustTinymce;
+use JustCoded\ThemeFramework\Supports\Just_Tinymce;
 use JustCoded\ThemeFramework\Web\TemplateHierarchy;
-use JustCoded\ThemeFramework\Supports\JustLoadMore;
+use JustCoded\ThemeFramework\Supports\Just_Load_More;
 use JustCoded\ThemeFramework\Web\View;
 
 /**
@@ -380,11 +380,11 @@ abstract class Theme {
 	 * Adds loading of custom features provided by 3d-party plugins.
 	 */
 	public function support_plugins() {
-		new JustLoadMore();
+		new Just_Load_More();
 		new JustResponsiveImages();
 		new JustCustomFields();
-		new JustPostPreview();
-		new JustTinymce();
+		new Just_Post_Preview();
+		new Just_Tinymce();
 	}
 
 	/**
