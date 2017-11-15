@@ -6,10 +6,10 @@ use JustCoded\ThemeFramework\Web\View;
 use JustCoded\ThemeFramework\Web\ViewsRule;
 
 /**
- * Class TemplateHierarchy
+ * Class Template_Hierarchy
  * Hook get_*_template() functions to add "views" folder everywhere
  */
-class TemplateHierarchy {
+class Template_Hierarchy {
 	/**
 	 * Standard template types available for rewrite.
 	 *
@@ -48,7 +48,7 @@ class TemplateHierarchy {
 	);
 
 	/**
-	 * TemplateHierarchy constructor.
+	 * Template_Hierarchy constructor.
 	 * set wordpress template system hooks
 	 */
 	public function __construct() {

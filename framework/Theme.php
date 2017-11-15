@@ -7,7 +7,7 @@ use JustCoded\ThemeFramework\Supports\JustCustomFields;
 use JustCoded\ThemeFramework\Supports\Just_Post_Preview;
 use JustCoded\ThemeFramework\Supports\JustResponsiveImages;
 use JustCoded\ThemeFramework\Supports\Just_Tinymce;
-use JustCoded\ThemeFramework\Web\TemplateHierarchy;
+use JustCoded\ThemeFramework\Web\Template_Hierarchy;
 use JustCoded\ThemeFramework\Supports\Just_Load_More;
 use JustCoded\ThemeFramework\Web\View;
 
@@ -116,7 +116,7 @@ abstract class Theme {
 	public function __construct() {
 		$this->register_post_types();
 		$this->register_taxonomies();
-		new TemplateHierarchy();
+		new Template_Hierarchy();
 
 		/**
 		 * Pretty standard theme hooks
