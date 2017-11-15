@@ -4,10 +4,10 @@
  *
  * Patch the default ajax load more pagination.
  *
- * @package JustCoded\ThemeFramework\Supports
+ * @package Just_Coded\Theme_Framework\Supports
  */
 
-namespace JustCoded\ThemeFramework\Supports;
+namespace Just_Coded\Theme_Framework\Supports;
 
 class JustLoadMore {
 	/**

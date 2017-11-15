@@ -1,5 +1,5 @@
 <?php
-namespace JustCoded\ThemeFramework;
+namespace Just_Coded\Theme_Framework;
 
 /**
  * SPL autoload registration for theme to prevent using file includes

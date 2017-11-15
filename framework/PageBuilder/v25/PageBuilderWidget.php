@@ -6,7 +6,7 @@
  * Time: 16:56
  */
 
-namespace JustCoded\ThemeFramework\PageBuilder\v25;
+namespace Just_Coded\Theme_Framework\PageBuilder\v25;
 
 if ( ! PageBuilderLoader::widgets_bundle_active() ) {
 	/**

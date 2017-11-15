@@ -1,7 +1,7 @@
 <?php
-namespace JustCoded\ThemeFramework\Supports;
+namespace Just_Coded\Theme_Framework\Supports;
 
-use JustCoded\ThemeFramework\Objects\PostType;
+use Just_Coded\Theme_Framework\Objects\PostType;
 
 /**
  * Class for save requests from plugin's Contact Form 7 forms

@@ -1,8 +1,8 @@
 <?php
-namespace JustCoded\ThemeFramework\Objects;
+namespace Just_Coded\Theme_Framework\Objects;
 
-use JustCoded\ThemeFramework\Web\View;
-use JustCoded\ThemeFramework\Web\ViewsRule;
+use Just_Coded\Theme_Framework\Web\View;
+use Just_Coded\Theme_Framework\Web\Views_Rule;
 
 /**
  * Custom post type class to simplify the process of registering post type.

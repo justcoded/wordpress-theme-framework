@@ -1,8 +1,8 @@
 <?php
 
-namespace JustCoded\ThemeFramework\PageBuilder\v25\Traits;
+namespace Just_Coded\Theme_Framework\PageBuilder\v25\Traits;
 
-use JustCoded\ThemeFramework\PageBuilder\v25\Layouts\WidgetLayout;
+use Just_Coded\Theme_Framework\PageBuilder\v25\Layouts\WidgetLayout;
 
 trait WidgetLayoutsLoader {
 
