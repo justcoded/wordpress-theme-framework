@@ -1,17 +1,22 @@
 <?php
 /**
- * Class JustLoadMore
+ * Class Just_Load_More
  *
  * Patch the default ajax load more pagination.
  *
- * @package JustCoded\ThemeFramework\Supports
+ * @package Just_Coded\Theme_Framework\Supports
  */
 
-namespace JustCoded\ThemeFramework\Supports;
+namespace Just_Coded\Theme_Framework\Supports;
 
-class JustLoadMore {
+/**
+ * Class Just_Load_More
+ *
+ * @package Just_Coded\Theme_Framework\Supports
+ */
+class Just_Load_More {
 	/**
-	 * JustLoadMore constructor.
+	 * Just_Load_More constructor.
 	 *
 	 * Register plugin hooks.
 	 */

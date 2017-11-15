@@ -1,12 +1,12 @@
 <?php
-namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
+namespace Just_Coded\Theme_Framework\Page_Builder\v25\Layouts;
 
 /**
- * Class RowLayout
+ * Class Row_Layout
  *
- * @package JustCoded\ThemeFramework\SOPanels
+ * @package Just_Coded\Theme_Framework\SOPanels
  */
-class RowLayout extends Layout {
+class Row_Layout extends Layout {
 	/**
 	 * Row Layout identifier
 	 * should be overwritten in child class
@@ -45,7 +45,7 @@ class RowLayout extends Layout {
 	public $cell_index;
 
 	/**
-	 * RowLayout constructor.
+	 * Row_Layout constructor.
 	 *
 	 * @throws \Exception Missing $ID or $TITLE properties.
 	 */
