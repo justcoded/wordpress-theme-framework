@@ -1,8 +1,8 @@
 <?php
 
-namespace JustCoded\ThemeFramework\PageBuilder\v25\Traits;
+namespace Just_Coded\Theme_Framework\Page_Builder\v25\Traits;
 
-use JustCoded\ThemeFramework\PageBuilder\v25\Layouts\Row_Layout;
+use Just_Coded\Theme_Framework\Page_Builder\v25\Layouts\Row_Layout;
 
 trait Row_Layouts_Loader {
 	/**

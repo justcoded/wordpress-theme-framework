@@ -1,15 +1,15 @@
 <?php
-namespace JustCoded\ThemeFramework\PageBuilder\v25;
+namespace Just_Coded\Theme_Framework\Page_Builder\v25;
 
-use JustCoded\ThemeFramework\PageBuilder\v25\Traits\Html_Cleanup;
-use JustCoded\ThemeFramework\PageBuilder\v25\Traits\Row_Layouts_Loader;
-use JustCoded\ThemeFramework\PageBuilder\v25\Traits\Widget_Layouts_Loader;
+use Just_Coded\Theme_Framework\Page_Builder\v25\Traits\Html_Cleanup;
+use Just_Coded\Theme_Framework\Page_Builder\v25\Traits\Row_Layouts_Loader;
+use Just_Coded\Theme_Framework\Page_Builder\v25\Traits\Widget_Layouts_Loader;
 
 /**
  * Class SiteOriginPanelsLoader
  * SiteOrigin Panels Page Builder plugin extension
  *
- * @package JustCoded\ThemeFramework\SOPanels
+ * @package Just_Coded\Theme_Framework\SOPanels
  */
 class Page_Builder_Loader {
 	use Html_Cleanup, Row_Layouts_Loader, Widget_Layouts_Loader;
@@ -56,7 +56,7 @@ class Page_Builder_Loader {
 	 *
 	 * @var string
 	 */
-	public $default_layout_namespace = '\JustCoded\ThemeFramework\PageBuilder\v25';
+	public $default_layout_namespace = '\Just_Coded\Theme_Framework\Page_Builder\v25';
 
 	/**
 	 * Current row index to be rendered
@@ -275,7 +275,7 @@ class Page_Builder_Loader {
 		global $wp_widget_factory;
 		$widget = ! empty( $wp_widget_factory->widgets[ $class ] ) ? $wp_widget_factory->widgets[ $class ] : false;
 
-		if ( ! is_a( $widget, '\JustCoded\ThemeFramework\PageBuilder\v25\Page_Builder_Widget' ) ) {
+		if ( ! is_a( $widget, '\Just_Coded\Theme_Framework\Page_Builder\v25\Page_Builder_Widget' ) ) {
 			return;
 		}
 

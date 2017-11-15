@@ -1,10 +1,10 @@
 <?php
-namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
+namespace Just_Coded\Theme_Framework\Page_Builder\v25\Layouts;
 
 /**
  * Class Widget_Layout
  *
- * @package JustCoded\ThemeFramework\SOPanels
+ * @package Just_Coded\Theme_Framework\SOPanels
  */
 class Rwd_Widget_Layout extends Widget_Layout {
 	/**
