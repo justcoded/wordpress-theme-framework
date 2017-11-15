@@ -28,12 +28,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 
-if ( ! class_exists( 'JustThemeFrameworkChecker' ) ) {
+if ( ! class_exists( 'Just_Theme_Framework_Checker' ) ) {
 
 	/**
-	 * Class JustThemeFrameworkChecker
+	 * Class Just_Theme_Framework_Checker
 	 */
-	class JustThemeFrameworkChecker {
+	class Just_Theme_Framework_Checker {
 
 		/**
 		 * Required plugins settings.
@@ -52,7 +52,7 @@ if ( ! class_exists( 'JustThemeFrameworkChecker' ) ) {
 		);
 
 		/**
-		 * JustThemeFrameworkChecker constructor.
+		 * Just_Theme_Framework_Checker constructor.
 		 *
 		 * Register admin notices with requirements.
 		 *
@@ -114,5 +114,5 @@ if ( ! class_exists( 'JustThemeFrameworkChecker' ) ) {
 		}
 	}
 
-	$_jtf_checker = new JustThemeFrameworkChecker();
+	$_jtf_checker = new Just_Theme_Framework_Checker();
 } // End if().

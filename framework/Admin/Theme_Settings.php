@@ -1,11 +1,11 @@
 <?php
-namespace JustCoded\ThemeFramework\Admin;
+namespace Just_Coded\Theme_Framework\Admin;
 
 /**
  * Theme Settings base class
  * Contain few methods to work with Titan framework
  */
-abstract class ThemeSettings {
+abstract class Theme_Settings {
 	/**
 	 * Unique framework instance to be used
 	 *
@@ -56,7 +56,7 @@ abstract class ThemeSettings {
 		foreach ( $tabs as $slug => $name ) {
 			$method = 'register' . ucfirst( $slug ) . 'Tab';
 			if ( ! method_exists( $this, $method ) ) {
-				throw new \Exception( 'ThemeSettings: Unable to find tab method "' . $method . '"' );
+				throw new \Exception( 'Theme_Settings: Unable to find tab method "' . $method . '"' );
 			}
 
 			$this->$method( $panel );
