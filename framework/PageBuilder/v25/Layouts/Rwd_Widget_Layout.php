@@ -2,11 +2,11 @@
 namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
 
 /**
- * Class WidgetLayout
+ * Class Widget_Layout
  *
  * @package JustCoded\ThemeFramework\SOPanels
  */
-class RwdWidgetLayout extends WidgetLayout {
+class Rwd_Widget_Layout extends Widget_Layout {
 	/**
 	 * Widget Layout identifier
 	 * should be overwritten in child class

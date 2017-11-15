@@ -6,7 +6,7 @@ namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
  *
  * @package JustCoded\ThemeFramework\SOPanels
  */
-class RwdRowLayout extends RowLayout {
+class Rwd_Row_Layout extends Row_Layout {
 	/**
 	 * ID
 	 *

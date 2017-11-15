@@ -359,7 +359,7 @@ abstract class Theme {
 	/**
 	 * Register post types
 	 * Usage:
-	 *      new \namespace\App\PostType\MyPostType();
+	 *      new \namespace\App\Post_Type\MyPostType();
 	 *
 	 * Each post type register it's own action hook
 	 */

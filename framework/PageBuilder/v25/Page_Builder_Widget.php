@@ -8,12 +8,12 @@
 
 namespace JustCoded\ThemeFramework\PageBuilder\v25;
 
-if ( ! PageBuilderLoader::widgets_bundle_active() ) {
+if ( ! Page_Builder_Loader::widgets_bundle_active() ) {
 	/**
-	 * Class PageBuilderWidget
+	 * Class Page_Builder_Widget
 	 * if widgets bundle is not enabled we create a dummy class to prevent errors.
 	 */
-	class PageBuilderWidget extends \WP_Widget {
+	class Page_Builder_Widget extends \WP_Widget {
 		/**
 		 * Constructor.
 		 *
@@ -36,14 +36,14 @@ if ( ! PageBuilderLoader::widgets_bundle_active() ) {
 }
 
 /**
- * Class PageBuilderWidget
+ * Class Page_Builder_Widget
  */
-class PageBuilderWidget extends \SiteOrigin_Widget {
+class Page_Builder_Widget extends \SiteOrigin_Widget {
 
 	public $preview_folder = 'assets/widgets';
 
 	/**
-	 * PageBuilderWidget Constructor.
+	 * Page_Builder_Widget Constructor.
 	 *
 	 * @param string $id Widget ID.
 	 * @param string $name Widget Name.
@@ -77,7 +77,7 @@ class PageBuilderWidget extends \SiteOrigin_Widget {
 	 * @throws \Exception Method should be overwritten in nested class.
 	 */
 	public function get_widget_form() {
-		throw new \Exception( 'PageBuilderWidget::get_widget_form() : You should overwrite get_widget_form() method inside your own class.' );
+		throw new \Exception( 'Page_Builder_Widget::get_widget_form() : You should overwrite get_widget_form() method inside your own class.' );
 	}
 
 	/**
@@ -89,7 +89,7 @@ class PageBuilderWidget extends \SiteOrigin_Widget {
 	 * @throws \Exception Method should be overwritten in nested class.
 	 */
 	public function modify_instance( $instance ) {
-		throw new \Exception( 'PageBuilderWidget::modify_instance() : You should overwrite modify_instance() method inside your own class.' );
+		throw new \Exception( 'Page_Builder_Widget::modify_instance() : You should overwrite modify_instance() method inside your own class.' );
 	}
 
 	/**
@@ -101,15 +101,15 @@ class PageBuilderWidget extends \SiteOrigin_Widget {
 	 * @throws \Exception Method should be overwritten in nested class.
 	 */
 	public function widget( $args, $instance ) {
-		throw new \Exception( 'PageBuilderWidget::widget() : You should overwrite widget() method inside your own class.' );
+		throw new \Exception( 'Page_Builder_Widget::widget() : You should overwrite widget() method inside your own class.' );
 	}
 
 	/**
 	 * Method called before saving instance to database.
 	 *
-	 * @param array             $new_instance  Array of widget field values.
-	 * @param array             $form_options  Array of form field options.
-	 * @param PageBuilderWidget $widget  Widget class instance.
+	 * @param array               $new_instance  Array of widget field values.
+	 * @param array               $form_options  Array of form field options.
+	 * @param Page_Builder_Widget $widget  Widget class instance.
 	 *
 	 * @return array
 	 */
