@@ -6,7 +6,7 @@
  * Time: 16:56
  */
 
-namespace Just_Coded\Theme_Framework\PageBuilder\v25;
+namespace Just_Coded\Theme_Framework\Page_Builder\v25;
 
 if ( ! Page_Builder_Loader::widgets_bundle_active() ) {
 	/**
@@ -38,12 +38,12 @@ if ( ! Page_Builder_Loader::widgets_bundle_active() ) {
 /**
  * Class Page_Builder_Widget
  */
-class PageBuilderWidget extends \SiteOrigin_Widget {
+class Page_Builder_Widget extends \SiteOrigin_Widget {
 
 	public $preview_folder = 'assets/widgets';
 
 	/**
-	 * PageBuilderWidget Constructor.
+	 * Page_Builder_Widget Constructor.
 	 *
 	 * @param string $id Widget ID.
 	 * @param string $name Widget Name.
@@ -77,7 +77,7 @@ class PageBuilderWidget extends \SiteOrigin_Widget {
 	 * @throws \Exception Method should be overwritten in nested class.
 	 */
 	public function get_widget_form() {
-		throw new \Exception( 'PageBuilderWidget::get_widget_form() : You should overwrite get_widget_form() method inside your own class.' );
+		throw new \Exception( 'Page_Builder_Widget::get_widget_form() : You should overwrite get_widget_form() method inside your own class.' );
 	}
 
 	/**
@@ -89,7 +89,7 @@ class PageBuilderWidget extends \SiteOrigin_Widget {
 	 * @throws \Exception Method should be overwritten in nested class.
 	 */
 	public function modify_instance( $instance ) {
-		throw new \Exception( 'PageBuilderWidget::modify_instance() : You should overwrite modify_instance() method inside your own class.' );
+		throw new \Exception( 'Page_Builder_Widget::modify_instance() : You should overwrite modify_instance() method inside your own class.' );
 	}
 
 	/**
@@ -101,7 +101,7 @@ class PageBuilderWidget extends \SiteOrigin_Widget {
 	 * @throws \Exception Method should be overwritten in nested class.
 	 */
 	public function widget( $args, $instance ) {
-		throw new \Exception( 'PageBuilderWidget::widget() : You should overwrite widget() method inside your own class.' );
+		throw new \Exception( 'Page_Builder_Widget::widget() : You should overwrite widget() method inside your own class.' );
 	}
 
 	/**
@@ -145,7 +145,7 @@ class PageBuilderWidget extends \SiteOrigin_Widget {
 	}
 
 	/**
-	 * Print widget preview inside an iframe from PageBuilder previewer.
+	 * Print widget preview inside an iframe from Page_Builder previewer.
 	 */
 	public function preview() {
 		$images = $this->get_preview_images();

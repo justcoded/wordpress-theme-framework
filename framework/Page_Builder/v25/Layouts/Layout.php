@@ -1,11 +1,11 @@
 <?php
 
-namespace Just_Coded\Theme_Framework\PageBuilder\v25\Layouts;
+namespace Just_Coded\Theme_Framework\Page_Builder\v25\Layouts;
 
 /**
  * Class Layout
  * Starting from Page Builder v2.5 all inline css were moved into separate inline css block.
- * Since we remove all inline css from PageBuilder - we need to enable back this feature.
+ * Since we remove all inline css from Page_Builder - we need to enable back this feature.
  *
  * For image attachment we can use rwd plugin for better support.
  */
