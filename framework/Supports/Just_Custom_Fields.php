@@ -4,15 +4,15 @@ namespace Just_Coded\Theme_Framework\Supports;
 use jcf\models\Settings;
 
 /**
- * Class JustCustomFields
+ * Class Just_Custom_Fields
  *
  * Register hooks to rewrite storage file path
  *
  * @package Just_Coded\Theme_Framework\Supports
  */
-class JustCustomFields {
+class Just_Custom_Fields {
 	/**
-	 * JustCustomFields constructor.
+	 * Just_Custom_Fields constructor.
 	 * Register jcf hooks
 	 */
 	public function __construct() {

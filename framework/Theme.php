@@ -3,9 +3,9 @@
 namespace Just_Coded\Theme_Framework;
 
 use Just_Coded\Theme_Framework\Supports\Autoptimize;
-use Just_Coded\Theme_Framework\Supports\JustCustomFields;
+use Just_Coded\Theme_Framework\Supports\Just_Custom_Fields;
 use Just_Coded\Theme_Framework\Supports\Just_Post_Preview;
-use Just_Coded\Theme_Framework\Supports\JustResponsiveImages;
+use Just_Coded\Theme_Framework\Supports\Just_Responsive_Images;
 use Just_Coded\Theme_Framework\Supports\Just_Tinymce;
 use Just_Coded\Theme_Framework\Web\Template_Hierarchy;
 use Just_Coded\Theme_Framework\Supports\Just_Load_More;
@@ -381,8 +381,8 @@ abstract class Theme {
 	 */
 	public function support_plugins() {
 		new Just_Load_More();
-		new JustResponsiveImages();
-		new JustCustomFields();
+		new Just_Responsive_Images();
+		new Just_Custom_Fields();
 		new Just_Post_Preview();
 		new Just_Tinymce();
 	}

@@ -2,16 +2,16 @@
 namespace Just_Coded\Theme_Framework\Supports;
 
 /**
- * Class JustResponsiveImages
+ * Class Just_Responsive_Images
  *
  * Load rwd sizes from /config/image-sizes.php file inside the theme.
  *
  * @package Just_Coded\Theme_Framework\Supports
  */
-class JustResponsiveImages {
+class Just_Responsive_Images {
 
 	/**
-	 * JustResponsiveImages constructor.
+	 * Just_Responsive_Images constructor.
 	 *
 	 * Register plugin hooks.
 	 */
