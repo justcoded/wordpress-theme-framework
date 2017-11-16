@@ -1,11 +1,11 @@
 <?php
 
-namespace Just_Coded\Theme_Framework\Page_Builder\v25\Traits;
+namespace JustCoded\ThemeFramework\PageBuilder\v25\Traits;
 
-trait Html_Cleanup {
+trait HtmlCleanup {
 
 	/**
-	 * Html_Cleanup contructor
+	 * HtmlCleanup contructor
 	 * (have to be called inside class constructor)
 	 */
 	public function html_cleanup() {

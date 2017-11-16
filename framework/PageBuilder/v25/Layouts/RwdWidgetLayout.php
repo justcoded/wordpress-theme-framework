@@ -1,12 +1,12 @@
 <?php
-namespace Just_Coded\Theme_Framework\Page_Builder\v25\Layouts;
+namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
 
 /**
- * Class Widget_Layout
+ * Class WidgetLayout
  *
- * @package Just_Coded\Theme_Framework\SOPanels
+ * @package JustCoded\ThemeFramework\SOPanels
  */
-class Rwd_Widget_Layout extends Widget_Layout {
+class RwdWidgetLayout extends WidgetLayout {
 	/**
 	 * Widget Layout identifier
 	 * should be overwritten in child class
