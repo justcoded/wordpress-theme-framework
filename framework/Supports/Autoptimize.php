@@ -1,5 +1,5 @@
 <?php
-namespace Just_Coded\Theme_Framework\Supports;
+namespace JustCoded\ThemeFramework\Supports;
 
 /**
  * Class AutoOptimize

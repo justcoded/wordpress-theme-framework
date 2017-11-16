@@ -1,8 +1,8 @@
 <?php
-namespace Just_Coded\Theme_Framework\Objects;
+namespace JustCoded\ThemeFramework\Objects;
 
-use Just_Coded\Theme_Framework\Web\View;
-use Just_Coded\Theme_Framework\Web\Views_Rule;
+use JustCoded\ThemeFramework\Web\View;
+use JustCoded\ThemeFramework\Web\ViewsRule;
 
 /**
  * Custom post type class to simplify the process of registering post type.
@@ -10,9 +10,9 @@ use Just_Coded\Theme_Framework\Web\Views_Rule;
  * However they affect all standard options from here:
  * https://codex.wordpress.org/Function_Reference/register_post_type
  */
-abstract class Post_Type {
+abstract class PostType {
 	/**
-	 * Post_Type ID. Used to store it in DB and identify by post_type key
+	 * PostType ID. Used to store it in DB and identify by post_type key
 	 * SHOULD BE OVERWRITTEN IN CHILD CLASS
 	 *
 	 * @var string
@@ -20,7 +20,7 @@ abstract class Post_Type {
 	public static $ID;
 
 	/**
-	 * Post_Type rewrite prefix, called slug. Will be present in URL structure
+	 * PostType rewrite prefix, called slug. Will be present in URL structure
 	 * SHOULD BE OVERWRITTEN IN CHILD CLASS
 	 *
 	 * @var string

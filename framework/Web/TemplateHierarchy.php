@@ -1,15 +1,15 @@
 <?php
 
-namespace Just_Coded\Theme_Framework\Web;
+namespace JustCoded\ThemeFramework\Web;
 
-use Just_Coded\Theme_Framework\Web\View;
-use Just_Coded\Theme_Framework\Web\Views_Rule;
+use JustCoded\ThemeFramework\Web\View;
+use JustCoded\ThemeFramework\Web\ViewsRule;
 
 /**
- * Class Template_Hierarchy
+ * Class TemplateHierarchy
  * Hook get_*_template() functions to add "views" folder everywhere
  */
-class Template_Hierarchy {
+class TemplateHierarchy {
 	/**
 	 * Standard template types available for rewrite.
 	 *
@@ -48,7 +48,7 @@ class Template_Hierarchy {
 	);
 
 	/**
-	 * Template_Hierarchy constructor.
+	 * TemplateHierarchy constructor.
 	 * set wordpress template system hooks
 	 */
 	public function __construct() {
@@ -259,7 +259,7 @@ class Template_Hierarchy {
 			return array();
 		}
 
-		$cache_hash = md5( 'Just_Coded\Theme_Framework-' . $wp_theme->get_stylesheet() );
+		$cache_hash = md5( 'JustCoded\ThemeFramework-' . $wp_theme->get_stylesheet() );
 
 		$post_templates = wp_cache_get( "post_templates-depth{$depth}-{$cache_hash}", 'themes' );
 
