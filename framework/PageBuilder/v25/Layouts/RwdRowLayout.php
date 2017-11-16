@@ -1,12 +1,12 @@
 <?php
-namespace Just_Coded\Theme_Framework\Page_Builder\v25\Layouts;
+namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
 
 /**
  * Class Grid12RowLayout
  *
- * @package Just_Coded\Theme_Framework\SOPanels
+ * @package JustCoded\ThemeFramework\SOPanels
  */
-class Rwd_Row_Layout extends Row_Layout {
+class RwdRowLayout extends RowLayout {
 	/**
 	 * ID
 	 *

@@ -1,15 +1,15 @@
 <?php
 
-namespace Just_Coded\Theme_Framework;
+namespace JustCoded\ThemeFramework;
 
-use Just_Coded\Theme_Framework\Supports\Autoptimize;
-use Just_Coded\Theme_Framework\Supports\JustCustomFields;
-use Just_Coded\Theme_Framework\Supports\Just_Post_Preview;
-use Just_Coded\Theme_Framework\Supports\JustResponsiveImages;
-use Just_Coded\Theme_Framework\Supports\Just_Tinymce;
-use Just_Coded\Theme_Framework\Web\Template_Hierarchy;
-use Just_Coded\Theme_Framework\Supports\Just_Load_More;
-use Just_Coded\Theme_Framework\Web\View;
+use JustCoded\ThemeFramework\Supports\Autoptimize;
+use JustCoded\ThemeFramework\Supports\JustCustomFields;
+use JustCoded\ThemeFramework\Supports\JustPostPreview;
+use JustCoded\ThemeFramework\Supports\JustResponsiveImages;
+use JustCoded\ThemeFramework\Supports\JustTinymce;
+use JustCoded\ThemeFramework\Web\TemplateHierarchy;
+use JustCoded\ThemeFramework\Supports\JustLoadMore;
+use JustCoded\ThemeFramework\Web\View;
 
 /**
  * Main base class for theme.
@@ -116,7 +116,7 @@ abstract class Theme {
 	public function __construct() {
 		$this->register_post_types();
 		$this->register_taxonomies();
-		new Template_Hierarchy();
+		new TemplateHierarchy();
 
 		/**
 		 * Pretty standard theme hooks
@@ -359,7 +359,7 @@ abstract class Theme {
 	/**
 	 * Register post types
 	 * Usage:
-	 *      new \namespace\App\Post_Type\MyPostType();
+	 *      new \namespace\App\PostType\MyPostType();
 	 *
 	 * Each post type register it's own action hook
 	 */
@@ -380,11 +380,11 @@ abstract class Theme {
 	 * Adds loading of custom features provided by 3d-party plugins.
 	 */
 	public function support_plugins() {
-		new Just_Load_More();
+		new JustLoadMore();
 		new JustResponsiveImages();
 		new JustCustomFields();
-		new Just_Post_Preview();
-		new Just_Tinymce();
+		new JustPostPreview();
+		new JustTinymce();
 	}
 
 	/**

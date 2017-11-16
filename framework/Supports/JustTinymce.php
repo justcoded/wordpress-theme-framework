@@ -1,16 +1,16 @@
 <?php
-namespace Just_Coded\Theme_Framework\Supports;
+namespace JustCoded\ThemeFramework\Supports;
 
 /**
- * Class Just_Tinymce
+ * Class JustTinymce
  *
  * Patch config file path
  *
- * @package Just_Coded\Theme_Framework\Supports
+ * @package JustCoded\ThemeFramework\Supports
  */
-class Just_Tinymce {
+class JustTinymce {
 	/**
-	 * Just_Tinymce constructor.
+	 * JustTinymce constructor.
 	 *
 	 * Register plugin hooks
 	 */

@@ -1,6 +1,6 @@
 <?php
 
-namespace Just_Coded\Theme_Framework\Supports;
+namespace JustCoded\ThemeFramework\Supports;
 use jcf\models\Settings;
 
 /**
@@ -8,7 +8,7 @@ use jcf\models\Settings;
  *
  * Register hooks to rewrite storage file path
  *
- * @package Just_Coded\Theme_Framework\Supports
+ * @package JustCoded\ThemeFramework\Supports
  */
 class JustCustomFields {
 	/**
