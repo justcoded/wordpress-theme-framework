@@ -1,12 +1,12 @@
 <?php
-namespace Just_Coded\Theme_Framework\Supports;
+namespace JustCoded\ThemeFramework\Supports;
 
 /**
  * Class JustResponsiveImages
  *
  * Load rwd sizes from /config/image-sizes.php file inside the theme.
  *
- * @package Just_Coded\Theme_Framework\Supports
+ * @package JustCoded\ThemeFramework\Supports
  */
 class JustResponsiveImages {
 
