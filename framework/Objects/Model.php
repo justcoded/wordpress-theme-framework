@@ -1,5 +1,5 @@
 <?php
-namespace JustCoded\ThemeFramework\Objects;
+namespace Just_Coded\Theme_Framework\Objects;
 
 /**
  * Model is the base class for data models.
