@@ -8,12 +8,12 @@
 
 namespace Just_Coded\Theme_Framework\PageBuilder\v25;
 
-if ( ! PageBuilderLoader::widgets_bundle_active() ) {
+if ( ! Page_Builder_Loader::widgets_bundle_active() ) {
 	/**
-	 * Class PageBuilderWidget
+	 * Class Page_Builder_Widget
 	 * if widgets bundle is not enabled we create a dummy class to prevent errors.
 	 */
-	class PageBuilderWidget extends \WP_Widget {
+	class Page_Builder_Widget extends \WP_Widget {
 		/**
 		 * Constructor.
 		 *
@@ -36,7 +36,7 @@ if ( ! PageBuilderLoader::widgets_bundle_active() ) {
 }
 
 /**
- * Class PageBuilderWidget
+ * Class Page_Builder_Widget
  */
 class PageBuilderWidget extends \SiteOrigin_Widget {
 
@@ -107,9 +107,9 @@ class PageBuilderWidget extends \SiteOrigin_Widget {
 	/**
 	 * Method called before saving instance to database.
 	 *
-	 * @param array             $new_instance  Array of widget field values.
-	 * @param array             $form_options  Array of form field options.
-	 * @param PageBuilderWidget $widget  Widget class instance.
+	 * @param array               $new_instance  Array of widget field values.
+	 * @param array               $form_options  Array of form field options.
+	 * @param Page_Builder_Widget $widget  Widget class instance.
 	 *
 	 * @return array
 	 */

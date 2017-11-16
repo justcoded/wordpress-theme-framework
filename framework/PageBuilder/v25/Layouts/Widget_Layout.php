@@ -2,11 +2,11 @@
 namespace Just_Coded\Theme_Framework\PageBuilder\v25\Layouts;
 
 /**
- * Class WidgetLayout
+ * Class Widget_Layout
  *
  * @package Just_Coded\Theme_Framework\SOPanels
  */
-class WidgetLayout extends Layout {
+class Widget_Layout extends Layout {
 	/**
 	 * Widget Layout identifier
 	 * should be overwritten in child class
@@ -38,7 +38,7 @@ class WidgetLayout extends Layout {
 	public static $unique_index;
 
 	/**
-	 * WidgetLayout constructor.
+	 * Widget_Layout constructor.
 	 *
 	 * @throws \Exception Missing $ID or $TITLE properties.
 	 */

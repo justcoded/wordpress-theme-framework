@@ -1,9 +1,9 @@
 <?php
 namespace Just_Coded\Theme_Framework\PageBuilder\v25;
 
-use Just_Coded\Theme_Framework\PageBuilder\v25\Traits\HtmlCleanup;
-use Just_Coded\Theme_Framework\PageBuilder\v25\Traits\RowLayoutsLoader;
-use Just_Coded\Theme_Framework\PageBuilder\v25\Traits\WidgetLayoutsLoader;
+use Just_Coded\Theme_Framework\PageBuilder\v25\Traits\Html_Cleanup;
+use Just_Coded\Theme_Framework\PageBuilder\v25\Traits\Row_Layouts_Loader;
+use Just_Coded\Theme_Framework\PageBuilder\v25\Traits\Widget_Layouts_Loader;
 
 /**
  * Class SiteOriginPanelsLoader
@@ -11,8 +11,8 @@ use Just_Coded\Theme_Framework\PageBuilder\v25\Traits\WidgetLayoutsLoader;
  *
  * @package Just_Coded\Theme_Framework\SOPanels
  */
-class PageBuilderLoader {
-	use HtmlCleanup, RowLayoutsLoader, WidgetLayoutsLoader;
+class Page_Builder_Loader {
+	use Html_Cleanup, Row_Layouts_Loader, Widget_Layouts_Loader;
 
 	/**
 	 * Widgets class names to be disabled from SiteOrigin Widgets Bundle
@@ -275,7 +275,7 @@ class PageBuilderLoader {
 		global $wp_widget_factory;
 		$widget = ! empty( $wp_widget_factory->widgets[ $class ] ) ? $wp_widget_factory->widgets[ $class ] : false;
 
-		if ( ! is_a( $widget, '\Just_Coded\Theme_Framework\PageBuilder\v25\PageBuilderWidget' ) ) {
+		if ( ! is_a( $widget, '\Just_Coded\Theme_Framework\PageBuilder\v25\Page_Builder_Widget' ) ) {
 			return;
 		}
 
