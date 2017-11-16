@@ -1,8 +1,8 @@
 <?php
-namespace Just_Coded\Theme_Framework\Objects;
+namespace JustCoded\WP\Framework\Objects;
 
-use Just_Coded\Theme_Framework\Web\Views_Rule;
-use Just_Coded\Theme_Framework\Web\View;
+use JustCoded\WP\Framework\Web\Views_Rule;
+use JustCoded\WP\Framework\Web\View;
 
 /**
  * Custom Taxonomy class to simplify the process of registering Taxonomy.

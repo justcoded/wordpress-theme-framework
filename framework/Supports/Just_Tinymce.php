@@ -1,12 +1,12 @@
 <?php
-namespace Just_Coded\Theme_Framework\Supports;
+namespace JustCoded\WP\Framework\Supports;
 
 /**
  * Class Just_Tinymce
  *
  * Patch config file path
  *
- * @package Just_Coded\Theme_Framework\Supports
+ * @package JustCoded\WP\Framework\Supports
  */
 class Just_Tinymce {
 	/**
