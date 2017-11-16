@@ -1,10 +1,10 @@
 <?php
-namespace Just_Coded\Theme_Framework\Page_Builder\v25\Layouts;
+namespace JustCoded\WP\Framework\Page_Builder\v25\Layouts;
 
 /**
  * Class Row_Layout
  *
- * @package Just_Coded\Theme_Framework\SOPanels
+ * @package JustCoded\WP\Framework\SOPanels
  */
 class Row_Layout extends Layout {
 	/**
