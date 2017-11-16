@@ -5,7 +5,7 @@ namespace Just_Coded\Theme_Framework\Admin;
  * Theme Settings base class
  * Contain few methods to work with Titan framework
  */
-abstract class ThemeSettings {
+abstract class Theme_Settings {
 	/**
 	 * Unique framework instance to be used
 	 *

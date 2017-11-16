@@ -2,16 +2,16 @@
 namespace Just_Coded\Theme_Framework\Supports;
 
 /**
- * Class JustPostPreview
+ * Class Just_Post_Preview
  *
  * Patch the folder to search custom templates.
  *
  * @package Just_Coded\Theme_Framework\Supports
  */
-class JustPostPreview {
+class Just_Post_Preview {
 
 	/**
-	 * JustPostPreview constructor.
+	 * Just_Post_Preview constructor.
 	 *
 	 * Register plugin hooks.
 	 */

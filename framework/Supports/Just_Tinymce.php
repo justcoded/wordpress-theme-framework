@@ -2,15 +2,15 @@
 namespace Just_Coded\Theme_Framework\Supports;
 
 /**
- * Class JustTinymce
+ * Class Just_Tinymce
  *
  * Patch config file path
  *
  * @package Just_Coded\Theme_Framework\Supports
  */
-class JustTinymce {
+class Just_Tinymce {
 	/**
-	 * JustTinymce constructor.
+	 * Just_Tinymce constructor.
 	 *
 	 * Register plugin hooks
 	 */

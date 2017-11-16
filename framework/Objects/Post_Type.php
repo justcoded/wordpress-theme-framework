@@ -10,9 +10,9 @@ use Just_Coded\Theme_Framework\Web\Views_Rule;
  * However they affect all standard options from here:
  * https://codex.wordpress.org/Function_Reference/register_post_type
  */
-abstract class PostType {
+abstract class Post_Type {
 	/**
-	 * PostType ID. Used to store it in DB and identify by post_type key
+	 * Post_Type ID. Used to store it in DB and identify by post_type key
 	 * SHOULD BE OVERWRITTEN IN CHILD CLASS
 	 *
 	 * @var string
@@ -20,7 +20,7 @@ abstract class PostType {
 	public static $ID;
 
 	/**
-	 * PostType rewrite prefix, called slug. Will be present in URL structure
+	 * Post_Type rewrite prefix, called slug. Will be present in URL structure
 	 * SHOULD BE OVERWRITTEN IN CHILD CLASS
 	 *
 	 * @var string
