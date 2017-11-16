@@ -1,5 +1,5 @@
 <?php
-namespace Just_Coded\Theme_Framework\Web;
+namespace JustCoded\WP\Framework\Web;
 
 /**
  * Views base class.

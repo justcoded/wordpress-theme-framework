@@ -1,6 +1,6 @@
 <?php
 
-namespace Just_Coded\Theme_Framework\Page_Builder\v25\Traits;
+namespace JustCoded\WP\Framework\Page_Builder\v25\Traits;
 
 trait Html_Cleanup {
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Just_Coded\Theme_Framework\Web;
+namespace JustCoded\WP\Framework\Web;
 
-use Just_Coded\Theme_Framework\Web\View;
-use Just_Coded\Theme_Framework\Web\Views_Rule;
+use JustCoded\WP\Framework\Web\View;
+use JustCoded\WP\Framework\Web\Views_Rule;
 
 /**
  * Class Template_Hierarchy
@@ -259,7 +259,7 @@ class Template_Hierarchy {
 			return array();
 		}
 
-		$cache_hash = md5( 'Just_Coded\Theme_Framework-' . $wp_theme->get_stylesheet() );
+		$cache_hash = md5( 'JustCoded\WP\Framework-' . $wp_theme->get_stylesheet() );
 
 		$post_templates = wp_cache_get( "post_templates-depth{$depth}-{$cache_hash}", 'themes' );
 

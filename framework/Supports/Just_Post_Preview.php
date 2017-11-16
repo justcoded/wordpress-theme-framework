@@ -1,12 +1,12 @@
 <?php
-namespace Just_Coded\Theme_Framework\Supports;
+namespace JustCoded\WP\Framework\Supports;
 
 /**
  * Class Just_Post_Preview
  *
  * Patch the folder to search custom templates.
  *
- * @package Just_Coded\Theme_Framework\Supports
+ * @package JustCoded\WP\Framework\Supports
  */
 class Just_Post_Preview {
 

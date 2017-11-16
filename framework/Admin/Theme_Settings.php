@@ -1,5 +1,5 @@
 <?php
-namespace Just_Coded\Theme_Framework\Admin;
+namespace JustCoded\WP\Framework\Admin;
 
 /**
  * Theme Settings base class

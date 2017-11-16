@@ -1,8 +1,8 @@
 <?php
 
-namespace Just_Coded\Theme_Framework\Page_Builder\v25\Traits;
+namespace JustCoded\WP\Framework\Page_Builder\v25\Traits;
 
-use Just_Coded\Theme_Framework\Page_Builder\v25\Layouts\Widget_Layout;
+use JustCoded\WP\Framework\Page_Builder\v25\Layouts\Widget_Layout;
 
 trait Widget_Layouts_Loader {
 

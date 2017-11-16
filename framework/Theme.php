@@ -1,15 +1,15 @@
 <?php
 
-namespace Just_Coded\Theme_Framework;
+namespace JustCoded\WP\Framework;
 
-use Just_Coded\Theme_Framework\Supports\Autoptimize;
-use Just_Coded\Theme_Framework\Supports\Just_Custom_Fields;
-use Just_Coded\Theme_Framework\Supports\Just_Post_Preview;
-use Just_Coded\Theme_Framework\Supports\Just_Responsive_Images;
-use Just_Coded\Theme_Framework\Supports\Just_Tinymce;
-use Just_Coded\Theme_Framework\Web\Template_Hierarchy;
-use Just_Coded\Theme_Framework\Supports\Just_Load_More;
-use Just_Coded\Theme_Framework\Web\View;
+use JustCoded\WP\Framework\Supports\Autoptimize;
+use JustCoded\WP\Framework\Supports\Just_Custom_Fields;
+use JustCoded\WP\Framework\Supports\Just_Post_Preview;
+use JustCoded\WP\Framework\Supports\Just_Responsive_Images;
+use JustCoded\WP\Framework\Supports\Just_Tinymce;
+use JustCoded\WP\Framework\Web\Template_Hierarchy;
+use JustCoded\WP\Framework\Supports\Just_Load_More;
+use JustCoded\WP\Framework\Web\View;
 
 /**
  * Main base class for theme.
