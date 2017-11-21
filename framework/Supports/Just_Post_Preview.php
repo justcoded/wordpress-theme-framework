@@ -1,17 +1,17 @@
 <?php
-namespace JustCoded\ThemeFramework\Supports;
+namespace JustCoded\WP\Framework\Supports;
 
 /**
- * Class JustPostPreview
+ * Class Just_Post_Preview
  *
  * Patch the folder to search custom templates.
  *
- * @package JustCoded\ThemeFramework\Supports
+ * @package JustCoded\WP\Framework\Supports
  */
-class JustPostPreview {
+class Just_Post_Preview {
 
 	/**
-	 * JustPostPreview constructor.
+	 * Just_Post_Preview constructor.
 	 *
 	 * Register plugin hooks.
 	 */

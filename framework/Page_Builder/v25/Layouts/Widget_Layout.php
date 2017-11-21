@@ -1,12 +1,12 @@
 <?php
-namespace JustCoded\ThemeFramework\PageBuilder\v25\Layouts;
+namespace JustCoded\WP\Framework\Page_Builder\v25\Layouts;
 
 /**
- * Class WidgetLayout
+ * Class Widget_Layout
  *
- * @package JustCoded\ThemeFramework\SOPanels
+ * @package JustCoded\WP\Framework\SOPanels
  */
-class WidgetLayout extends Layout {
+class Widget_Layout extends Layout {
 	/**
 	 * Widget Layout identifier
 	 * should be overwritten in child class
@@ -38,7 +38,7 @@ class WidgetLayout extends Layout {
 	public static $unique_index;
 
 	/**
-	 * WidgetLayout constructor.
+	 * Widget_Layout constructor.
 	 *
 	 * @throws \Exception Missing $ID or $TITLE properties.
 	 */

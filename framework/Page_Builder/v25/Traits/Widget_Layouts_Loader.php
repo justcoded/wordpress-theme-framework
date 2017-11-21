@@ -1,10 +1,10 @@
 <?php
 
-namespace JustCoded\ThemeFramework\PageBuilder\v25\Traits;
+namespace JustCoded\WP\Framework\Page_Builder\v25\Traits;
 
-use JustCoded\ThemeFramework\PageBuilder\v25\Layouts\WidgetLayout;
+use JustCoded\WP\Framework\Page_Builder\v25\Layouts\Widget_Layout;
 
-trait WidgetLayoutsLoader {
+trait Widget_Layouts_Loader {
 
 	/**
 	 * Registered widgets layouts
@@ -16,7 +16,7 @@ trait WidgetLayoutsLoader {
 	/**
 	 * Current widget layout in use.
 	 *
-	 * @var null|WidgetLayout
+	 * @var null|Widget_Layout
 	 */
 	protected $_widget_layout = null;
 
@@ -28,7 +28,7 @@ trait WidgetLayoutsLoader {
 	protected $_widget_styles = null;
 
 	/**
-	 * WidgetLayoutsLoader contructor
+	 * Widget_Layouts_Loader contructor
 	 * (have to be called inside class constructor)
 	 */
 	public function widget_layouts_loader() {

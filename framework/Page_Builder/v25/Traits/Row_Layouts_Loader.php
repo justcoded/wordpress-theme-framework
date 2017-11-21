@@ -1,26 +1,26 @@
 <?php
 
-namespace JustCoded\ThemeFramework\PageBuilder\v25\Traits;
+namespace JustCoded\WP\Framework\Page_Builder\v25\Traits;
 
-use JustCoded\ThemeFramework\PageBuilder\v25\Layouts\RowLayout;
+use JustCoded\WP\Framework\Page_Builder\v25\Layouts\Row_Layout;
 
-trait RowLayoutsLoader {
+trait Row_Layouts_Loader {
 	/**
 	 * Registered row layouts
 	 *
-	 * @var RowLayout[]
+	 * @var Row_Layout[]
 	 */
 	protected $layouts = array();
 
 	/**
 	 * Define is layout currently in use for specific row.
 	 *
-	 * @var null|RowLayout
+	 * @var null|Row_Layout
 	 */
 	protected $_row_layout = null;
 
 	/**
-	 * RowLayoutsLoader contructor
+	 * Row_Layouts_Loader contructor
 	 * (have to be called inside class constructor)
 	 */
 	public function row_layouts_loader() {
@@ -112,7 +112,7 @@ trait RowLayoutsLoader {
 	 *
 	 * @param array $style_data  style settings.
 	 *
-	 * @return RowLayout|null
+	 * @return Row_Layout|null
 	 */
 	protected function check_layout_in_use( $style_data ) {
 		if ( ! empty( $style_data['row_template'] ) ) {
