@@ -1,10 +1,10 @@
 <?php
 
 /*
-Plugin Name: Just Theme Framework
-Description: Lightweight MVC theming framework for developers who want to better organize their own custom themes with an MVC approach.
+Plugin Name: WordPress Theme Framework
+Description: Lightweight theme framework base with Model-View concept for developers who want to better organize their own custom themes.
 Tags: mvc theme, theme boilerplate, oop theme, mini framework
-Version: 1.3.1
+Version: 2.0
 Author: JustCoded / Alex Prokopenko
 Author URI: http://justcoded.com/
 License: GPL3
