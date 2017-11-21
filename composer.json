@@ -1,8 +1,8 @@
 {
-  "name": "justcoded/just-theme-framework",
-  "description": "Lightweight MVC theming framework for developers who want to better organize their own custom themes with an MVC approach.",
+  "name": "justcoded/wordpress-theme-framework",
+  "description": "Lightweight theme framework base with Model-View concept for developers who want to better organize their own custom themes.",
   "keywords": ["plugin","wordpress","theme framework","mvc"],
-  "type": "wordpress-plugin",
+  "type": "wordpress-muplugin",
   "authors": [
     {
       "name": "Alex Prokopenko",
@@ -13,10 +13,10 @@
   ],
   "support": {
     "email": "aprokopenko@justcoded.com",
-    "issues": "https://github.com/justcoded/just-theme-framework/issues"
+    "issues": "https://github.com/justcoded/wordpress-theme-framework/issues"
   },
   "require": {
-    "php": ">=5.5",
+    "php": ">=7.0",
     "johnpbloch/wordpress": ">=4.7",
     "composer/installers": "~1.0"
   },

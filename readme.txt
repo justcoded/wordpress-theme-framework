@@ -1,20 +1,19 @@
-=== Just Theme Framework === 
+=== WordPress Theme Framework ===
 Contributors: aprokopenko
-Description: Lightweight MVC theming framework for developers who want to better organize their own custom themes with an MVC approach.
+Description: Lightweight theme framework base with Model-View concept for developers who want to better organize their own custom themes.
 Tags: mvc theme, theme boilerplate, oop theme, mini framework
 Author: JustCoded / Alex Prokopenko
 Author URI: http://justcoded.com/
 Requires at least: 4.7
-Tested up to: 4.7.3
+Tested up to: 4.9
 License: GPL3
 Stable tag: trunk
 
-Lightweight MVC theming framework for developers who want to better organize their own custom themes with an MVC approach.
+Lightweight theme framework base with Model-View concept for developers who want to better organize their own custom themes.
 
 == Description ==
 
-Just Theme Framework is a lightweight MVC theming framework for developers who want to better organize their own custom
-themes with an MVC approach.
+Just Theme Framework is a lightweight theme framework base with Model-View concept for developers who want to better organize their own custom themes.
 
 Our mini framework features:
 
@@ -70,13 +69,13 @@ security and SEO optimizations.
 Built in wrapper for Titan Framework to rapidly build Admin option pages
 
 = Theme Build Example =
-You can find theme build example in plugin folder under "themes" folder.
+You can find theme build example here: https://github.com/justcoded/wordpress-theme-boilerplate.
 
-Don't forget to copy `just-theme-framework-checker.php` as well!
+Don't forget to copy `requirements.php` to your theme and require it at the top of theme `functions.php` file!
 
 = Have a feedback? =
 Write to us on our github repository:
-https://github.com/justcoded/just-theme-framework
+https://github.com/justcoded/wordpress-theme-framework
 
 == Installation ==
 
@@ -92,6 +91,11 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 2.0 - 21 November 2017 =
+    * New: Namespaces refactored
+    * New: Package renamed
+    * New: Should be added as "mu-plugin"
+    * New: Now is a part of: https://github.com/justcoded/wordpress-starter
 = Version 1.3.2 - 28 September 2017 =
     * Bugfix: Hide Loadmore button after load last page, fix multiclick
 = Version 1.3.1 - 11 August 2017 =
