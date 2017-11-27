@@ -91,6 +91,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 2.0.1 - 27 November 2017 =
+	* New: Removed theme hooks to patch WordPress-generated .htaccess (moved to starter package)
 = Version 2.0 - 21 November 2017 =
     * New: Namespaces refactored
     * New: Package renamed
