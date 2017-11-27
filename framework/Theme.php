@@ -134,11 +134,6 @@ abstract class Theme {
 		add_action( 'after_switch_theme', array( $this, 'activate' ) );
 		add_action( 'switch_theme', array( $this, 'deactivate' ) );
 
-		if ( ! is_multisite() ) {
-			add_action( 'generate_rewrite_rules', array( $this, 'insert_rewrite_rules' ) );
-			add_filter( 'mod_rewrite_rules', array( $this, 'correct_rewrite_rules' ) );
-		}
-
 		add_filter( 'image_size_names_choose', array( $this, 'image_size_names_choose' ) );
 
 		/**
@@ -413,44 +408,6 @@ abstract class Theme {
 		$mimes = array_merge( $mimes, $this->upload_mime_types );
 
 		return $mimes;
-	}
-
-	/**
-	 * Add rewrite rules into .htaccess for redirect cms/ or wp-admin/ to cms/wp-admin/
-	 */
-	public function insert_rewrite_rules() {
-		global $wp_rewrite;
-		$non_wp_rules             = array(
-			'cms\/?$'      => 'cms/wp-admin/',
-			'wp-admin\/?$' => 'cms/wp-admin/',
-		);
-		$wp_rewrite->non_wp_rules = $non_wp_rules + $wp_rewrite->non_wp_rules;
-	}
-
-	/**
-	 * Replace incorrect flags to correct for cms/wp-admin redirect rules
-	 *
-	 * @param string $rules htaccess rules source.
-	 *
-	 * @return string
-	 */
-	public function correct_rewrite_rules( $rules ) {
-		// add secure rules to htaccess.
-		$rules = "
-		<IfModule mod_rewrite.c>
-			Options All -Indexes
-			<Files .htaccess>
-				order allow,deny
-				allow from all
-			</Files>
-			<files wp-config.php>
-				order allow,deny
-				deny from all
-			</files>
-		</IfModule>\n\n" . $rules;
-		$rules = str_replace( 'cms/wp-admin/ [QSA,L]', 'cms/wp-admin/ [R=301,L]', $rules );
-
-		return $rules;
 	}
 
 }
