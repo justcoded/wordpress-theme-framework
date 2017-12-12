@@ -1,64 +1,82 @@
 <?php
 namespace JustCoded\WP\Framework\Web;
 
+use JustCoded\WP\Framework\Objects\Singleton;
+
 /**
  * Views base class.
  * Used for layouts and render partials
  */
 class View {
-	/**
-	 * Current layout name
-	 *
-	 * @var string
-	 */
-	private static $_layout;
+	use Singleton;
 
 	/**
 	 * Layouts call chain
 	 *
 	 * @var array
 	 */
-	private static $_processing = array();
+	private static $extends = array();
 
-	/**
-	 * Start recording the content to be passed to the layout template
-	 *
-	 * @param string $layout Layout name to be rendered after views render.
-	 */
-	public static function layout_open( $layout = 'main' ) {
+	public $template;
+
+	protected function __construct() {
+		add_filter('template_include', array($this, 'init_template'), 999999);
+	}
+
+	public function init_template($template) {
+		$this->template = $template;
+
+		return $this;
+	}
+
+	public function __toString() {
+		return locate_template( array( 'index.php' ) );
+	}
+
+	public function include_template() {
+		include $this->template;
+
+		$this->wrap();
+	}
+
+	public static function wrap() {
+		if ( empty( static::$extends ) ) {
+			return false;
+		}
+
+		while( ob_get_contents() && $template = array_pop( static::$extends ) ) {
+			$content = ob_get_contents();
+
+			// clean view file buffer.
+			ob_clean();
+
+			// reset query to protect header from unclosed query in the content.
+			wp_reset_postdata();
+
+			// render under the existing context.
+			include $template;
+		}
+	}
+
+	public static function extends( $layout = 'main' ) {
+		if ( false === $layout ) {
+			return false;
+		}
+
 		// WordPress compatibility to still process usual headers.
-		do_action( 'get_header', null );
+		if ( empty( static::$extends ) ) {
+			do_action( 'get_header', null );
+		}
 
 		// check that we have required template.
 		$template = static::locate( 'layouts/' . $layout, true );
 
 		// memorize the template.
-		static::$_layout = $layout;
-		array_push( static::$_processing, $template );
+		array_push( static::$extends, $template );
 
 		// start buffer.
 		ob_start();
-		ob_implicit_flush( false );
-	}
-
-	/**
-	 * Stop recording content part and final render of the layout
-	 *
-	 * @throws \Exception No layout_open were called before close.
-	 */
-	public static function layout_close() {
-		if ( empty( static::$_processing ) ) {
-			throw new \Exception( 'Unexpected Views::layout_close() method call. Check that you have layout_open() call and not close layout before.' );
-		}
-
-		// get content.
-		$content = ob_get_clean();
-
-		// reset query to protect header from unclosed query in the content.
-		wp_reset_postdata();
-
-		// render under the existing context.
-		include array_pop( static::$_processing );
+		return true;
 	}
 
 	/**
@@ -74,7 +92,7 @@ class View {
 	/**
 	 * WordPress compatibility option intead of get_sidebar
 	 *
-	 * @param string|name $name custom footer name.
+	 * @param string|null $name custom footer name.
 	 */
 	public static function footer_begin( $name = null ) {
 		// WordPress compatibility.
@@ -88,7 +106,7 @@ class View {
 	 * @param array   $params params to be passed to the view.
 	 * @param boolean $__required print message if views not found.
 	 *
-	 * @return bool|void
+	 * @return bool
 	 */
 	public static function render( $view, $params = array(), $__required = true ) {
 		$__views_path = static::locate( $view, $__required );
@@ -101,6 +119,7 @@ class View {
 		}
 
 		include $__views_path;
+		return true;
 	}
 
 	/**
