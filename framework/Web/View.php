@@ -69,7 +69,7 @@ class View {
 		}
 
 		// check that we have required template.
-		$template = static::locate( 'layouts/' . $layout, true );
+		$template = static::locate( $layout, true );
 
 		// memorize the template.
 		array_push( static::$extends, $template );
