@@ -17,28 +17,59 @@ class View {
 	 */
 	private static $extends = array();
 
+	/**
+	 * Current page wordpress template
+	 *
+	 * @var string
+	 */
 	public $template;
 
+	/**
+	 * View constructor.
+	 *
+	 * Executed immediately before WordPress includes the predetermined template file
+	 * Override WordPress's default template behavior.
+	 */
 	protected function __construct() {
 		add_filter('template_include', array($this, 'init_template'), 999999);
 	}
 
+	/**
+	 * Returned current wp template
+	 *
+	 * @param $template
+	 *
+	 * @return $this
+	 */
 	public function init_template($template) {
 		$this->template = $template;
 
 		return $this;
 	}
 
+	/**
+	 * Processing object as the string
+	 *
+	 * @return string
+	 */
 	public function __toString() {
 		return locate_template( array( 'index.php' ) );
 	}
 
+	/**
+	 * Start loading wordpress templates
+	 */
 	public function include_template() {
 		include $this->template;
 
 		$this->wrap();
 	}
 
+	/**
+	 * Wrap content in the template
+	 *
+	 * @return bool
+	 */
 	public static function wrap() {
 		if ( empty( static::$extends ) ) {
 			return false;
@@ -58,6 +89,14 @@ class View {
 		}
 	}
 
+	/**
+	 * Including layout
+	 *
+	 * @param string $layout
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 */
 	public static function extends( $layout = 'main' ) {
 		if ( false === $layout ) {
 			return false;
