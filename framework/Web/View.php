@@ -15,7 +15,7 @@ class View {
 	 *
 	 * @var array
 	 */
-	private static $extends = array();
+	private $extends = array();
 
 	public $template;
 
@@ -34,17 +34,20 @@ class View {
 	}
 
 	public function include_template() {
+		// add alias.
+		$template = $this->template;
+
 		include $this->template;
 
 		$this->wrap();
 	}
 
-	public static function wrap() {
-		if ( empty( static::$extends ) ) {
+	public function wrap() {
+		if ( empty( $this->extends ) ) {
 			return false;
 		}
 
-		while( ob_get_contents() && $template = array_pop( static::$extends ) ) {
+		while( ob_get_contents() && $template = array_pop( $this->extends ) ) {
 			$content = ob_get_contents();
 
 			// clean view file buffer.
@@ -58,21 +61,21 @@ class View {
 		}
 	}
 
-	public static function extends( $layout = 'main' ) {
+	public function extends( $layout = 'main' ) {
 		if ( false === $layout ) {
 			return false;
 		}
 
 		// WordPress compatibility to still process usual headers.
-		if ( empty( static::$extends ) ) {
+		if ( empty( $this->extends ) ) {
 			do_action( 'get_header', null );
 		}
 
 		// check that we have required template.
-		$template = static::locate( $layout, true );
+		$template = $this->locate( $layout, true );
 
 		// memorize the template.
-		array_push( static::$extends, $template );
+		array_push( $this->extends, $template );
 
 		// start buffer.
 		ob_start();
@@ -84,7 +87,7 @@ class View {
 	 *
 	 * @param string|null $name custom sidebar name.
 	 */
-	public static function sidebar_begin( $name = null ) {
+	public function sidebar_begin( $name = null ) {
 		// WordPress compatibility.
 		do_action( 'get_footer', $name );
 	}
@@ -94,7 +97,7 @@ class View {
 	 *
 	 * @param string|null $name custom footer name.
 	 */
-	public static function footer_begin( $name = null ) {
+	public function footer_begin( $name = null ) {
 		// WordPress compatibility.
 		do_action( 'get_footer', $name );
 	}
@@ -108,9 +111,9 @@ class View {
 	 *
 	 * @return bool
 	 */
-	public static function render( $view, $params = array(), $__required = true ) {
-		$__views_path = static::locate( $view, $__required );
-		if ( empty( $__views_path ) ) {
+	public function render( $view, $params = array(), $__required = true ) {
+		$template = $this->locate( $view, $__required );
+		if ( empty( $template ) ) {
 			return false;
 		}
 
@@ -118,7 +121,7 @@ class View {
 			extract( $params );
 		}
 
-		include $__views_path;
+		include $template;
 		return true;
 	}
 
@@ -133,7 +136,7 @@ class View {
 	 *
 	 * @throws \Exception  Required and not found.
 	 */
-	public static function locate( $view, $required = false ) {
+	public function locate( $view, $required = false ) {
 		$view_file = "views/$view.php";
 		$template  = locate_template( $view_file );
 		if ( $required && ( empty( $template ) || ! is_file( $template ) ) ) {
