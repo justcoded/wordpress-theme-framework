@@ -35,20 +35,25 @@ class View {
 	}
 
 	/**
-	 * Returned current wp template
+	 * Implement template wrappers. For this we need to remember real template to be loaded.
+	 * Then we return the object itself to be able to manipulate the loading process.
 	 *
-	 * @param $template
+	 * @param string $template Template to be included inside theme.
 	 *
 	 * @return $this
 	 */
-	public function init_template($template) {
+	public function init_template( $template ) {
 		$this->template = $template;
 
 		return $this;
 	}
 
 	/**
-	 * Processing object as the string
+	 * Convert object to string magic method.
+	 * We replaced string with object inside `template_include` hook, so to support next include statement we need
+	 * to add magic method, which make object to string conversion.
+	 *
+	 * Here we will just return theme index.php file, which will be the entry point of our views engine.
 	 *
 	 * @return string
 	 */
@@ -57,7 +62,7 @@ class View {
 	}
 
 	/**
-	 * Start loading wordpress templates
+	 * Start loading WordPress templates.
 	 */
 	public function include_template() {
 		// add alias.
