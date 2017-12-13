@@ -17,22 +17,48 @@ class View {
 	 */
 	private $extends = array();
 
+	/**
+	 * Current page wordpress template
+	 *
+	 * @var string
+	 */
 	public $template;
 
+	/**
+	 * View constructor.
+	 *
+	 * Executed immediately before WordPress includes the predetermined template file
+	 * Override WordPress's default template behavior.
+	 */
 	protected function __construct() {
 		add_filter('template_include', array($this, 'init_template'), 999999);
 	}
 
+	/**
+	 * Returned current wp template
+	 *
+	 * @param $template
+	 *
+	 * @return $this
+	 */
 	public function init_template($template) {
 		$this->template = $template;
 
 		return $this;
 	}
 
+	/**
+	 * Processing object as the string
+	 *
+	 * @return string
+	 */
 	public function __toString() {
 		return locate_template( array( 'index.php' ) );
 	}
 
+	/**
+	 * Start loading wordpress templates
+	 */
 	public function include_template() {
 		// add alias.
 		$template = $this->template;
@@ -42,6 +68,11 @@ class View {
 		$this->wrap();
 	}
 
+	/**
+	 * Wrap content with another view or layout
+	 *
+	 * @return bool
+	 */
 	public function wrap() {
 		if ( empty( $this->extends ) ) {
 			return false;
@@ -61,7 +92,18 @@ class View {
 		}
 	}
 
-	public function extends( $layout = 'main' ) {
+	/**
+	 * Registers parent template.
+	 * Parent template will be rendered just after current template execution.
+	 *
+	 * To use current template generated html use `$content` variable inside the parent view
+	 *
+	 * @param string $layout  View name to register.
+	 *
+	 * @return bool
+	 * @throws \Exception If no parent view template found.
+	 */
+	public function extends( $layout = 'layouts/main' ) {
 		if ( false === $layout ) {
 			return false;
 		}
