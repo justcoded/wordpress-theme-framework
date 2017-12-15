@@ -2,14 +2,16 @@
 
 namespace JustCoded\WP\Framework\Web;
 
+use JustCoded\WP\Framework\Objects\Singleton;
 use JustCoded\WP\Framework\Web\View;
-use JustCoded\WP\Framework\Web\Views_Rule;
 
 /**
  * Class Template_Hierarchy
  * Hook get_*_template() functions to add "views" folder everywhere
  */
 class Template_Hierarchy {
+	use Singleton;
+
 	/**
 	 * Standard template types available for rewrite.
 	 *
@@ -49,16 +51,16 @@ class Template_Hierarchy {
 
 	/**
 	 * Template_Hierarchy constructor.
-	 * set wordpress template system hooks
+	 * set WordPress template system hooks
 	 */
-	public function __construct() {
+	protected function __construct() {
+		// patch page/custom post type templates.
+		add_action( 'init', array( $this, 'init_theme_page_template_hooks' ), 1000 );
+
 		// set filter for all query template types.
 		foreach ( $this->template_types as $type ) {
 			add_filter( "{$type}_template_hierarchy", array( $this, "{$type}_template_hierarchy" ) );
 		}
-
-		// patch page/custom post type templates.
-		add_action( 'init', array( $this, 'init_theme_page_template_hooks' ), 1000 );
 
 		// add woocommerce support.
 		add_filter( 'woocommerce_template_path', array( $this, 'woocommerce_template_path' ) );
