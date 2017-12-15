@@ -91,9 +91,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
-= Version 2.1 - 13 December 2017 =
-	* New: Changed layout rendering method from View::layout_open() to $this->extends( 'layouts/main' );
-	In the head of your template you should use /* @var \JustCoded\WP\Framework\Web\View $this */
+= Version 2.1.0 - 15 December 2017 =
+	* New: Updated View component and layouts wrapping rendering. Replaced layout_open()/layout_close() methods with extends() method.
 = Version 2.0.1 - 27 November 2017 =
 	* New: Removed theme hooks to patch WordPress-generated .htaccess (moved to starter package)
 = Version 2.0 - 21 November 2017 =
