@@ -1,64 +1,132 @@
 <?php
 namespace JustCoded\WP\Framework\Web;
 
+use JustCoded\WP\Framework\Objects\Singleton;
+
 /**
  * Views base class.
  * Used for layouts and render partials
  */
 class View {
-	/**
-	 * Current layout name
-	 *
-	 * @var string
-	 */
-	private static $_layout;
+	use Singleton;
 
 	/**
-	 * Layouts call chain
+	 * Layouts call chain.
 	 *
 	 * @var array
 	 */
-	private static $_processing = array();
+	private $extends = array();
 
 	/**
-	 * Start recording the content to be passed to the layout template
+	 * Theme template path to be loaded.
 	 *
-	 * @param string $layout Layout name to be rendered after views render.
+	 * @var string
 	 */
-	public static function layout_open( $layout = 'main' ) {
-		// WordPress compatibility to still process usual headers.
-		do_action( 'get_header', null );
+	public $template;
 
-		// check that we have required template.
-		$template = static::locate( 'layouts/' . $layout, true );
-
-		// memorize the template.
-		static::$_layout = $layout;
-		array_push( static::$_processing, $template );
-
-		// start buffer.
-		ob_start();
-		ob_implicit_flush( false );
+	/**
+	 * View constructor.
+	 *
+	 * Executed immediately before WordPress includes the predetermined template file
+	 * Override WordPress's default template behavior.
+	 */
+	protected function __construct() {
+		add_filter( 'template_include', array( $this, 'init_template' ), 999999 );
 	}
 
 	/**
-	 * Stop recording content part and final render of the layout
+	 * Implement template wrappers. For this we need to remember real template to be loaded.
+	 * Then we return the object itself to be able to manipulate the loading process.
 	 *
-	 * @throws \Exception No layout_open were called before close.
+	 * @param string $template Template to be included inside theme.
+	 *
+	 * @return $this
 	 */
-	public static function layout_close() {
-		if ( empty( static::$_processing ) ) {
-			throw new \Exception( 'Unexpected Views::layout_close() method call. Check that you have layout_open() call and not close layout before.' );
+	public function init_template( $template ) {
+		$this->template = $template;
+
+		return $this;
+	}
+
+	/**
+	 * Convert object to string magic method.
+	 * We replaced string with object inside `template_include` hook, so to support next include statement we need
+	 * to add magic method, which make object to string conversion.
+	 *
+	 * Here we will just return theme index.php file, which will be the entry point of our views engine.
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		return locate_template( array( 'index.php' ) );
+	}
+
+	/**
+	 * Start loading theme template.
+	 */
+	public function include_template() {
+		// add alias.
+		$template = $this->template;
+
+		include $this->template;
+
+		$this->wrap();
+	}
+
+	/**
+	 * Wrap content with another view or layout
+	 *
+	 * @return bool
+	 */
+	public function wrap() {
+		if ( empty( $this->extends ) ) {
+			return false;
 		}
 
-		// get content.
-		$content = ob_get_clean();
+		while( ob_get_contents() && $template = array_pop( $this->extends ) ) {
+			$content = ob_get_contents();
 
-		// reset query to protect header from unclosed query in the content.
-		wp_reset_postdata();
+			// clean view file buffer.
+			ob_clean();
 
-		// render under the existing context.
-		include array_pop( static::$_processing );
+			// reset query to protect header from unclosed query in the content.
+			wp_reset_postdata();
+
+			// render under the existing context.
+			include $template;
+		}
+	}
+
+	/**
+	 * Registers parent template.
+	 * Parent template will be rendered just after current template execution.
+	 *
+	 * To use current template generated html use `$content` variable inside the parent view
+	 *
+	 * @param string $layout  View name to register.
+	 *
+	 * @return bool
+	 * @throws \Exception If no parent view template found.
+	 */
+	public function extends( $layout = 'layouts/main' ) {
+		if ( false === $layout ) {
+			return false;
+		}
+
+		// WordPress compatibility to still process usual headers.
+		if ( empty( $this->extends ) ) {
+			do_action( 'get_header', null );
+		}
+
+		// check that we have required template.
+		$template = $this->locate( $layout, true );
+
+		// memorize the template.
+		array_push( $this->extends, $template );
+
+		// start buffer.
+		ob_start();
+		return true;
 	}
 
 	/**
@@ -66,7 +134,7 @@ class View {
 	 *
 	 * @param string|null $name custom sidebar name.
 	 */
-	public static function sidebar_begin( $name = null ) {
+	public function sidebar_begin( $name = null ) {
 		// WordPress compatibility.
 		do_action( 'get_footer', $name );
 	}
@@ -74,9 +142,9 @@ class View {
 	/**
 	 * WordPress compatibility option intead of get_sidebar
 	 *
-	 * @param string|name $name custom footer name.
+	 * @param string|null $name custom footer name.
 	 */
-	public static function footer_begin( $name = null ) {
+	public function footer_begin( $name = null ) {
 		// WordPress compatibility.
 		do_action( 'get_footer', $name );
 	}
@@ -88,11 +156,11 @@ class View {
 	 * @param array   $params params to be passed to the view.
 	 * @param boolean $__required print message if views not found.
 	 *
-	 * @return bool|void
+	 * @return bool
 	 */
-	public static function render( $view, $params = array(), $__required = true ) {
-		$__views_path = static::locate( $view, $__required );
-		if ( empty( $__views_path ) ) {
+	public function render( $view, $params = array(), $__required = true ) {
+		$template = $this->locate( $view, $__required );
+		if ( empty( $template ) ) {
 			return false;
 		}
 
@@ -100,7 +168,8 @@ class View {
 			extract( $params );
 		}
 
-		include $__views_path;
+		include $template;
+		return true;
 	}
 
 	/**
@@ -114,7 +183,7 @@ class View {
 	 *
 	 * @throws \Exception  Required and not found.
 	 */
-	public static function locate( $view, $required = false ) {
+	public function locate( $view, $required = false ) {
 		$view_file = "views/$view.php";
 		$template  = locate_template( $view_file );
 		if ( $required && ( empty( $template ) || ! is_file( $template ) ) ) {

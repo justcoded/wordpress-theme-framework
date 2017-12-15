@@ -11,6 +11,8 @@ use JustCoded\WP\Framework\Web\Views_Rule;
  * https://codex.wordpress.org/Function_Reference/register_post_type
  */
 abstract class Post_Type {
+	use Singleton;
+
 	/**
 	 * Post_Type ID. Used to store it in DB and identify by post_type key
 	 * SHOULD BE OVERWRITTEN IN CHILD CLASS
@@ -231,7 +233,7 @@ abstract class Post_Type {
 	 *
 	 * @throws \Exception Missing $ID property.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		if ( empty( $this::$ID ) ) {
 			throw new \Exception( 'Post Type "' . get_class( $this ) . '" init failed: missing $ID property' );
 		}

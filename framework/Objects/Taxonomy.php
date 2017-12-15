@@ -11,6 +11,8 @@ use JustCoded\WP\Framework\Web\View;
  * https://codex.wordpress.org/Function_Reference/register_taxonomy
  */
 abstract class Taxonomy {
+	use Singleton;
+
 	/**
 	 * Taxonomy ID. Used to store it in DB and identify by taxonomy key
 	 * SHOULD BE OVERWRITTEN IN CHILD CLASS
@@ -150,7 +152,7 @@ abstract class Taxonomy {
 	 *
 	 * @throws \Exception Taxonomy $ID property not defined.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		if ( empty( $this::$ID ) ) {
 			throw new \Exception( 'Taxonomy "' . get_class( $this ) . '" init failed: missing $ID property' );
 		}

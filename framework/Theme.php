@@ -116,7 +116,7 @@ abstract class Theme {
 	public function __construct() {
 		$this->register_post_types();
 		$this->register_taxonomies();
-		new Template_Hierarchy();
+		$this->init_views_templates();
 
 		/**
 		 * Pretty standard theme hooks
@@ -186,6 +186,14 @@ abstract class Theme {
 		}
 
 		return $src;
+	}
+
+	/**
+	 * Init new Template Hierarchy based on "views" folder and load Views engine.
+	 */
+	public function init_views_templates() {
+		Template_Hierarchy::instance();
+		View::instance();
 	}
 
 	/**
