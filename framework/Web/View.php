@@ -11,14 +11,14 @@ class View {
 	use Singleton;
 
 	/**
-	 * Layouts call chain
+	 * Layouts call chain.
 	 *
 	 * @var array
 	 */
 	private $extends = array();
 
 	/**
-	 * Current page wordpress template
+	 * Theme template path to be loaded.
 	 *
 	 * @var string
 	 */
@@ -31,7 +31,7 @@ class View {
 	 * Override WordPress's default template behavior.
 	 */
 	protected function __construct() {
-		add_filter('template_include', array($this, 'init_template'), 999999);
+		add_filter( 'template_include', array( $this, 'init_template' ), 999999 );
 	}
 
 	/**
@@ -62,7 +62,7 @@ class View {
 	}
 
 	/**
-	 * Start loading WordPress templates.
+	 * Start loading theme template.
 	 */
 	public function include_template() {
 		// add alias.

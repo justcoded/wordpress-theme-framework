@@ -188,6 +188,9 @@ abstract class Theme {
 		return $src;
 	}
 
+	/**
+	 * Init new Template Hierarchy based on "views" folder and load Views engine.
+	 */
 	public function init_views_templates() {
 		Template_Hierarchy::instance();
 		View::instance();
