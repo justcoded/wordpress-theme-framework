@@ -2,14 +2,14 @@
 
 namespace JustCoded\WP\Framework\Objects;
 
-class Postmeta extends Meta_Fields {
-
-	/**
-	 * Internal cache of wp queries
-	 *
-	 * @var \WP_Query[]
-	 */
-	private $_queries = [];
+/**
+ * Get fields from posts
+ *
+ * Class Postmeta
+ *
+ * @package JustCoded\WP\Framework\Objects
+ */
+class Postmeta extends Meta {
 
 	/**
 	 * Internal cache for post custom fields data
@@ -22,6 +22,8 @@ class Postmeta extends Meta_Fields {
 	 * Postmeta constructor.
 	 */
 	public function __construct() {
+		parent::__construct();
+
 		// set current post for new created instance.
 		$this->set_post( null );
 	}
@@ -35,14 +37,39 @@ class Postmeta extends Meta_Fields {
 		if ( is_null( $post ) ) {
 			$post = get_the_ID();
 		}
-		$this->post = get_post( $post );
+		$this->object = get_post( $post );
 	}
 
 	/**
-	 * Clean up queries cache in case you need to run new query
+	 * Getter of postmeta from advanced custom fields
+	 *
+	 * @param string      $field_name Field name to get.
+	 * @param int         $post_id Post ID if different from get_the_ID.
+	 * @param bool|string $format_value Format value or not.
+	 *
+	 * @return mixed
+	 * @throws \Exception Unsupported custom fields plugin.
 	 */
-	protected function reset_queries() {
-		$this->_queries = [];
+	public function get_field_acf( $field_name, $post_id, $format_value ) {
+		return get_field( $field_name, $post_id, $format_value );
+	}
+
+	/**
+	 * Getter of postmeta from just custom fields
+	 *
+	 * @param string      $field_name Field name to get.
+	 * @param int         $post_id Post ID if different from get_the_ID.
+	 * @param bool|string $format_value Format value or not.
+	 *
+	 * @return mixed
+	 * @throws \Exception Unsupported custom fields plugin.
+	 */
+	public function get_field_jcf( $field_name, $post_id, $format_value ) {
+		// Fix for getter from magic property field_*.
+		if ( strpos( $field_name, '_' ) !== 0 ) {
+			$field_name = "_{$field_name}";
+		}
+		return get_post_meta( $post_id, $field_name, $format_value );
 	}
 
 }

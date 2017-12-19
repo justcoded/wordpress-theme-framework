@@ -76,12 +76,11 @@ abstract class Taxonomy {
 	protected $rewrite_singular = false;
 
 	/**
-	 * 'hierarchical' - true or false allow hierarchical urls
-	 * (implemented in Version 3.1) - defaults to false
+	 * Allow hierarchical urls, defaults false
 	 *
 	 * @var bool
 	 */
-	protected $is_hierarchical_url = false;
+	protected $rewrite_hierarchical = false;
 
 	/**
 	 * Show in admin menu
@@ -202,7 +201,7 @@ abstract class Taxonomy {
 			'rewrite'   => array(
 				'slug' => $this::$SLUG,
 				'with_front' => ! $this->rewrite_singular,
-				'hierarchical' => $this->is_hierarchical_url,
+				'hierarchical' => $this->rewrite_hierarchical,
 			),
 		);
 

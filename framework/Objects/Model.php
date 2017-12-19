@@ -86,6 +86,72 @@ class Model {
 	}
 
 	/**
+	 * Sets value of an object property.
+	 *
+	 * Do not call this method directly as it is a PHP magic method that
+	 * will be implicitly called when executing `$object->property = $value;`.
+	 *
+	 * @param string $name The property name or the event name.
+	 * @param mixed  $value The property value.
+	 *
+	 * @throws \Exception Property is not defined or read-only.
+	 * @see __get()
+	 */
+	public function __set( $name, $value ) {
+		$setter = 'set_' . $name;
+		if ( method_exists( $this, $setter ) ) {
+			$this->$setter( $value );
+		} elseif ( method_exists( $this, 'get_' . $name ) ) {
+			throw new \Exception( 'Setting read-only property: ' . get_class( $this ) . '::' . $name );
+		} else {
+			throw new \Exception( 'Setting unknown property: ' . get_class( $this ) . '::' . $name );
+		}
+	}
+
+	/**
+	 * Checks if the named property is set (not null).
+	 *
+	 * Do not call this method directly as it is a PHP magic method that
+	 * will be implicitly called when executing `isset($object->property)`.
+	 *
+	 * Note that if the property is not defined, false will be returned.
+	 *
+	 * @param string $name The property name or the event name.
+	 *
+	 * @return boolean Whether the named property is set (not null).
+	 */
+	public function __isset( $name ) {
+		$getter = 'get_' . $name;
+		if ( method_exists( $this, $getter ) ) {
+			return $this->$getter() !== null;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Sets an object property to null.
+	 *
+	 * Do not call this method directly as it is a PHP magic method that
+	 * will be implicitly called when executing `unset($object->property)`.
+	 *
+	 * Note that if the property is not defined, this method will do nothing.
+	 * If the property is read-only, it will throw an exception.
+	 *
+	 * @param string $name The property name.
+	 *
+	 * @throws \Exception The property is read only.
+	 */
+	public function __unset( $name ) {
+			$setter = 'set_' . $name;
+			if ( method_exists( $this, $setter ) ) {
+					$this->$setter( null );
+				} elseif ( method_exists( $this, 'get_' . $name ) ) {
+					throw new \Exception( 'Setting read-only property: ' . get_class( $this ) . '::' . $name );
+ 		}
+ 	}
+
+	/**
 	 * Run query and remember it to cache
 	 * In this way you can use magic getter withour reseting query
 	 *
