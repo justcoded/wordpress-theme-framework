@@ -12,32 +12,20 @@ namespace JustCoded\WP\Framework\Objects;
 class Postmeta extends Meta {
 
 	/**
-	 * Internal cache for post custom fields data
-	 *
-	 * @var array
-	 */
-	protected $_fields = [];
-
-	/**
 	 * Postmeta constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
-
-		// set current post for new created instance.
-		$this->set_post( null );
 	}
 
 	/**
-	 * Set $post property correctly
+	 * Get post id
 	 *
-	 * @param \WP_Post|int|null $post Post object, id or null to take current object.
+	 * @return false|int
 	 */
-	protected function set_post( $post = null ) {
-		if ( is_null( $post ) ) {
-			$post = get_the_ID();
-		}
-		$this->object = get_post( $post );
+	public function get_id() {
+
+		return get_queried_object_id();
 	}
 
 	/**

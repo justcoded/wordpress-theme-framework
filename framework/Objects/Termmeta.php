@@ -12,32 +12,20 @@ namespace JustCoded\WP\Framework\Objects;
 class Termmeta extends Meta {
 
 	/**
-	 * Internal cache for post custom fields data
-	 *
-	 * @var array
-	 */
-	protected $_fields = [];
-
-	/**
 	 * Postmeta constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
-
-		// set current post for new created instance.
-		$this->set_term( null );
 	}
 
 	/**
-	 * Set $term property correctly
+	 * Get post id
 	 *
-	 * @param \WP_Term|int|null $term Term object, id or null to take current object.
+	 * @return false|int
 	 */
-	protected function set_term( $term = null ) {
-		if ( is_null( $term ) ) {
-			$term = get_queried_object();
-		}
-		$this->object = $term;
+	public function get_id() {
+
+		return get_queried_object_id();
 	}
 
 	/**
@@ -51,12 +39,7 @@ class Termmeta extends Meta {
 	 * @throws \Exception Unsupported custom fields plugin.
 	 */
 	public function get_field_acf( $field_name, $term_id, $format_value ) {
-		if ( $term_id ) {
-			$option_name = 'category_' . $term_id . '_' . $field_name;
-			return get_option( $option_name );
-		} else {
-			return false;
-		}
+		return get_field( $field_name, get_queried_object() );
 	}
 
 	/**

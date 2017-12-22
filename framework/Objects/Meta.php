@@ -30,11 +30,11 @@ abstract class Meta {
 	const PLUGIN_ACF = 'advanced-custom-fields';
 
 	/**
-	 * Current page/term object. It can be WP_Post or WP_Term
+	 * Internal cache for post custom fields data
 	 *
-	 * @var object
+	 * @var array
 	 */
-	public $object;
+	protected $_fields = [];
 
 	/**
 	 * Meta constructor.
@@ -45,8 +45,6 @@ abstract class Meta {
 		} else {
 			$this->custom_fields_plugin = self::PLUGIN_JCF;
 		}
-
-		return $this->custom_fields_plugin;
 	}
 
 	/**
@@ -55,11 +53,10 @@ abstract class Meta {
 	 * Do not call this method directly as it is a PHP magic method that
 	 * will be implicitly called when executing `$value = $object->property;`.
 	 *
-	 * @param string $name The property name.
+	 * @param $name the property name.
 	 *
-	 * @return mixed the property value
-	 * @throws \Exception Property is not defined.
-	 * @see __set()
+	 * @return mixed
+	 * @throws \Exception
 	 */
 	public function __get( $name ) {
 
@@ -84,50 +81,36 @@ abstract class Meta {
 	}
 
 	/**
-	 * Sets an object property to null.
-	 *
-	 * Do not call this method directly as it is a PHP magic method that
-	 * will be implicitly called when executing `unset($object->property)`.
-	 *
-	 * Note that if the property is not defined, this method will do nothing.
-	 * If the property is read-only, it will throw an exception.
-	 *
-	 * @param string $name The property name.
-	 *
-	 * @throws \Exception The property is read only.
-	 */
-	public function __unset( $name ) {
-		$setter = 'set_' . $name;
-		if ( method_exists( $this, $setter ) ) {
-			$this->$setter( null );
-		} elseif ( method_exists( $this, 'get_' . $name ) ) {
-			throw new \Exception( 'Setting read-only property: ' . get_class( $this ) . '::' . $name );
-		}
-	}
-
-	/**
 	 * Getter of postmeta from just custom fields
 	 *
 	 * @param string      $field_name Field name to get.
-	 * @param int         $post_id Post ID if different from get_the_ID.
+	 * @param int         $object_id Post/Term ID
 	 * @param bool|string $format_value Format value or not.
 	 *
 	 * @return mixed
 	 * @throws \Exception Unsupported custom fields plugin.
 	 */
-	abstract public function get_field_jcf( $field_name, $post_id, $format_value );
+	abstract public function get_field_jcf( $field_name, $object_id, $format_value );
 
 	/**
 	 * Getter of postmeta from advanced custom fields
 	 *
 	 * @param string      $field_name Field name to get.
-	 * @param int         $post_id Post ID if different from get_the_ID.
+	 * @param int         $object_id Post/Term ID
 	 * @param bool|string $format_value Format value or not.
 	 *
 	 * @return mixed
 	 * @throws \Exception Unsupported custom fields plugin.
 	 */
-	abstract public function get_field_acf( $field_name, $post_id, $format_value );
+	abstract public function get_field_acf( $field_name, $object_id, $format_value );
+
+	/**
+	 * Get id of entity
+	 * It can be post or term
+	 *
+	 * @return mixed
+	 */
+	abstract public function get_id();
 
 	/**
 	 * Main post meta fields getter function.
@@ -141,10 +124,8 @@ abstract class Meta {
 	 */
 	public function get_field( $field_name, $post_id = null, $format_value = true ) {
 
-		if ( is_a( $this->object, 'WP_Post' ) ) {
-			$post_id = $this->object->ID;
-		} else {
-			$post_id = $this->object->term_id;
+		if ( empty( $post_id ) ) {
+			$post_id = $this->get_id();
 		}
 
 		// Check cache, if not exists - get field value.
