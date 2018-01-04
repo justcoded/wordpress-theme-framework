@@ -3,19 +3,36 @@
 namespace JustCoded\WP\Framework\Objects;
 
 /**
- * Get fields from posts
- *
  * Class Postmeta
- *
- * @package JustCoded\WP\Framework\Objects
+ * Get meta fields from posts
  */
 class Postmeta extends Meta {
+
+	/**
+	 * Current Object to get meta data from.
+	 *
+	 * @var \WP_Post
+	 */
+	public $object;
 
 	/**
 	 * Postmeta constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
+		$this->the_post();
+	}
+
+	/**
+	 * Set $object property correctly
+	 *
+	 * @param \WP_Post|int|null $post Post object, id or null to take current object.
+	 */
+	public function the_post( $post = null ) {
+		if ( is_null( $post ) ) {
+			$post = get_the_ID();
+		}
+		$this->object = get_post( $post );
 	}
 
 	/**
@@ -23,9 +40,8 @@ class Postmeta extends Meta {
 	 *
 	 * @return false|int
 	 */
-	public function get_id() {
-
-		return get_queried_object_id();
+	public function get_object_id() {
+		return $this->object->ID;
 	}
 
 	/**
@@ -38,7 +54,7 @@ class Postmeta extends Meta {
 	 * @return mixed
 	 * @throws \Exception Unsupported custom fields plugin.
 	 */
-	public function get_field_acf( $field_name, $post_id, $format_value ) {
+	public function get_value_acf( $field_name, $post_id, $format_value ) {
 		return get_field( $field_name, $post_id, $format_value );
 	}
 
@@ -52,8 +68,8 @@ class Postmeta extends Meta {
 	 * @return mixed
 	 * @throws \Exception Unsupported custom fields plugin.
 	 */
-	public function get_field_jcf( $field_name, $post_id, $format_value ) {
-		// Fix for getter from magic property field_*.
+	public function get_value_jcf( $field_name, $post_id, $format_value ) {
+		// Fix for getter from magic property _*.
 		if ( strpos( $field_name, '_' ) !== 0 ) {
 			$field_name = "_{$field_name}";
 		}

@@ -9,6 +9,23 @@ namespace JustCoded\WP\Framework\Objects;
 abstract class Meta {
 
 	/**
+	 * JCF Plugin name
+	 */
+	const PLUGIN_JCF = 'just-custom-fields';
+
+	/**
+	 * ACF Plugin name
+	 */
+	const PLUGIN_ACF = 'advanced-custom-fields';
+
+	/**
+	 * Object with meta data.
+	 *
+	 * @var \WP_Post|\WP_Term
+	 */
+	public $object;
+
+	/**
 	 * Plugin used for extending of post custom fields.
 	 *
 	 * Available values:
@@ -20,27 +37,17 @@ abstract class Meta {
 	public $custom_fields_plugin = 'just-custom-fields';
 
 	/**
-	 * JCF Plugin name
-	 */
-	const PLUGIN_JCF = 'just-custom-fields';
-
-	/**
-	 * ACF Plugin name
-	 */
-	const PLUGIN_ACF = 'advanced-custom-fields';
-
-	/**
-	 * Internal cache for post custom fields data
+	 * Internal cache for object meta data
 	 *
 	 * @var array
 	 */
-	protected $_fields = [];
+	protected static $_meta = [];
 
 	/**
 	 * Meta constructor.
 	 */
 	public function __construct() {
-		if ( class_exists('acf') ) {
+		if ( class_exists( 'acf' ) ) {
 			$this->custom_fields_plugin = self::PLUGIN_ACF;
 		} else {
 			$this->custom_fields_plugin = self::PLUGIN_JCF;
@@ -53,14 +60,13 @@ abstract class Meta {
 	 * Do not call this method directly as it is a PHP magic method that
 	 * will be implicitly called when executing `$value = $object->property;`.
 	 *
-	 * @param $name the property name.
+	 * @param string $name a property name.
 	 *
 	 * @return mixed
-	 * @throws \Exception
+	 * @throws \Exception Unable to get property.
 	 */
 	public function __get( $name ) {
-
-		return $this->get_field( $name );
+		return $this->get_value( $name );
 	}
 
 	/**
@@ -76,72 +82,71 @@ abstract class Meta {
 	 * @return boolean Whether the named property is set (not null).
 	 */
 	public function __isset( $name ) {
-
-		return null !== $this->get_field($name);
+		return null !== $this->get_value( $name );
 	}
+
+	/**
+	 * Get object id
+	 * It can be post or term
+	 *
+	 * @return mixed
+	 */
+	abstract public function get_object_id();
 
 	/**
 	 * Getter of postmeta from just custom fields
 	 *
 	 * @param string      $field_name Field name to get.
-	 * @param int         $object_id Post/Term ID
+	 * @param int         $object_id Post/Term ID.
 	 * @param bool|string $format_value Format value or not.
 	 *
 	 * @return mixed
 	 * @throws \Exception Unsupported custom fields plugin.
 	 */
-	abstract public function get_field_jcf( $field_name, $object_id, $format_value );
+	abstract public function get_value_jcf( $field_name, $object_id, $format_value );
 
 	/**
 	 * Getter of postmeta from advanced custom fields
 	 *
 	 * @param string      $field_name Field name to get.
-	 * @param int         $object_id Post/Term ID
+	 * @param int         $object_id Post/Term ID.
 	 * @param bool|string $format_value Format value or not.
 	 *
 	 * @return mixed
 	 * @throws \Exception Unsupported custom fields plugin.
 	 */
-	abstract public function get_field_acf( $field_name, $object_id, $format_value );
-
-	/**
-	 * Get id of entity
-	 * It can be post or term
-	 *
-	 * @return mixed
-	 */
-	abstract public function get_id();
+	abstract public function get_value_acf( $field_name, $object_id, $format_value );
 
 	/**
 	 * Main post meta fields getter function.
 	 *
 	 * @param string      $field_name Field name to get.
-	 * @param int         $post_id Post ID if different from get_the_ID.
+	 * @param int         $object_id Post ID if different from get_the_ID.
 	 * @param bool|string $format_value Format value or not.
 	 *
 	 * @return mixed
 	 * @throws \Exception Unsupported custom fields plugin.
 	 */
-	public function get_field( $field_name, $post_id = null, $format_value = true ) {
+	public function get_value( $field_name, $object_id = null, $format_value = true ) {
 
-		if ( empty( $post_id ) ) {
-			$post_id = $this->get_id();
+		if ( empty( $object_id ) ) {
+			$object_id = $this->get_object_id();
 		}
 
-		// Check cache, if not exists - get field value.
-		if ( ! isset( $this->_fields[ $post_id ][ $field_name ] ) ) {
+		// Check cache, if not exists - get meta value.
+		if ( ! isset( $this->_meta[ $object_id ][ $field_name ] ) ) {
 			if ( self::PLUGIN_JCF === $this->custom_fields_plugin ) {
-				$value = $this->get_field_jcf( $field_name, $post_id, $format_value );
+				$value = $this->get_value_jcf( $field_name, $object_id, $format_value );
 			} elseif ( self::PLUGIN_ACF === $this->custom_fields_plugin ) {
-				$value = $this->get_field_acf( $field_name, $post_id, $format_value );
+				$value = $this->get_value_acf( $field_name, $object_id, $format_value );
 			} else {
-				throw new \Exception( get_class( $this ) . "::get_field() : Unsupported custom fields plugin \"{$this->custom_fields_plugin}\"" );
+				throw new \Exception( get_class( $this ) . "::get_value() : Unsupported custom fields plugin \"{$this->custom_fields_plugin}\"" );
 			}
 
-			$this->_fields[ $post_id ][ $field_name ] = $value;
+			$this->_meta[ $object_id ][ $field_name ] = $value;
 		}
 
-		return $this->_fields[ $post_id ][ $field_name ];
+		return $this->_meta[ $object_id ][ $field_name ];
 	}
 
 }

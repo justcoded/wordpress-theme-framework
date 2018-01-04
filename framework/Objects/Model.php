@@ -42,13 +42,6 @@ namespace JustCoded\WP\Framework\Objects;
 class Model {
 
 	/**
-	 * Current $post object
-	 *
-	 * @var \WP_Post
-	 */
-	public $post;
-
-	/**
 	 * Internal cache of wp queries
 	 *
 	 * @var \WP_Query[]
@@ -59,8 +52,6 @@ class Model {
 	 * Model constructor.
 	 */
 	public function __construct() {
-		// set current post for new created instance.
-		$this->set_post( null );
 	}
 
 	/**
@@ -143,13 +134,13 @@ class Model {
 	 * @throws \Exception The property is read only.
 	 */
 	public function __unset( $name ) {
-			$setter = 'set_' . $name;
-			if ( method_exists( $this, $setter ) ) {
-					$this->$setter( null );
-				} elseif ( method_exists( $this, 'get_' . $name ) ) {
-					throw new \Exception( 'Setting read-only property: ' . get_class( $this ) . '::' . $name );
- 		}
- 	}
+		$setter = 'set_' . $name;
+		if ( method_exists( $this, $setter ) ) {
+			$this->$setter( null );
+		} elseif ( method_exists( $this, 'get_' . $name ) ) {
+			throw new \Exception( 'Setting read-only property: ' . get_class( $this ) . '::' . $name );
+		}
+	}
 
 	/**
 	 * Run query and remember it to cache
@@ -196,18 +187,6 @@ class Model {
 	 */
 	public function reset_queries() {
 		$this->_queries = [];
-	}
-
-	/**
-	 * Set $post property correctly
-	 *
-	 * @param \WP_Post|int|null $post Post object, id or null to take current object.
-	 */
-	public function set_post( $post = null ) {
-		if ( is_null( $post ) ) {
-			$post = get_the_ID();
-		}
-		$this->post = get_post( $post );
 	}
 
 }
