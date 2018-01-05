@@ -5,7 +5,7 @@ Tags: mvc theme, theme boilerplate, oop theme, mini framework
 Author: JustCoded / Alex Prokopenko
 Author URI: http://justcoded.com/
 Requires at least: 4.7
-Tested up to: 4.9
+Tested up to: 4.9.1
 License: GPL3
 Stable tag: trunk
 
