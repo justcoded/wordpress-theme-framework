@@ -108,7 +108,23 @@ class Page_Builder_Loader {
 		// add own hook for custom widgets preview.
 		add_action( 'wp_ajax_so_widgets_preview', array( $this, 'widget_preview' ), 5 );
 
+		// filter widget dialog tabs
+		add_filter( 'siteorigin_panels_widget_dialog_tabs', array( $this, 'update_widgets_dialog_tabs' ), 20 );
+
 		$this->init();
+	}
+
+	public function update_widgets_dialog_tabs($tabs) {
+		$tabs[0]['message'] = '';
+		$tabs['page_builder']['message'] = '';
+
+		$sorted_tabs[0] = $tabs[0];
+		$sorted_tabs['recommended'] = $tabs['recommended'];
+		unset($tabs[0]);
+		unset($tabs['recommended']);
+		unset($tabs['widgets_bundle']);
+		$sorted_tabs = array_merge($sorted_tabs, $tabs);
+		return $sorted_tabs;
 	}
 
 	/**
@@ -241,6 +257,8 @@ class Page_Builder_Loader {
 				}
 			}
 		}
+
+		$widgets['SiteOrigin_Widget_Editor_Widget']['groups'] = array('recommended');
 
 		return $widgets;
 	}

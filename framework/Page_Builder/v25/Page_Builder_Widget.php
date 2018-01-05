@@ -64,6 +64,7 @@ class Page_Builder_Widget extends \SiteOrigin_Widget {
 		$form_options = array(),
 		$base_folder = false
 	) {
+		$widget_options['panels_groups'] = array('recommended');
 		parent::__construct( $id, $name, $widget_options, $control_options, $form_options, $base_folder );
 
 		// add hook to be able to overwrite widget label, printed in page builder rows grid.
