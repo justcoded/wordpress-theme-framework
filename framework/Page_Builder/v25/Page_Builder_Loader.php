@@ -1,6 +1,7 @@
 <?php
 namespace JustCoded\WP\Framework\Page_Builder\v25;
 
+use JustCoded\WP\Framework\Objects\Singleton;
 use JustCoded\WP\Framework\Page_Builder\v25\Traits\Html_Cleanup;
 use JustCoded\WP\Framework\Page_Builder\v25\Traits\Row_Layouts_Loader;
 use JustCoded\WP\Framework\Page_Builder\v25\Traits\Widget_Layouts_Loader;
@@ -12,6 +13,7 @@ use JustCoded\WP\Framework\Page_Builder\v25\Traits\Widget_Layouts_Loader;
  * @package JustCoded\WP\Framework\SOPanels
  */
 class Page_Builder_Loader {
+	use Singleton;
 	use Html_Cleanup, Row_Layouts_Loader, Widget_Layouts_Loader;
 
 	/**
@@ -90,7 +92,7 @@ class Page_Builder_Loader {
 	 * Main class constructor
 	 * Set WordPress actions and filters
 	 */
-	public function __construct() {
+	protected function __construct() {
 		$this->html_cleanup();
 		$this->row_layouts_loader();
 		$this->widget_layouts_loader();

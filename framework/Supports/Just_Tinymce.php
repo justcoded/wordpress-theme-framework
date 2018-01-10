@@ -1,6 +1,8 @@
 <?php
 namespace JustCoded\WP\Framework\Supports;
 
+use JustCoded\WP\Framework\Objects\Singleton;
+
 /**
  * Class Just_Tinymce
  *
@@ -9,12 +11,14 @@ namespace JustCoded\WP\Framework\Supports;
  * @package JustCoded\WP\Framework\Supports
  */
 class Just_Tinymce {
+	use Singleton;
+
 	/**
 	 * Just_Tinymce constructor.
 	 *
 	 * Register plugin hooks
 	 */
-	public function __construct() {
+	protected function __construct() {
 		add_filter( 'jtmce_config_file_path', array( $this, 'jtmce_config_file_path' ) );
 	}
 

@@ -2,6 +2,7 @@
 
 namespace JustCoded\WP\Framework\Supports;
 use jcf\models\Settings;
+use JustCoded\WP\Framework\Objects\Singleton;
 
 /**
  * Class Just_Custom_Fields
@@ -11,11 +12,13 @@ use jcf\models\Settings;
  * @package JustCoded\WP\Framework\Supports
  */
 class Just_Custom_Fields {
+	use Singleton;
+
 	/**
 	 * Just_Custom_Fields constructor.
 	 * Register jcf hooks
 	 */
-	public function __construct() {
+	protected function __construct() {
 		add_filter( 'jcf_config_filepath', array( $this, 'jcf_config_filepath' ), 10, 2 );
 	}
 

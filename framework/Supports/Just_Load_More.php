@@ -9,18 +9,22 @@
 
 namespace JustCoded\WP\Framework\Supports;
 
+use JustCoded\WP\Framework\Objects\Singleton;
+
 /**
  * Class Just_Load_More
  *
  * @package JustCoded\WP\Framework\Supports
  */
 class Just_Load_More {
+	use Singleton;
+
 	/**
 	 * Just_Load_More constructor.
 	 *
 	 * Register plugin hooks.
 	 */
-	function __construct() {
+	protected function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
 		if ( isset( $_POST['jtf_load_more'] ) && ! defined( 'JTF_LOAD_MORE_AJAX' ) ) {
 			define( 'JTF_LOAD_MORE_AJAX', true );
@@ -31,30 +35,32 @@ class Just_Load_More {
 	}
 
 	/**
-	 * disable autooptimaze if using load more
+	 * Disable autooptimaze if using load more
 	 */
 	public function disable_autoptimize() {
 		return true;
 	}
 
 	/**
-	 * registered scripts
+	 * Register load more scripts
 	 */
 	public function register_assets() {
-		wp_enqueue_script( '_jtf-load_more', jtf_plugin_url( 'assets/js/load_more.js' ), [ 'jquery' ] );
+		if ( ! is_admin() ) {
+			wp_enqueue_script( '_jtf-load_more', jtf_plugin_url( 'assets/js/load_more.js' ), [ 'jquery' ] );
+		}
 	}
 
 	/**
-	 * callback for loadmore script
+	 * Callback for loadmore script
 	 *
-	 * @param $html buffer output
+	 * @param string $html buffer output.
 	 *
 	 * @return string
 	 */
 	public function ob_get_clean( $html ) {
 		$text = '';
-		if ( isset( $_POST['jtf_selector'] ) ) {
-			$selector  = trim( $_POST['jtf_selector'] );
+		if ( isset( $_POST[ 'jtf_selector' ] ) ) {
+			$selector  = trim( $_POST[ 'jtf_selector' ] );
 			$attribute = substr( $selector, 0, 1 );
 			if ( $attribute == '.' || $attribute == '#' ) {
 				$selector = substr( $selector, 1 );
