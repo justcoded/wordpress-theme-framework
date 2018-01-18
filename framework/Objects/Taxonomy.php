@@ -236,12 +236,12 @@ abstract class Taxonomy {
 				if ( is_array( $post_type ) ) {
 					$post_type = reset( $post_type );
 				}
-				$templates[] = "views/$post_type/archive-" . $this::$ID . '.php';
+				$templates[] = "views/$post_type/taxonomy-" . $this::$ID . '.php';
 			}
 
 			// search tax template inside all post types related to taxonomy.
 			foreach ( $this->post_types as $post_type ) {
-				$templates[] = "views/$post_type/archive-" . $this::$ID . '.php';
+				$templates[] = "views/$post_type/taxonomy-" . $this::$ID . '.php';
 			}
 
 			$templates = array_unique( $templates );

@@ -1,12 +1,16 @@
 <?php
 namespace JustCoded\WP\Framework\Supports;
 
+use JustCoded\WP\Framework\Objects\Singleton;
+
 /**
  * Class AutoOptimize
  * AutoOptimize plugin extention which allows to add advanced configuration of this plugin.
  * Also add patches for multisite and "/cms" folder installation
  */
 class Autoptimize {
+	use Singleton;
+
 	/**
 	 * Domains to be added as <link prefetch>
 	 *
@@ -33,7 +37,7 @@ class Autoptimize {
 	/**
 	 * AutoOptimize constructor.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		// autooptimize patches.
 		add_filter( 'autoptimize_filter_js_unmovable', array( $this, 'js_is_unmovable' ) );
 		add_filter( 'autoptimize_filter_js_domove', array( $this, 'js_move_first' ) );

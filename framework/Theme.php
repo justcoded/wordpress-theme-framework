@@ -2,6 +2,7 @@
 
 namespace JustCoded\WP\Framework;
 
+use JustCoded\WP\Framework\Objects\Singleton;
 use JustCoded\WP\Framework\Supports\Autoptimize;
 use JustCoded\WP\Framework\Supports\Just_Custom_Fields;
 use JustCoded\WP\Framework\Supports\Just_Post_Preview;
@@ -16,6 +17,8 @@ use JustCoded\WP\Framework\Web\View;
  * Init main path rewrite operations and activate / register hooks
  */
 abstract class Theme {
+	use Singleton;
+
 	/**
 	 * Theme version
 	 *
@@ -113,7 +116,7 @@ abstract class Theme {
 	/**
 	 * Init actions and hooks
 	 */
-	public function __construct() {
+	protected function __construct() {
 		$this->register_post_types();
 		$this->register_taxonomies();
 		$this->init_views_templates();
@@ -383,11 +386,11 @@ abstract class Theme {
 	 * Adds loading of custom features provided by 3d-party plugins.
 	 */
 	public function support_plugins() {
-		new Just_Load_More();
-		new Just_Responsive_Images();
-		new Just_Custom_Fields();
-		new Just_Post_Preview();
-		new Just_Tinymce();
+		Just_Load_More::instance();
+		Just_Responsive_Images::instance();
+		Just_Custom_Fields::instance();
+		Just_Post_Preview::instance();
+		Just_Tinymce::instance();
 	}
 
 	/**

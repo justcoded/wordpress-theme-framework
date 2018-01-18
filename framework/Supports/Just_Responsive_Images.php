@@ -1,6 +1,8 @@
 <?php
 namespace JustCoded\WP\Framework\Supports;
 
+use JustCoded\WP\Framework\Objects\Singleton;
+
 /**
  * Class Just_Responsive_Images
  *
@@ -9,13 +11,14 @@ namespace JustCoded\WP\Framework\Supports;
  * @package JustCoded\WP\Framework\Supports
  */
 class Just_Responsive_Images {
+	use Singleton;
 
 	/**
 	 * Just_Responsive_Images constructor.
 	 *
 	 * Register plugin hooks.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		add_filter( 'rwd_image_sizes', array( $this, 'rmd_image_sizes' ) );
 	}
 

@@ -1,6 +1,8 @@
 <?php
 namespace JustCoded\WP\Framework\Supports;
 
+use JustCoded\WP\Framework\Objects\Singleton;
+
 /**
  * Class Just_Post_Preview
  *
@@ -9,13 +11,14 @@ namespace JustCoded\WP\Framework\Supports;
  * @package JustCoded\WP\Framework\Supports
  */
 class Just_Post_Preview {
+	use Singleton;
 
 	/**
 	 * Just_Post_Preview constructor.
 	 *
 	 * Register plugin hooks.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		add_filter( 'jpp_post_preview_template', array( $this, 'jpp_post_preview_template' ) );
 	}
 

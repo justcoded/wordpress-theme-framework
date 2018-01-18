@@ -25,6 +25,13 @@ class View {
 	public $template;
 
 	/**
+	 * Template params, which you can use to pass variables through inherited templates.
+	 *
+	 * @var array
+	 */
+	public $params = array();
+
+	/**
 	 * View constructor.
 	 *
 	 * Executed immediately before WordPress includes the predetermined template file
@@ -64,7 +71,7 @@ class View {
 	/**
 	 * Start loading theme template.
 	 */
-	public function include_template() {
+	public function run() {
 		// add alias.
 		$template = $this->template;
 
@@ -158,7 +165,7 @@ class View {
 	 *
 	 * @return bool
 	 */
-	public function render( $view, $params = array(), $__required = true ) {
+	public function include( $view, $params = array(), $__required = true ) {
 		$template = $this->locate( $view, $__required );
 		if ( empty( $template ) ) {
 			return false;

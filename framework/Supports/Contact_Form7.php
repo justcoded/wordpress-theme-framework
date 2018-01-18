@@ -41,9 +41,9 @@ class Contact_Form7 extends Post_Type {
 
 	/**
 	 * FormRequest constructor.
-	 * Define Wordpress hooks
+	 * define WordPress hooks
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 		add_action( 'wpcf7_before_send_mail', array( $this, 'save_form_request' ) );
 

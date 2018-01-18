@@ -124,7 +124,7 @@ class Template_Hierarchy {
 	 * Generate views for custom page templates set from admin.
 	 * It search for page template set from admin. If it was deleted - then load generic page template
 	 *
-	 * @param array $std_templates Standard Wordpress templates.
+	 * @param array $std_templates Standard WordPress templates.
 	 *
 	 * @return array
 	 */
