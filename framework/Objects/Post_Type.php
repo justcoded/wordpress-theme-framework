@@ -112,7 +112,7 @@ abstract class Post_Type {
 	 * IF has_singular == false AND is_searchable == true THEN we need to redirect page from search results to some other page
 	 * custom property: auto-redirect to some URL
 	 *
-	 * @var false|string
+	 * @var boolean|string
 	 */
 	protected $redirect = false;
 
@@ -169,7 +169,7 @@ abstract class Post_Type {
 	 */
 
 	/**
-	 * Taxonomy slugs to add to this CPT, will be used only for standard Category and Tags.
+	 * Taxonomy IDs to add to this CPT, will be used only for standard Category and Tags.
 	 * All other custom taxonomies should register CPT they are used inside the Taxonomy
 	 * affect: taxonomies
 	 *
