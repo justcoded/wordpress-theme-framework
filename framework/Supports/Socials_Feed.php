@@ -35,7 +35,7 @@ class Socials_Feed {
 		}
 
 
-		//add_action( 'init', array( $this, 'insert_posts' ) );
+		add_action( 'init', array( $this, 'insert_posts' ) );
 
 	}
 
