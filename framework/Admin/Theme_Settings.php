@@ -17,6 +17,8 @@ abstract class Theme_Settings {
 	 */
 	protected static $titan_instance;
 
+	public static $panel;
+
 	/**
 	 * Theme Settings constructor
 	 * init framework hook
