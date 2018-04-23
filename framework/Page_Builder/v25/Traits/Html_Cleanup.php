@@ -5,7 +5,7 @@ namespace JustCoded\WP\Framework\Page_Builder\v25\Traits;
 trait Html_Cleanup {
 
 	/**
-	 * Html_Cleanup contructor
+	 * Html_Cleanup constructor
 	 * (have to be called inside class constructor)
 	 */
 	public function html_cleanup() {
@@ -92,7 +92,12 @@ trait Html_Cleanup {
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = 'pb-row pb-row-cols-' . count( $panel_data['cells'] );
+
+		if ( $this->index_elements ) {
+			$attributes['class'] = 'pb-row pb-row-cols-' . count( $panel_data['cells'] );
+		} else {
+			$attributes['class'] = 'pb-row';
+		}
 
 		return $attributes;
 	}
@@ -134,7 +139,12 @@ trait Html_Cleanup {
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = 'pb-cell pb-cell-num-' . ( $this->_col_index + 1 );
+
+		if ( $this->index_elements ) {
+			$attributes['class'] = 'pb-cell pb-cell-num-' . ( $this->_col_index + 1 );
+		} else {
+			$attributes['class'] = 'pb-cell';
+		}
 
 		return $attributes;
 	}
@@ -151,7 +161,10 @@ trait Html_Cleanup {
 		if ( isset( $attributes['id'] ) ) {
 			unset( $attributes['id'] );
 		}
-		$attributes['class'] = array( 'pb-cell-inner' );
+
+		if ( $this->index_elements ) {
+			$attributes['class'] = array( 'pb-cell-inner' );
+		}
 
 		return $attributes;
 	}

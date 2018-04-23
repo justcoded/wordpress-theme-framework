@@ -1,4 +1,5 @@
 <?php
+
 namespace JustCoded\WP\Framework\Page_Builder\v25;
 
 use JustCoded\WP\Framework\Objects\Singleton;
@@ -23,11 +24,11 @@ class Page_Builder_Loader {
 	 * @var array
 	 */
 	public $disabled_siteorigin_widgets = array(
-		'editor' => 'SiteOrigin_Widget_Editor_Widget',
-		'button' => 'SiteOrigin_Widget_Button_Widget',
-		'image' => 'SiteOrigin_Widget_Image_Widget',
-		'slider' => 'SiteOrigin_Widget_Slider_Widget',
-		'features' => 'SiteOrigin_Widget_Features_Widget',
+		'editor'        => 'SiteOrigin_Widget_Editor_Widget',
+		'button'        => 'SiteOrigin_Widget_Button_Widget',
+		'image'         => 'SiteOrigin_Widget_Image_Widget',
+		'slider'        => 'SiteOrigin_Widget_Slider_Widget',
+		'features'      => 'SiteOrigin_Widget_Features_Widget',
 		'post-carousel' => 'SiteOrigin_Widget_PostCarousel_Widget',
 	);
 
@@ -90,12 +91,19 @@ class Page_Builder_Loader {
 	protected $_widget_index = - 1;
 
 	/**
+	 * Whether we need elements to be indexed.
+	 *
+	 * @var int
+	 */
+	protected $index_elements = false;
+
+	/**
 	 * Main class constructor
 	 * Set WordPress actions and filters
 	 */
 	protected function __construct() {
-		$this->html_cleanup();
 		$this->fields_loader();
+		$this->html_cleanup();
 		$this->row_layouts_loader();
 		$this->widget_layouts_loader();
 
@@ -184,6 +192,7 @@ class Page_Builder_Loader {
 				unset( $fields[ $field ] );
 			}
 		}
+
 		return $fields;
 	}
 
@@ -211,13 +220,14 @@ class Page_Builder_Loader {
 				unset( $fields[ $field ] );
 			}
 		}
+
 		return $fields;
 	}
 
 	/**
 	 * Remove hard-coded widgets from the "Add Widget" page builder popup
 	 *
-	 * @param array $widgets  widgets available for page builder.
+	 * @param array $widgets widgets available for page builder.
 	 *
 	 * @return array
 	 */
@@ -268,7 +278,7 @@ class Page_Builder_Loader {
 			exit();
 		}
 		if ( empty( $_REQUEST['_widgets_nonce'] )
-		     || ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) {
+			 || ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) {
 			return;
 		}
 
@@ -289,8 +299,8 @@ class Page_Builder_Loader {
 		$instance['is_preview'] = true;
 
 		wp_enqueue_style( 'dashicons' );
-		wp_enqueue_style( 'so-widget-preview', plugin_dir_url( SOW_BUNDLE_BASE_FILE ) . 'base/css/preview.css', array(), rand( 0,65536 ) );
-		wp_enqueue_style( 'jtf-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/css/widget-preview.css', array(), rand( 0,65536 ) );
+		wp_enqueue_style( 'so-widget-preview', plugin_dir_url( SOW_BUNDLE_BASE_FILE ) . 'base/css/preview.css', array(), rand( 0, 65536 ) );
+		wp_enqueue_style( 'jtf-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/css/widget-preview.css', array(), rand( 0, 65536 ) );
 
 		wp_enqueue_script( 'jtc-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/js/widget-preview.js', array( 'jquery' ) );
 		$sowb = \SiteOrigin_Widgets_Bundle::single();
