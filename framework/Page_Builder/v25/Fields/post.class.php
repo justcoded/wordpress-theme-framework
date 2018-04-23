@@ -20,13 +20,12 @@ class Just_Field_Post extends SiteOrigin_Widget_Field_Autocomplete {
 		return array( 'widefat', 'siteorigin-widget-input', 'siteorigin-widget-post-input' );
 	}
 
-	protected function get_default_options() {
-		$defaults           = parent::get_default_options();
-		$defaults['source'] = 'posts';
-
-		return $defaults;
-	}
-
+	/**
+	 * Method is used to render html after field.
+	 *
+	 * @param mixed $value - Value.
+	 * @param mixed $instance - Instance.
+	 */
 	protected function render_after_field( $value, $instance ) {
 		$post_type = $this->post_type;
 		?>
@@ -34,7 +33,6 @@ class Just_Field_Post extends SiteOrigin_Widget_Field_Autocomplete {
 
 			<input type="text" class="content-text-search"
 				   data-types="<?php echo esc_attr( $post_type ) ?>"
-				   data-source="<?php echo esc_attr( $this->source ) ?>"
 				   placeholder="<?php esc_attr_e( 'Search', 'so-widgets-bundle' ) ?>"/>
 			<ul class="items"></ul>
 
@@ -45,8 +43,11 @@ class Just_Field_Post extends SiteOrigin_Widget_Field_Autocomplete {
 		<?php
 	}
 
+	/**
+	 * Enqueue needed js.
+	 */
 	function enqueue_scripts() {
-		wp_enqueue_script( 'post-js', get_template_directory_uri() . '/app/Page_Builder/Fields/js/post-field.js', array( 'jquery' ), '4.0.1.1' );
+		wp_enqueue_script( 'post-js', plugin_dir_url( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/js/post-field.js', array( 'jquery' ), '4.0.1.1' );
 	}
 
 	/**
@@ -57,7 +58,7 @@ class Just_Field_Post extends SiteOrigin_Widget_Field_Autocomplete {
 			wp_die( __( 'Invalid request.', 'so-widgets-bundle' ), 403 );
 		}
 
-		// Get all public post types, besides attachments
+		// Get all public post types, besides attachments.
 		$post_type = (array) get_post_types( array(
 			'public' => true,
 		) );

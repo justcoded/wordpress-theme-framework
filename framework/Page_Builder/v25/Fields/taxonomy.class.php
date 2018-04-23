@@ -20,11 +20,12 @@ class Just_Field_Taxonomy extends SiteOrigin_Widget_Field_Autocomplete {
 		return array( 'widefat', 'siteorigin-widget-input', 'siteorigin-widget-taxonomy-input' );
 	}
 
-	protected function get_default_options() {
-		$defaults             = parent::get_default_options();
-		return $defaults;
-	}
-
+	/**
+	 * Method is used to render html after field.
+	 *
+	 * @param mixed $value - Value.
+	 * @param mixed $instance - Instance.
+	 */
 	protected function render_after_field( $value, $instance ) {
 
 		$post_types = ! empty( $this->post_types ) && is_array( $this->post_types ) ? implode( ',', $this->post_types ) : '';
@@ -42,7 +43,6 @@ class Just_Field_Taxonomy extends SiteOrigin_Widget_Field_Autocomplete {
 
 			<input type="text" class="content-text-search"
 				   data-post-types="<?php echo esc_attr( $post_types ) ?>"
-				   data-source="<?php echo esc_attr( $this->source ) ?>"
 				   data-taxonomy="<?php echo esc_attr( $this->taxonomy ); ?>"
 				   placeholder="<?php esc_attr_e( 'Search', 'so-widgets-bundle' ) ?>"/>
 
@@ -55,20 +55,22 @@ class Just_Field_Taxonomy extends SiteOrigin_Widget_Field_Autocomplete {
 		<?php
 	}
 
+	/**
+	 * Enqueue needed js.
+	 */
 	function enqueue_scripts() {
-		wp_enqueue_script( 'taxonomy-js', get_template_directory_uri() . '/app/Page_Builder/Fields/js/taxonomy-field.js', array( 'jquery' ), '4.1' );
+		wp_enqueue_script( 'taxonomy-js', plugin_dir_url( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/js/taxonomy-field.js', array( 'jquery' ), '4.1' );
 	}
 
 	/**
 	 * Action to handle searching taxonomy terms.
 	 */
-	static function my_search_terms() {
+	static function action_search_terms() {
 		if ( empty( $_REQUEST['_widgets_nonce'] ) || ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) {
 			wp_die( __( 'Invalid request.', 'so-widgets-bundle' ), 403 );
 		}
 
 		global $wpdb;
-		$term     = ! empty( $_GET['term'] ) ? stripslashes( $_GET['term'] ) : '';
 		$taxonomy = ! empty( $_REQUEST['taxonomy'] ) ? stripslashes( $_REQUEST['taxonomy'] ) : '';
 		if ( $taxonomy ) {
 			$query = $wpdb->prepare( "
@@ -77,18 +79,14 @@ class Just_Field_Taxonomy extends SiteOrigin_Widget_Field_Autocomplete {
 		JOIN $wpdb->term_taxonomy AS termtaxonomy ON terms.term_id = termtaxonomy.term_id
 		WHERE
 			termtaxonomy.taxonomy LIKE '%s'
-		LIMIT 20
 	", '%' . $taxonomy . '%' );
 		} else {
 			$query = $wpdb->prepare( "
 		SELECT terms.slug AS 'value', terms.term_id AS 'term_id', terms.name AS 'label', termtaxonomy.taxonomy AS 'type'
 		FROM $wpdb->terms AS terms
 		JOIN $wpdb->term_taxonomy AS termtaxonomy ON terms.term_id = termtaxonomy.term_id
-		LIMIT 20
-	");
+	" );
 		}
-
-		$term = trim( $term, '%' );
 
 
 		$results = array();

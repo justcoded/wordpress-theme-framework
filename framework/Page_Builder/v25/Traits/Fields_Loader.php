@@ -13,7 +13,7 @@ trait Fields_Loader {
 
 	/**
 	 * Fields constructor.
-	 * (has to be cold inside a class constructor)
+	 * (has to be cold in)
 	 */
 	function fields_loader() {
 		add_filter( 'siteorigin_widgets_field_class_prefixes', array( $this, 'pb_fields_class_prefixes' ) );
@@ -22,7 +22,7 @@ trait Fields_Loader {
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_pb_admin_style' ) );
 
-		add_action( 'wp_ajax_custom_term_search', array( 'Just_Field_Taxonomy', 'my_search_terms' ) );
+		add_action( 'wp_ajax_custom_term_search', array( 'Just_Field_Taxonomy', 'action_search_terms' ) );
 
 		add_action( 'wp_ajax_custom_post_search', array( 'Just_Field_Post', 'action_search_posts' ) );
 
@@ -43,7 +43,7 @@ trait Fields_Loader {
 	 * @return array
 	 */
 	function pb_fields_class_paths( $class_paths ) {
-		$class_paths[] = plugin_dir_url( JTF_PLUGIN_FILE ) . '/framework/Page_Builder/v25/Fields/';
+		$class_paths[] = plugin_dir_path( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/';
 
 		return $class_paths;
 	}
