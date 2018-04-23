@@ -74,7 +74,26 @@ class Row_Layout extends Layout {
 	 * @return array
 	 */
 	public function options() {
-		return array();
+		return array(
+			'row_template' => null,
+			'mobile_padding' => null,
+			'background' => null,
+			'background_image_attachment' => null,
+			'background_display' => null,
+			'border_color' => null,
+			'id' => null,
+			'class' => null,
+			'row_css' => null,
+			'mobile_css' => null,
+			'padding' => null,
+			'cell_class' => null,
+			'bottom_margin' => null,
+			'gutter' => null,
+			'row_stretch' => null,
+			'collapse_behaviour' => null,
+			'collapse_order' => null,
+			'cell_alignment' => null,
+		);
 	}
 
 	/**
