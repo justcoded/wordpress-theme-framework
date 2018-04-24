@@ -1,4 +1,5 @@
 <?php
+
 namespace JustCoded\WP\Framework\Page_Builder\v25\Layouts;
 
 /**
@@ -61,46 +62,51 @@ class Row_Layout extends Layout {
 	 * Field element should has a format similar to this:
 	 *
 	 *      '{field}' => array(
-	 *				'name'     => '{Field Title}',
-	 *				'type'     => 'select',  // available: text, select, color, measurement
-	 *				'group'    => 'layout',  // available: attributes, layout, design
-	 *				'options'  => array(     // select options
-	 *				    'No',
-	 *				    'Yes',
-	 *			    ),
-	 *				'priority' => 15,        // order weigth
-	 *			),
+	 *                'name'     => '{Field Title}',
+	 *                'type'     => 'select',  // available: text, select, color, measurement
+	 *                'group'    => 'layout',  // available: attributes, layout, design
+	 *                'options'  => array(     // select options
+	 *                    'No',
+	 *                    'Yes',
+	 *                ),
+	 *                'priority' => 15,        // order weigth
+	 *            ),
+	 *
+	 * By default we unset Design and Theme tabs. (1 assigned to values, because of empty() check in SO plugin)
 	 *
 	 * @return array
 	 */
 	public function options() {
 		return array(
-			'row_template' => null,
-			'mobile_padding' => null,
-			'background' => null,
-			'background_image_attachment' => null,
-			'background_display' => null,
-			'border_color' => null,
-			'id' => null,
-			'class' => null,
-			'row_css' => null,
-			'mobile_css' => null,
-			'padding' => null,
-			'cell_class' => null,
-			'bottom_margin' => null,
-			'gutter' => null,
-			'row_stretch' => null,
-			'collapse_behaviour' => null,
-			'collapse_order' => null,
-			'cell_alignment' => null,
+			'mobile_padding'              => 1,
+			'background'                  => 1,
+			'background_image_attachment' => 1,
+			'background_display'          => 1,
+			'border_color'                => 1,
+			'id'                          => 1,
+			'class'                       => 1,
+			'row_css'                     => 1,
+			'mobile_css'                  => 1,
+			'padding'                     => 1,
+			'cell_class'                  => 1,
+			'bottom_margin'               => 1,
+			'gutter'                      => 1,
+			'row_stretch'                 => 1,
+			'collapse_behaviour'          => 1,
+			'collapse_order'              => 1,
+			'cell_alignment'              => 1,
+			'widget_css'                  => 1,
+			'font_color'                  => 1,
+			'link_color'                  => 1,
+			'hero_size'                   => 1,
 		);
 	}
 
 	/**
 	 * Adjust html attributes for row wrapper div
 	 *
-	 * @param array $attributes  container attributes.
-	 * @param array $panel_data  panel data settings.
+	 * @param array $attributes container attributes.
+	 * @param array $panel_data panel data settings.
 	 *
 	 * @return array    update attributes
 	 */
@@ -121,15 +127,15 @@ class Row_Layout extends Layout {
 		if ( ! empty( $style_data['background_image_attachment'] ) ) {
 			$attributes['class'][] = $style_class;
 		}
-		$attributes['style'] = $this->generate_inline_styles( $style_data, $style_class );
+
 		return $attributes;
 	}
 
 	/**
 	 * Adjust html attributes for cell wrapper
 	 *
-	 * @param array $attributes  container attributes.
-	 * @param array $panel_data  panel data settings.
+	 * @param array $attributes container attributes.
+	 * @param array $panel_data panel data settings.
 	 *
 	 * @return array    update attributes
 	 */
@@ -153,9 +159,9 @@ class Row_Layout extends Layout {
 	 * Adjust custom html which can be inserted before row
 	 * Default is null
 	 *
-	 * @param string $html  Row HTML.
+	 * @param string $html Row HTML.
 	 * @param array  $panel_data panel data array.
-	 * @param array  $grid_data  grid data options.
+	 * @param array  $grid_data grid data options.
 	 *
 	 * @return string
 	 */
@@ -167,9 +173,9 @@ class Row_Layout extends Layout {
 	 * Adjust custom html which can be inserted after row
 	 * Default is null
 	 *
-	 * @param string $html  Row HTML.
+	 * @param string $html Row HTML.
 	 * @param array  $panel_data panel data array.
-	 * @param array  $grid_data  grid data options.
+	 * @param array  $grid_data grid data options.
 	 *
 	 * @return string
 	 */
