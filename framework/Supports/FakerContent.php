@@ -2,7 +2,6 @@
 
 namespace JustCoded\WP\Framework\Supports;
 
-use JustCoded\WP\Framework\Objects\Singleton;
 use Faker\Provider\Uuid;
 use Faker\Provider\TextBase;
 
@@ -11,54 +10,6 @@ use Faker\Provider\TextBase;
  * Fakerpress plugin extension which allows to generated faker content for custom fields.
  */
 class FakerContent {
-	use Singleton;
-
-	/**
-	 * FakerContent data.
-	 *
-	 * @var $data
-	 */
-	public $data;
-
-	/**
-	 * FakerContent construct.
-	 */
-	public function __construct() {
-		if ( self::do_fakerpress() ) {
-			add_action( 'wp_insert_post', array( $this, 'insert_post' ), 10, 3 );
-		}
-	}
-
-	/**
-	 * Fires once a post has been saved.
-	 *
-	 * @param int      $post_id Post ID.
-	 * @param \WP_Post $post    Post object.
-	 * @param bool     $update  Whether this is an existing post being updated or not.
-	 */
-	public function insert_post( $post_id, $post, $update ) {
-		$this->do_save( $post_id, $this->data );
-	}
-
-	/**
-	 * Saved faker content.
-	 *
-	 * @param int   $post_id Post ID.
-	 * @param array $data    Form data.
-	 *
-	 * @return bool
-	 */
-	public function do_save( $post_id, $data ) {
-		foreach ( $data as $meta_key => $meta_value ) {
-			if ( class_exists( 'acf' ) ) {
-				update_field( $meta_key, $meta_value, $post_id );
-			} else {
-				update_post_meta( $post_id, $meta_key, $meta_value );
-			}
-		}
-
-		return true;
-	}
 
 	/**
 	 * Generated array for flexible content.
@@ -187,27 +138,5 @@ class FakerContent {
 		$attach_id = wp_insert_attachment( $attachment, $upload['file'], 0 );
 
 		return $attach_id;
-	}
-
-	/**
-	 * Check that required plugin is installed and activated
-	 *
-	 * @return bool
-	 */
-	public static function check_requirements() {
-		return is_plugin_active( 'fakerpress/fakerpress.php' );
-	}
-
-	/**
-	 * Check work plugin Fakerpress for generated faker content.
-	 *
-	 * @return bool
-	 */
-	public static function do_fakerpress() {
-		if ( isset( $_POST['fakerpress']['view'] ) && $_POST['fakerpress']['view'] === 'posts' ) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 }

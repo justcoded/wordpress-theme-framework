@@ -3,6 +3,7 @@ namespace JustCoded\WP\Framework\Objects;
 
 use JustCoded\WP\Framework\Web\View;
 use JustCoded\WP\Framework\Web\Views_Rule;
+use JustCoded\WP\Framework\Supports\FakerPress;
 
 /**
  * Custom post type class to simplify the process of registering post type.
@@ -239,6 +240,9 @@ abstract class Post_Type {
 		}
 
 		add_action( 'init', array( $this, 'init' ) );
+		if ( FakerPress::check_requirements() ) {
+			add_action( 'init', array( $this, 'init_faker' ) );
+		}
 		add_filter( 'template_include', array( $this, 'views' ), 10 );
 	}
 
@@ -332,5 +336,14 @@ abstract class Post_Type {
 		 */
 
 		return $template;
+	}
+
+	/**
+	 * Init FakerPress.
+	 */
+	public function init_faker() {
+		if ( method_exists( $this, 'faker' ) ) {
+			new FakerPress( $this::$ID, $this );
+		}
 	}
 }
