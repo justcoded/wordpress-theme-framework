@@ -28,13 +28,14 @@ class FakerPress {
 	/**
 	 * FakerContent construct.
 	 *
-	 * @param string $id Post Type ID.
+	 * @param string $id        Post Type ID.
 	 * @param object $post_type Object.
 	 */
 	public function __construct( $id, $post_type ) {
 		$this->ID        = $id;
 		$this->post_type = $post_type;
-		if ( self::do_fakerpress() && self::do_faker_post_type( $this->ID ) ) {
+		if ( self::do_fakerpress() ) {
+			add_action( 'wp_insert_post_data', array( $this, 'pre_insert_post' ), 20, 2 );
 			add_action( 'wp_insert_post', array( $this, 'insert_post' ), 10, 3 );
 		}
 	}
@@ -47,7 +48,29 @@ class FakerPress {
 	 * @param bool     $update  Whether this is an existing post being updated or not.
 	 */
 	public function insert_post( $post_id, $post, $update ) {
-		$this->do_save( $post_id, $this->post_type->faker() );
+		if ( $this->ID === $post->post_type ) {
+			$this->do_save( $post_id, $this->post_type->faker() );
+		}
+	}
+
+	/**
+	 * Pre-save post content.
+	 *
+	 * @param array $data    An array of sanitized attachment post data.
+	 * @param array $postarr An array of unsanitized attachment post data.
+	 *
+	 * @return array
+	 */
+	public function pre_insert_post( $data, $postarr ) {
+		$faker_data = $this->post_type->faker();
+		if ( $faker_data['post_title'] ) {
+			$data['post_title'] = $faker_data['post_title'];
+		}
+		if ( $faker_data['post_content'] ) {
+			$data['post_content'] = $faker_data['post_content'];
+		}
+
+		return $data;
 	}
 
 	/**
@@ -59,6 +82,9 @@ class FakerPress {
 	 * @return bool
 	 */
 	public function do_save( $post_id, $data ) {
+		if ( $data['post_featured_image'] ) {
+			set_post_thumbnail( $post_id, $data['post_featured_image'] );
+		}
 		foreach ( $data as $meta_key => $meta_value ) {
 			if ( class_exists( 'acf' ) ) {
 				update_field( $meta_key, $meta_value, $post_id );
@@ -87,23 +113,6 @@ class FakerPress {
 	public static function do_fakerpress() {
 		if ( isset( $_POST['fakerpress']['view'] ) && $_POST['fakerpress']['view'] === 'posts' ) {
 			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Check Post Type for generated faker content.
-	 *
-	 * @param string $id Post Type ID.
-	 * @return bool
-	 */
-	public static function do_faker_post_type( $id ) {
-		if ( isset( $_POST['fakerpress']['post_types'] ) ) {
-			if ( strpos( $_POST['fakerpress']['post_types'], $id ) !== false ) {
-				return true;
-			}
-			return false;
 		} else {
 			return false;
 		}

@@ -2,14 +2,41 @@
 
 namespace JustCoded\WP\Framework\Supports;
 
+use Faker\Provider\Base;
 use Faker\Provider\Uuid;
 use Faker\Provider\TextBase;
+use Faker\Provider\Company;
+use Faker\Provider\DateTime;
+use Faker\Provider\Internet;
+use JustCoded\WP\Framework\Objects\Singleton;
 
 /**
  * Class FakerContent
  * Fakerpress plugin extension which allows to generated faker content for custom fields.
  */
 class FakerContent {
+	use Singleton;
+
+	/**
+	 * Person first name array
+	 *
+	 * @var $first_name
+	 */
+	public $first_name = array( 'John', 'Daniel', 'June', 'Bruce', 'Frederick', 'Charles', 'Amy', 'May' );
+
+	/**
+	 * Person last name array
+	 *
+	 * @var $last_name
+	 */
+	public $last_name = array( 'Doe', 'Oliver', 'McCrory', 'Fowler', 'Saxon', 'Chen', 'Homan', 'Franklin' );
+
+	/**
+	 * Top-level domain array
+	 *
+	 * @var $tld
+	 */
+	public $tld = array( 'com', 'com', 'com', 'com', 'com', 'com', 'biz', 'info', 'net', 'org' );
 
 	/**
 	 * Generated array for flexible content.
@@ -74,26 +101,6 @@ class FakerContent {
 	}
 
 	/**
-	 * Get fake number.
-	 *
-	 * @return int
-	 */
-	public function number() {
-		return rand( 1, 99 );
-	}
-
-	/**
-	 * Get fake date.
-	 *
-	 * @param string $format Date format.
-	 *
-	 * @return string
-	 */
-	public function date( $format = 'Y-m-d' ) {
-		return date( $format );
-	}
-
-	/**
 	 * Generated and save attachment file.
 	 *
 	 * @param int    $width  Attachment width.
@@ -138,5 +145,79 @@ class FakerContent {
 		$attach_id = wp_insert_attachment( $attachment, $upload['file'], 0 );
 
 		return $attach_id;
+	}
+
+	/**
+	 * Get fake number.
+	 *
+	 * @return int
+	 */
+	public function number() {
+		return rand( 1, 99 );
+	}
+
+	/**
+	 * Get fake date.
+	 *
+	 * @param string $format Date format.
+	 *
+	 * @return string
+	 */
+	public function date( $format = 'Y-m-d' ) {
+		return DateTime::date( $format );
+	}
+
+	/**
+	 * Get fake timezone.
+	 *
+	 * @return string
+	 */
+	public function timezone() {
+		return DateTime::timezone();
+	}
+
+	/**
+	 * Get fake person name.
+	 *
+	 * @return string
+	 */
+	public function person() {
+		return Base::randomElement( $this->first_name ) . ' ' . Base::randomElement( $this->last_name );
+	}
+
+	/**
+	 * Get fake name.
+	 *
+	 * @return string
+	 */
+	public function company() {
+		return $this->words( 1 ) . ' ' . Company::companySuffix();
+	}
+
+	/**
+	 * Get fake email.
+	 *
+	 * @return string
+	 */
+	public function email() {
+		return strtolower( $this->words( 1 ) ) . '@' . Internet::safeEmailDomain();
+	}
+
+	/**
+	 * Get fake domain.
+	 *
+	 * @return string
+	 */
+	public function domain() {
+		return strtolower( $this->words( 1 ) ) . '.' . Base::randomElement( $this->tld );
+	}
+
+	/**
+	 * Get fake IP address.
+	 *
+	 * @return string
+	 */
+	public function ip() {
+		return Internet::localIpv4();
 	}
 }
