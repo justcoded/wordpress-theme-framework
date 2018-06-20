@@ -62,12 +62,14 @@ class FakerPress {
 	 * @return array
 	 */
 	public function pre_insert_post( $data, $postarr ) {
-		$faker_data = $this->post_type->faker();
-		if ( $faker_data['post_title'] ) {
-			$data['post_title'] = $faker_data['post_title'];
-		}
-		if ( $faker_data['post_content'] ) {
-			$data['post_content'] = $faker_data['post_content'];
+		if ( $this->ID === $data['post_type'] ) {
+			$faker_data = $this->post_type->faker();
+			if ( $faker_data['post_title'] ) {
+				$data['post_title'] = $faker_data['post_title'];
+			}
+			if ( $faker_data['post_content'] ) {
+				$data['post_content'] = $faker_data['post_content'];
+			}
 		}
 
 		return $data;
