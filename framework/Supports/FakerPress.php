@@ -1,15 +1,11 @@
 <?php
-
 namespace JustCoded\WP\Framework\Supports;
-
-use JustCoded\WP\Framework\Objects\Singleton;
 
 /**
  * Class FakerPress
  * Fakerpress plugin extension which allows to generated faker content for custom fields.
  */
 class FakerPress {
-	use Singleton;
 
 	/**
 	 * Post Type ID.
@@ -19,11 +15,11 @@ class FakerPress {
 	public $ID;
 
 	/**
-	 * Post Type Object.
+	 * Post Type faker data.
 	 *
-	 * @var object $post_type
+	 * @var array $data
 	 */
-	public $post_type;
+	public $data;
 
 	/**
 	 * FakerContent construct.
@@ -32,9 +28,9 @@ class FakerPress {
 	 * @param object $post_type Object.
 	 */
 	public function __construct( $id, $post_type ) {
-		$this->ID        = $id;
-		$this->post_type = $post_type;
-		if ( self::do_fakerpress() ) {
+		if ( $this->do_fakerpress() ) {
+			$this->ID   = $id;
+			$this->data = $post_type->faker();
 			add_action( 'wp_insert_post_data', array( $this, 'pre_insert_post' ), 20, 2 );
 			add_action( 'wp_insert_post', array( $this, 'insert_post' ), 10, 3 );
 		}
@@ -49,7 +45,7 @@ class FakerPress {
 	 */
 	public function insert_post( $post_id, $post, $update ) {
 		if ( $this->ID === $post->post_type ) {
-			$this->do_save( $post_id, $this->post_type->faker() );
+			$this->do_save( $post_id, $this->data );
 		}
 	}
 
@@ -63,11 +59,11 @@ class FakerPress {
 	 */
 	public function pre_insert_post( $data, $postarr ) {
 		if ( $this->ID === $data['post_type'] ) {
-			$faker_data = $this->post_type->faker();
-			if ( $faker_data['post_title'] ) {
+			$faker_data = $this->data;
+			if ( isset( $faker_data['post_title'] ) ) {
 				$data['post_title'] = $faker_data['post_title'];
 			}
-			if ( $faker_data['post_content'] ) {
+			if ( isset( $faker_data['post_content'] ) ) {
 				$data['post_content'] = $faker_data['post_content'];
 			}
 		}
@@ -84,9 +80,10 @@ class FakerPress {
 	 * @return bool
 	 */
 	public function do_save( $post_id, $data ) {
-		if ( $data['post_featured_image'] ) {
+		if ( isset( $data['post_featured_image'] ) ) {
 			set_post_thumbnail( $post_id, $data['post_featured_image'] );
 		}
+		unset( $data['post_featured_image'], $data['post_title'], $data['post_content'] );
 		foreach ( $data as $meta_key => $meta_value ) {
 			if ( class_exists( 'acf' ) ) {
 				update_field( $meta_key, $meta_value, $post_id );
@@ -112,7 +109,7 @@ class FakerPress {
 	 *
 	 * @return bool
 	 */
-	public static function do_fakerpress() {
+	public function do_fakerpress() {
 		if ( isset( $_POST['fakerpress']['view'] ) && $_POST['fakerpress']['view'] === 'posts' ) {
 			return true;
 		} else {

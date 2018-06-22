@@ -2,12 +2,9 @@
 
 namespace JustCoded\WP\Framework\Supports;
 
-use Faker\Provider\Base;
 use Faker\Provider\Uuid;
 use Faker\Provider\TextBase;
-use Faker\Provider\Company;
-use Faker\Provider\DateTime;
-use Faker\Provider\Internet;
+use Faker\Factory;
 use JustCoded\WP\Framework\Objects\Singleton;
 
 /**
@@ -18,25 +15,18 @@ class FakerContent {
 	use Singleton;
 
 	/**
-	 * Person first name array
+	 * Faker object
 	 *
-	 * @var $first_name
+	 * @var $faker
 	 */
-	public $first_name = array( 'John', 'Daniel', 'June', 'Bruce', 'Frederick', 'Charles', 'Amy', 'May' );
+	public $faker;
 
 	/**
-	 * Person last name array
-	 *
-	 * @var $last_name
+	 * FakerContent construct
 	 */
-	public $last_name = array( 'Doe', 'Oliver', 'McCrory', 'Fowler', 'Saxon', 'Chen', 'Homan', 'Franklin' );
-
-	/**
-	 * Top-level domain array
-	 *
-	 * @var $tld
-	 */
-	public $tld = array( 'com', 'com', 'com', 'com', 'com', 'com', 'biz', 'info', 'net', 'org' );
+	protected function __construct() {
+		$this->faker = Factory::create();
+	}
 
 	/**
 	 * Generated array for flexible content.
@@ -164,7 +154,7 @@ class FakerContent {
 	 * @return string
 	 */
 	public function date( $format = 'Y-m-d' ) {
-		return DateTime::date( $format );
+		return $this->faker->date( $format );
 	}
 
 	/**
@@ -173,7 +163,7 @@ class FakerContent {
 	 * @return string
 	 */
 	public function timezone() {
-		return DateTime::timezone();
+		return $this->faker->timezone;
 	}
 
 	/**
@@ -182,7 +172,7 @@ class FakerContent {
 	 * @return string
 	 */
 	public function person() {
-		return Base::randomElement( $this->first_name ) . ' ' . Base::randomElement( $this->last_name );
+		return $this->faker->name;
 	}
 
 	/**
@@ -191,7 +181,7 @@ class FakerContent {
 	 * @return string
 	 */
 	public function company() {
-		return $this->words( 1 ) . ' ' . Company::companySuffix();
+		return $this->faker->company;
 	}
 
 	/**
@@ -200,7 +190,7 @@ class FakerContent {
 	 * @return string
 	 */
 	public function email() {
-		return strtolower( $this->words( 1 ) ) . '@' . Internet::safeEmailDomain();
+		return $this->faker->safeEmail;
 	}
 
 	/**
@@ -209,7 +199,7 @@ class FakerContent {
 	 * @return string
 	 */
 	public function domain() {
-		return strtolower( $this->words( 1 ) ) . '.' . Base::randomElement( $this->tld );
+		return $this->faker->domainName;
 	}
 
 	/**
@@ -218,6 +208,6 @@ class FakerContent {
 	 * @return string
 	 */
 	public function ip() {
-		return Internet::localIpv4();
+		return $this->faker->localIpv4;
 	}
 }

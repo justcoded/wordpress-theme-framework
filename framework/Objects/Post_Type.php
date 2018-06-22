@@ -240,7 +240,7 @@ abstract class Post_Type {
 		}
 
 		add_action( 'init', array( $this, 'init' ) );
-		if ( FakerPress::check_requirements() ) {
+		if ( method_exists( $this, 'faker' ) && is_admin() ) {
 			add_action( 'init', array( $this, 'init_faker' ) );
 		}
 		add_filter( 'template_include', array( $this, 'views' ), 10 );
@@ -342,8 +342,6 @@ abstract class Post_Type {
 	 * Init FakerPress.
 	 */
 	public function init_faker() {
-		if ( method_exists( $this, 'faker' ) ) {
-			new FakerPress( $this::$ID, $this );
-		}
+		new FakerPress( $this::$ID, $this );
 	}
 }
