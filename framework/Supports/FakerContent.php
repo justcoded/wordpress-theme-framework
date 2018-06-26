@@ -55,36 +55,75 @@ class FakerContent {
 	 * @return array
 	 */
 	public function flexible_content( $data = array() ) {
-		$flexible_content = array();
-		if ( empty( $data ) && ! class_exists( 'acf' ) ) {
-			return $flexible_content;
-		}
-		foreach ( $data as $layout => $fields ) {
-			foreach ( $fields as $field_value ) {
-				$flexible_content[] = array_merge( $field_value, array( 'acf_fc_layout' => $layout ) );
-			}
+		if ( empty( $data ) || ! class_exists( 'acf' ) ) {
+			return array();
 		}
 
-		return $flexible_content;
+		return $data;
+	}
+
+	/**
+	 * Prepare flexible layout data array
+	 *
+	 * @param string $layout_name Flexible content layout name.
+	 * @param array  $data Layout fields data.
+	 *
+	 * @return array
+	 */
+	public function flexible_layout( $layout_name, $data ) {
+		return array_merge( $data, array( 'acf_fc_layout' => $layout_name ) );
 	}
 
 	/**
 	 * Generated array for repeater fields.
 	 *
-	 * @param array $data Repeater fields data.
+	 * @param int|int[] $qty Min/max qty to generate.
+	 * @param callable  $callback Repeater fields data generator callback.
 	 *
 	 * @return array
 	 */
-	public function repeater( $data = array() ) {
-		$repeater = array();
-		if ( empty( $data ) ) {
-			return $repeater;
-		}
-		foreach ( $data as $fields ) {
-			$repeater[] = $fields;
+	public function repeater( $qty, $callback ) {
+		// validate qty.
+		$qty = $this->normalize_qty( $qty );
+		if ( $qty[0] < 1 ) {
+			return array();
 		}
 
-		return $repeater;
+		// generate data.
+		$data = array();
+		$num  = $this->faker->numberBetween( $qty[0], $qty[1] );
+		for ( $i = 0; $i < $num; $i++ ) {
+			$data[] = $callback();
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Normalize qty to standard range array.
+	 *
+	 * @param int|int[] $qty Number or range.
+	 *
+	 * @return array|bool
+	 */
+	protected function normalize_qty( $qty ) {
+		if ( ! is_array( $qty ) ) {
+			$qty = array( $qty );
+		}
+		if ( count( $qty ) < 2 && (int) $qty[1] < (int) $qty[0] ) {
+			$qty[1] = $qty[0];
+		}
+		$qty[0] = (int) $qty[0];
+		$qty[1] = (int) $qty[1];
+
+		if ( $qty[0] < 1 ) {
+			return false;
+		}
+
+		return [
+			$qty[0],
+			$qty[1],
+		];
 	}
 
 	/**
@@ -121,12 +160,18 @@ class FakerContent {
 	/**
 	 * Get fake words.
 	 *
-	 * @param int $chars Chars number.
+	 * @param int|int[] $qty Words number or range.
 	 *
 	 * @return string
 	 */
-	public function words( $chars = 3 ) {
-		return ucfirst( TextBase::words( $chars, true ) );
+	public function words( $qty = 3 ) {
+		$qty = $this->normalize_qty( $qty );
+		if ( $qty[0] < 1 ) {
+			return '';
+		}
+
+		$nb = $this->faker->numberBetween( $qty[0], $qty[1] );
+		return $this->faker->words( $nb, true );
 	}
 
 	/**
@@ -139,7 +184,8 @@ class FakerContent {
 	 * @return int|string
 	 */
 	public function attachment_generated( $width = 1100, $height = 800, $type = 'id' ) {
-		$attach_url = "http://via.placeholder.com/{$width}x{$height}/";
+		$color      = substr( md5( microtime( true ), false ), 0, 6 );
+		$attach_url = "http://via.placeholder.com/{$width}x{$height}/$color";
 
 		if ( 'id' !== $type ) {
 			return $attach_url;
@@ -181,8 +227,20 @@ class FakerContent {
 	 *
 	 * @return int
 	 */
-	public function number() {
-		return rand( 1, 99 );
+	public function percent() {
+		return $this->faker->numberBetween( 0, 100 );
+	}
+
+	/**
+	 * Generate random number.
+	 *
+	 * @param int $min min value.
+	 * @param int $max max value.
+	 *
+	 * @return int
+	 */
+	public function number( $min = 1, $max = 99 ) {
+		return $this->faker->numberBetween( $min, $max );
 	}
 
 	/**
@@ -241,21 +299,4 @@ class FakerContent {
 		return $this->faker->safeEmail;
 	}
 
-	/**
-	 * Get fake domain.
-	 *
-	 * @return string
-	 */
-	public function domain() {
-		return $this->faker->domainName;
-	}
-
-	/**
-	 * Get fake IP address.
-	 *
-	 * @return string
-	 */
-	public function ip() {
-		return $this->faker->localIpv4;
-	}
 }
