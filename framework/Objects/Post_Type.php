@@ -342,6 +342,6 @@ abstract class Post_Type {
 	 * Init FakerPress.
 	 */
 	public function init_faker() {
-		new FakerPress( $this::$ID, $this );
+		new FakerPress( $this );
 	}
 }

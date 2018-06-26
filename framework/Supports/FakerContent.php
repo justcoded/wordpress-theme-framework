@@ -9,7 +9,9 @@ use JustCoded\WP\Framework\Objects\Singleton;
 
 /**
  * Class FakerContent
- * Fakerpress plugin extension which allows to generated faker content for custom fields.
+ * FakerPress plugin extension which allows to generated faker content for custom fields.
+ *
+ * @method static FakerContent instance() Singleton design pattern instance creation.
  */
 class FakerContent {
 	use Singleton;
@@ -22,10 +24,27 @@ class FakerContent {
 	public $faker;
 
 	/**
+	 * Faker Press custom providers
+	 *
+	 * @var array
+	 */
+	public $providers = array(
+		'\Faker\Provider\Lorem',
+		'\Faker\Provider\DateTime',
+		'\Faker\Provider\HTML',
+	);
+
+	/**
 	 * FakerContent construct
 	 */
 	protected function __construct() {
 		$this->faker = Factory::create();
+
+		// register custom providers.
+		foreach ( $this->providers as $provider_class ) {
+			$provider = new $provider_class( $this->faker );
+			$this->faker->addProvider( $provider );
+		}
 	}
 
 	/**
@@ -77,6 +96,26 @@ class FakerContent {
 	 */
 	public function text( $max_chars = 200 ) {
 		return TextBase::text( $max_chars );
+	}
+
+
+	/**
+	 * Get fake html.
+	 *
+	 * @param array  $content_size Min/max number of paragraphs to generate.
+	 * @param string $html_tags Allowed html tags.
+	 *
+	 * @return string
+	 */
+	public function html_text(
+		$content_size = [ 5, 10 ],
+		$html_tags = 'p,p,p,p,p,p,p,h2,h3,h4,h5,h6,ul,ol,p,blockquote,img,hr,b,i,a' // increase "p" possibility.
+	) {
+		$tags = $this->faker->html_elements([
+			'qty'      => $content_size,
+			'elements' => explode( ',', $html_tags ),
+		]);
+		return implode( "\n", $tags );
 	}
 
 	/**
@@ -176,12 +215,21 @@ class FakerContent {
 	}
 
 	/**
-	 * Get fake name.
+	 * Get fake company name.
 	 *
 	 * @return string
 	 */
 	public function company() {
 		return $this->faker->company;
+	}
+
+	/**
+	 * Get fake job title.
+	 *
+	 * @return string
+	 */
+	public function job_title() {
+		return $this->faker->jobTitle;
 	}
 
 	/**

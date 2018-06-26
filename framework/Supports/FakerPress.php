@@ -1,6 +1,9 @@
 <?php
 namespace JustCoded\WP\Framework\Supports;
 
+use FakerPress\Module\Post;
+use JustCoded\WP\Framework\Objects\Post_Type;
+
 /**
  * Class FakerPress
  * Fakerpress plugin extension which allows to generated faker content for custom fields.
@@ -12,7 +15,14 @@ class FakerPress {
 	 *
 	 * @var string $ID
 	 */
-	public $ID;
+	protected $ID;
+
+	/**
+	 * Post type definition object.
+	 *
+	 * @var Post_Type
+	 */
+	public $post_type;
 
 	/**
 	 * Post Type faker data.
@@ -24,28 +34,15 @@ class FakerPress {
 	/**
 	 * FakerContent construct.
 	 *
-	 * @param string $id        Post Type ID.
-	 * @param object $post_type Object.
+	 * @param Post_Type $post_type Object.
 	 */
-	public function __construct( $id, $post_type ) {
+	public function __construct( $post_type ) {
 		if ( $this->do_fakerpress() ) {
-			$this->ID   = $id;
-			$this->data = $post_type->faker();
+			$this->ID   = $post_type::$ID;
+			$this->post_type = $post_type;
+
 			add_action( 'wp_insert_post_data', array( $this, 'pre_insert_post' ), 20, 2 );
 			add_action( 'wp_insert_post', array( $this, 'insert_post' ), 10, 3 );
-		}
-	}
-
-	/**
-	 * Fires once a post has been saved.
-	 *
-	 * @param int      $post_id Post ID.
-	 * @param \WP_Post $post    Post object.
-	 * @param bool     $update  Whether this is an existing post being updated or not.
-	 */
-	public function insert_post( $post_id, $post, $update ) {
-		if ( $this->ID === $post->post_type ) {
-			$this->do_save( $post_id, $this->data );
 		}
 	}
 
@@ -58,17 +55,33 @@ class FakerPress {
 	 * @return array
 	 */
 	public function pre_insert_post( $data, $postarr ) {
+		$this->data = $this->post_type->faker();
+
 		if ( $this->ID === $data['post_type'] ) {
-			$faker_data = $this->data;
-			if ( isset( $faker_data['post_title'] ) ) {
-				$data['post_title'] = $faker_data['post_title'];
+			if ( isset( $this->data['post_title'] ) ) {
+				$data['post_title'] = $this->data['post_title'];
+				unset( $this->data['post_title'] );
 			}
-			if ( isset( $faker_data['post_content'] ) ) {
-				$data['post_content'] = $faker_data['post_content'];
+			if ( isset( $this->data['post_content'] ) ) {
+				$data['post_content'] = $this->data['post_content'];
+				unset( $this->data['post_content'] );
 			}
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Fires once a post has been saved.
+	 *
+	 * @param int      $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
+	 * @param bool     $update  Whether this is an existing post being updated or not.
+	 */
+	public function insert_post( $post_id, $post, $update ) {
+		if ( $this->ID === $post->post_type ) {
+			$this->update_meta( $post_id, $this->data );
+		}
 	}
 
 	/**
@@ -79,11 +92,12 @@ class FakerPress {
 	 *
 	 * @return bool
 	 */
-	public function do_save( $post_id, $data ) {
+	public function update_meta( $post_id, $data ) {
 		if ( isset( $data['post_featured_image'] ) ) {
 			set_post_thumbnail( $post_id, $data['post_featured_image'] );
+			unset( $data['post_featured_image'] );
 		}
-		unset( $data['post_featured_image'], $data['post_title'], $data['post_content'] );
+
 		foreach ( $data as $meta_key => $meta_value ) {
 			if ( class_exists( 'acf' ) ) {
 				update_field( $meta_key, $meta_value, $post_id );
