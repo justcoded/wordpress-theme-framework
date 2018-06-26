@@ -24,7 +24,7 @@ class FakerContent {
 	public $faker;
 
 	/**
-	 * Faker Press custom providers
+	 * FakerPress plugin custom providers
 	 *
 	 * @var array
 	 */
@@ -183,7 +183,7 @@ class FakerContent {
 	 *
 	 * @return int|string
 	 */
-	public function attachment_generated( $width = 1100, $height = 800, $type = 'id' ) {
+	public function image_attachment( $width = 1100, $height = 800, $type = 'id' ) {
 		$color      = substr( md5( microtime( true ), false ), 0, 6 );
 		$attach_url = "http://via.placeholder.com/{$width}x{$height}/$color";
 

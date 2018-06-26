@@ -240,7 +240,7 @@ abstract class Post_Type {
 		}
 
 		add_action( 'init', array( $this, 'init' ) );
-		if ( method_exists( $this, 'faker' ) && FakerPress::check_requirements() && is_admin() ) {
+		if ( method_exists( $this, 'faker' ) && is_admin() && FakerPress::check_requirements() ) {
 			add_action( 'init', array( $this, 'init_faker' ) );
 		}
 		add_filter( 'template_include', array( $this, 'views' ), 10 );
