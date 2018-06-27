@@ -8,13 +8,6 @@ namespace JustCoded\WP\Framework\Objects;
  */
 trait Singleton {
 	/**
-	 * Refers to a single instance of this class.
-	 *
-	 * @var self
-	 */
-	protected static $instance = null;
-
-	/**
 	 * Returns the *Singleton* current class.
 	 *
 	 * @return Singleton A single instance of this class.

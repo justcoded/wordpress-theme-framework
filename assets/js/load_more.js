@@ -10,9 +10,9 @@ function initLoadMore() {
     loading = true;
     var $loadmore = jQuery(this),
       link = $loadmore.attr('href'),
-      pagecount = $loadmore.attr('data-pagecount'),
-      selector = $loadmore.attr('data-selector'),
-      container = $loadmore.attr('data-container') || selector;
+      pagecount = $loadmore.data('pagecount'),
+      selector = $loadmore.data('selector'),
+      container = $loadmore.data('container') || selector;
     jQuery.post(
       link,
       {

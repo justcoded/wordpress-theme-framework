@@ -59,6 +59,11 @@ function cpt_next_posts_link( WP_Query $wp_query, $label, $load_more_attr = '' )
 	$paged    = $wp_query->query_vars['paged'];
 	$max_page = $wp_query->max_num_pages;
 
+	// on default post list we have empty $paged, so need to set into 1.
+	if ( ! $paged ) {
+		$paged = $wp_query->query_vars['paged'] = 1;
+	}
+
 	$nextpage = intval( $paged ) + 1;
 
 	if ( null === $label ) {

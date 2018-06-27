@@ -3,6 +3,7 @@ namespace JustCoded\WP\Framework\Objects;
 
 use JustCoded\WP\Framework\Web\View;
 use JustCoded\WP\Framework\Web\Views_Rule;
+use JustCoded\WP\Framework\Supports\FakerPress;
 
 /**
  * Custom post type class to simplify the process of registering post type.
@@ -112,7 +113,7 @@ abstract class Post_Type {
 	 * IF has_singular == false AND is_searchable == true THEN we need to redirect page from search results to some other page
 	 * custom property: auto-redirect to some URL
 	 *
-	 * @var false|string
+	 * @var boolean|string
 	 */
 	protected $redirect = false;
 
@@ -169,7 +170,7 @@ abstract class Post_Type {
 	 */
 
 	/**
-	 * Taxonomy slugs to add to this CPT, will be used only for standard Category and Tags.
+	 * Taxonomy IDs to add to this CPT, will be used only for standard Category and Tags.
 	 * All other custom taxonomies should register CPT they are used inside the Taxonomy
 	 * affect: taxonomies
 	 *
@@ -239,6 +240,9 @@ abstract class Post_Type {
 		}
 
 		add_action( 'init', array( $this, 'init' ) );
+		if ( method_exists( $this, 'faker' ) && is_admin() && FakerPress::check_requirements() ) {
+			add_action( 'init', array( $this, 'init_faker' ) );
+		}
 		add_filter( 'template_include', array( $this, 'views' ), 10 );
 	}
 
@@ -332,5 +336,12 @@ abstract class Post_Type {
 		 */
 
 		return $template;
+	}
+
+	/**
+	 * Init FakerPress.
+	 */
+	public function init_faker() {
+		new FakerPress( $this );
 	}
 }
