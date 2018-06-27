@@ -80,7 +80,7 @@ class FakerPress {
 	 */
 	public function insert_post( $post_id, $post, $update ) {
 		if ( $this->ID === $post->post_type ) {
-			$this->update_meta( $post_id, $this->data );
+			$this->update_post_meta( $post_id, $this->data );
 		}
 	}
 
@@ -92,7 +92,7 @@ class FakerPress {
 	 *
 	 * @return bool
 	 */
-	public function update_meta( $post_id, $data ) {
+	public function update_post_meta( $post_id, $data ) {
 		if ( isset( $data['post_featured_image'] ) ) {
 			set_post_thumbnail( $post_id, $data['post_featured_image'] );
 			unset( $data['post_featured_image'] );
