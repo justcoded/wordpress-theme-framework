@@ -183,9 +183,10 @@ class FakerContent {
 	 *
 	 * @return int|string
 	 */
-	public function image_attachment( $width = 1100, $height = 800, $type = 'id' ) {
+	public function image_attachment( $width = 1200, $height = 800, $type = 'id' ) {
 		$color      = substr( md5( microtime( true ), false ), 0, 6 );
-		$attach_url = "http://via.placeholder.com/{$width}x{$height}/$color";
+		$text       = $this->faker->words( 2, true );
+		$attach_url = "http://via.placeholder.com/{$width}x{$height}/$color/?text=$text";
 
 		if ( 'id' !== $type ) {
 			return $attach_url;
