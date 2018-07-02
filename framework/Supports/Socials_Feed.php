@@ -39,7 +39,6 @@ class Socials_Feed {
 			wp_schedule_event( time(), 'hourly', 'jtf_social_sheduler' );
 		}
 
-		add_action( 'init', array( $this, 'get_social_posts' ) );
 		add_action( 'init', array( $this, 'insert_posts' ) );
 
 
