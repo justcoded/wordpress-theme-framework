@@ -1,4 +1,5 @@
 <?php
+
 namespace JustCoded\WP\Framework\Web;
 
 use JustCoded\WP\Framework\Objects\Singleton;
@@ -90,7 +91,7 @@ class View {
 			return false;
 		}
 
-		while( ob_get_contents() && $template = array_pop( $this->extends ) ) {
+		while ( ob_get_contents() && $template = array_pop( $this->extends ) ) {
 			$content = ob_get_contents();
 
 			// clean view file buffer.
@@ -110,12 +111,12 @@ class View {
 	 *
 	 * To use current template generated html use `$content` variable inside the parent view
 	 *
-	 * @param string $layout  View name to register.
+	 * @param string $layout View name to register.
 	 *
 	 * @return bool
 	 * @throws \Exception If no parent view template found.
 	 */
-	public function extends( $layout = 'layouts/main' ) {
+	public function extends ( $layout = 'layouts/main' ) {
 		if ( false === $layout ) {
 			return false;
 		}
@@ -133,6 +134,7 @@ class View {
 
 		// start buffer.
 		ob_start();
+
 		return true;
 	}
 
@@ -165,7 +167,7 @@ class View {
 	 *
 	 * @return bool
 	 */
-	public function include( $view, $params = array(), $__required = true ) {
+	public function include ( $view, $params = array(), $__required = true ) {
 		$template = $this->locate( $view, $__required );
 		if ( empty( $template ) ) {
 			return false;
@@ -176,6 +178,7 @@ class View {
 		}
 
 		include $template;
+
 		return true;
 	}
 
@@ -183,8 +186,8 @@ class View {
 	 * Return real filename of view, or false if not exists
 	 * if view is required then throw error
 	 *
-	 * @param string  $view      view shortname.
-	 * @param boolean $required  throw exception if not found.
+	 * @param string  $view view shortname.
+	 * @param boolean $required throw exception if not found.
 	 *
 	 * @return string|false
 	 *
@@ -193,6 +196,12 @@ class View {
 	public function locate( $view, $required = false ) {
 		$view_file = "views/$view.php";
 		$template  = locate_template( $view_file );
+		if (  empty( $template ) ) {
+			$view_file = "/templates/views/$view.php";
+			$template = dirname(__FILE__, 3) . $view_file;
+
+		}
+
 		if ( $required && ( empty( $template ) || ! is_file( $template ) ) ) {
 			throw new \Exception( "Unable to locate views template: $view_file" );
 		}

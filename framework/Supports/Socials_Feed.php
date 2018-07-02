@@ -67,7 +67,7 @@ class Socials_Feed {
 			'labels'       => array(
 				'name' => 'Socials Category',
 			),
-			'public'       => false,
+			'public'       => true,
 			'hierarchical' => false,
 		) );
 
