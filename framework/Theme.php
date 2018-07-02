@@ -10,7 +10,6 @@ use JustCoded\WP\Framework\Supports\Just_Responsive_Images;
 use JustCoded\WP\Framework\Supports\Just_Tinymce;
 use JustCoded\WP\Framework\Web\Template_Hierarchy;
 use JustCoded\WP\Framework\Supports\Just_Load_More;
-use JustCoded\WP\Framework\Supports\Socials_Feed;
 use JustCoded\WP\Framework\Web\View;
 
 

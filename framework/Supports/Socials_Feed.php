@@ -20,6 +20,7 @@ class Socials_Feed {
 	 * @var $fb_posts
 	 */
 	public $posts = array();
+	public $show_in_admin = true;
 
 
 	const POST_TYPE = 'socials_feed';
@@ -38,7 +39,9 @@ class Socials_Feed {
 			wp_schedule_event( time(), 'hourly', 'jtf_social_sheduler' );
 		}
 
+		add_action( 'init', array( $this, 'get_social_posts' ) );
 		add_action( 'init', array( $this, 'insert_posts' ) );
+
 
 	}
 
@@ -50,8 +53,8 @@ class Socials_Feed {
 			'labels'       => array(
 				'name' => 'Socials Feed',
 			),
-			'public'       => true,
-			'hierarchical' => true,
+			'public'       => $this->show_in_admin,
+			'hierarchical' => false,
 			'taxonomies'   => array(),
 		) );
 	}
@@ -65,7 +68,7 @@ class Socials_Feed {
 			'labels'       => array(
 				'name' => 'Socials Category',
 			),
-			'public'       => true,
+			'public'       => false,
 			'hierarchical' => false,
 		) );
 
@@ -222,6 +225,7 @@ class Socials_Feed {
 				'post_date'    => date( 'Y-m-d H:i:s', $timestamp ),
 				'post_name'    => 'facebook_post_' . $fb_post['id'],
 				'post_type'    => self::POST_TYPE,
+				'post_status'  => 'publish',
 				'tax_input'    => array( self::TAXONOMY => array( 'facebook' ) ),
 				'meta_fields'  => array(
 					'postmeta_image' => ( ! empty( $fb_post['full_picture'] ) ) ? $fb_post['full_picture'] : '',
@@ -263,22 +267,24 @@ class Socials_Feed {
 			$insta_posts = $media->data;
 
 		}
-
-		foreach ( $insta_posts as $insta_post ) {
-			$timestamp     = $insta_post->created_time;
-			$this->posts[] = array(
-				'post_title'   => 'Instagram post #' . $insta_post->id,
-				'post_content' => ( ! empty( $insta_post->caption->text ) ) ? $insta_post->caption->text : '&nbsp;',
-				'post_date'    => date( 'Y-m-d H:i:s', $timestamp ),
-				'post_name'    => 'instagram_post_' . $insta_post->id,
-				'post_type'    => self::POST_TYPE,
-				'tax_input'    => array( self::TAXONOMY => array( 'instagram' ) ),
-				'meta_fields'  => array(
-					'postmeta_image' => ( ! empty( $insta_post->images->standard_resolution->url ) ) ? $insta_post->images->standard_resolution->url : '',
-					'postmeta_url'   => ( ! empty( $insta_post->link ) ) ? $insta_post->link : '',
-					'postmeta_url'   => ( ! empty( $insta_post->videos ) ) ? $insta_post->videos->standard_resolution->url : '',
-				),
-			);
+		if ( ! empty( $insta_posts ) ) {
+			foreach ( $insta_posts as $insta_post ) {
+				$timestamp     = $insta_post->created_time;
+				$this->posts[] = array(
+					'post_title'   => 'Instagram post #' . $insta_post->id,
+					'post_content' => ( ! empty( $insta_post->caption->text ) ) ? $insta_post->caption->text : '&nbsp;',
+					'post_date'    => date( 'Y-m-d H:i:s', $timestamp ),
+					'post_name'    => 'instagram_post_' . $insta_post->id,
+					'post_type'    => self::POST_TYPE,
+					'post_status'  => 'publish',
+					'tax_input'    => array( self::TAXONOMY => array( 'instagram' ) ),
+					'meta_fields'  => array(
+						'postmeta_image' => ( ! empty( $insta_post->images->standard_resolution->url ) ) ? $insta_post->images->standard_resolution->url : '',
+						'postmeta_url'   => ( ! empty( $insta_post->link ) ) ? $insta_post->link : '',
+						'postmeta_url'   => ( ! empty( $insta_post->videos ) ) ? $insta_post->videos->standard_resolution->url : '',
+					),
+				);
+			}
 		}
 
 		return true;
@@ -314,8 +320,8 @@ class Socials_Feed {
 		$twitter = new \TwitterAPIExchange( $settings );
 
 		$twitter_posts = $twitter->setGetfield( $getfield )
-		                         ->buildOauth( $url, $requestMethod )
-		                         ->performRequest();
+								 ->buildOauth( $url, $requestMethod )
+								 ->performRequest();
 
 		$twitter_posts = json_decode( $twitter_posts );
 
@@ -327,7 +333,7 @@ class Socials_Feed {
 				'post_date'    => date( 'Y-m-d H:i:s', $timestamp ),
 				'post_name'    => 'twitter_post_' . $twitter_post->id,
 				'post_type'    => self::POST_TYPE,
-				'post_status'  => 'draft',
+				'post_status'  => 'publish',
 				'tax_input'    => array( self::TAXONOMY => array( 'twitter' ) ),
 				'meta_fields'  => array(
 					'postmeta_image' => ( ! empty( $twitter_post->entities->media[0]->media_url ) ) ? $twitter_post->entities->media[0]->media_url : '',
@@ -357,7 +363,7 @@ class Socials_Feed {
 		foreach ( $this->posts as $post ) {
 
 			$meta_fields = array();
-			if ( $this->is_exists( $post['post_title'] ) ) {
+			if ( $this->is_exists( $post['post_name'] ) ) {
 				continue;
 			}
 			if ( isset( $post['meta_fields'] ) ) {
@@ -376,9 +382,8 @@ class Socials_Feed {
 
 	}
 
-	protected function is_exists( $post_title ) {
-		return get_page_by_title( wp_strip_all_tags( $post_title ), OBJECT, self::POST_TYPE );
+	protected function is_exists( $post_name ) {
+		return get_page_by_path( wp_strip_all_tags( $post_name ), OBJECT, self::POST_TYPE );
 	}
-
 
 }
