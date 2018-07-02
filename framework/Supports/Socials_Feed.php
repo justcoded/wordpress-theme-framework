@@ -21,6 +21,10 @@ class Socials_Feed {
 	 */
 	public $posts = array();
 
+
+	const POST_TYPE = 'socials_feed';
+	const TAXONOMY = 'socials_category';
+
 	/**
 	 * SocialsFeed constructor.
 	 */
@@ -34,7 +38,6 @@ class Socials_Feed {
 			wp_schedule_event( time(), 'hourly', 'jtf_social_sheduler' );
 		}
 
-
 		add_action( 'init', array( $this, 'insert_posts' ) );
 
 	}
@@ -43,7 +46,7 @@ class Socials_Feed {
 	 * Register Socials post type
 	 */
 	public function register_socials_posttype() {
-		register_post_type( 'socials_feed', array(
+		register_post_type( self::POST_TYPE, array(
 			'labels'       => array(
 				'name' => 'Socials Feed',
 			),
@@ -57,7 +60,7 @@ class Socials_Feed {
 	 * Register Socials taxonomy
 	 */
 	public function register_socials_taxonomy() {
-		register_taxonomy( 'socials_category', array( 'socials_feed' ), array(
+		register_taxonomy( self::TAXONOMY, array( self::POST_TYPE ), array(
 			'label'        => '',
 			'labels'       => array(
 				'name' => 'Socials Category',
@@ -190,15 +193,20 @@ class Socials_Feed {
 	 */
 	public function get_fb_posts() {
 
-		$facebook_app_id     = Theme_Settings::get( 'facebook_app_id' );
-		$facebook_app_secret = Theme_Settings::get( 'facebook_app_secret' );
-		$facebook_access_token  = Theme_Settings::get( 'facebook_access_token' );
+		$facebook_app_id       = Theme_Settings::get( 'facebook_app_id' );
+		$facebook_app_secret   = Theme_Settings::get( 'facebook_app_secret' );
+		$facebook_access_token = Theme_Settings::get( 'facebook_access_token' );
+
+		if ( empty( $facebook_app_id ) || empty( $facebook_app_secret ) || empty( $facebook_access_token ) ) {
+			return true;
+		}
 
 		$fb = new FacebookSDK( array(
 			'app_id'                => $facebook_app_id,
 			'app_secret'            => $facebook_app_secret,
 			'default_graph_version' => 'v2.12',
 		) );
+
 
 		$response = $fb->get( '/me/feed?fields=full_picture,message,created_time,message_tags,link', $facebook_access_token );
 
@@ -213,8 +221,8 @@ class Socials_Feed {
 				'post_content' => ( ! empty( $fb_post['message'] ) ) ? $fb_post['message'] : '&nbsp;',
 				'post_date'    => date( 'Y-m-d H:i:s', $timestamp ),
 				'post_name'    => 'facebook_post_' . $fb_post['id'],
-				'post_type'    => 'socials_feed',
-				'tax_input'    => array( 'socials_category' => array( 'facebook' ) ),
+				'post_type'    => self::POST_TYPE,
+				'tax_input'    => array( self::TAXONOMY => array( 'facebook' ) ),
 				'meta_fields'  => array(
 					'postmeta_image' => ( ! empty( $fb_post['full_picture'] ) ) ? $fb_post['full_picture'] : '',
 					'postmeta_url'   => ( ! empty( $fb_post['link'] ) ) ? $fb_post['link'] : '',
@@ -236,6 +244,10 @@ class Socials_Feed {
 		$instagram_api_secret   = Theme_Settings::get( 'instagram_api_secret' );
 		$instagram_access_token = Theme_Settings::get( 'instagram_access_token' );
 
+		if ( empty( $instagram_api_key ) || empty( $instagram_api_secret ) || empty( $instagram_access_token ) ) {
+			return true;
+		}
+
 		$instagram = new InstagramSDK( array(
 			'apiKey'      => $instagram_api_key,
 			'apiSecret'   => $instagram_api_secret,
@@ -252,17 +264,15 @@ class Socials_Feed {
 
 		}
 
-
 		foreach ( $insta_posts as $insta_post ) {
-			//pa($insta_post);
 			$timestamp     = $insta_post->created_time;
 			$this->posts[] = array(
 				'post_title'   => 'Instagram post #' . $insta_post->id,
 				'post_content' => ( ! empty( $insta_post->caption->text ) ) ? $insta_post->caption->text : '&nbsp;',
 				'post_date'    => date( 'Y-m-d H:i:s', $timestamp ),
 				'post_name'    => 'instagram_post_' . $insta_post->id,
-				'post_type'    => 'socials_feed',
-				'tax_input'    => array( 'socials_category' => array( 'instagram' ) ),
+				'post_type'    => self::POST_TYPE,
+				'tax_input'    => array( self::TAXONOMY => array( 'instagram' ) ),
 				'meta_fields'  => array(
 					'postmeta_image' => ( ! empty( $insta_post->images->standard_resolution->url ) ) ? $insta_post->images->standard_resolution->url : '',
 					'postmeta_url'   => ( ! empty( $insta_post->link ) ) ? $insta_post->link : '',
@@ -281,11 +291,20 @@ class Socials_Feed {
 	public function get_twitter_posts() {
 
 
+		$oauth_access_token        = Theme_Settings::get( 'twitter_access_token' );
+		$oauth_access_token_secret = Theme_Settings::get( 'twitter_access_token_secret' );
+		$consumer_key              = Theme_Settings::get( 'twitter_customer_key' );
+		$consumer_secret           = Theme_Settings::get( 'twitter_customer_secret' );
+
+		if ( empty( $oauth_access_token ) || empty( $oauth_access_token_secret ) || empty( $consumer_key ) || empty( $consumer_secret ) ) {
+			return true;
+		}
+
 		$settings = array(
-			'oauth_access_token'        => Theme_Settings::get( 'twitter_access_token' ),
-			'oauth_access_token_secret' => Theme_Settings::get( 'twitter_access_token_secret' ),
-			'consumer_key'              => Theme_Settings::get( 'twitter_customer_key' ),
-			'consumer_secret'           => Theme_Settings::get( 'twitter_customer_secret' ),
+			'oauth_access_token'        => $oauth_access_token,
+			'oauth_access_token_secret' => $oauth_access_token_secret,
+			'consumer_key'              => $consumer_key,
+			'consumer_secret'           => $consumer_secret,
 		);
 
 		$url           = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
@@ -298,7 +317,7 @@ class Socials_Feed {
 		                         ->buildOauth( $url, $requestMethod )
 		                         ->performRequest();
 
-		$twitter_posts = json_decode($twitter_posts);
+		$twitter_posts = json_decode( $twitter_posts );
 
 		foreach ( $twitter_posts as $twitter_post ) {
 			$timestamp     = strtotime( $twitter_post->created_at );
@@ -307,9 +326,9 @@ class Socials_Feed {
 				'post_content' => ( ! empty( $twitter_post->text ) ) ? $twitter_post->text : '&nbsp;',
 				'post_date'    => date( 'Y-m-d H:i:s', $timestamp ),
 				'post_name'    => 'twitter_post_' . $twitter_post->id,
-				'post_type'    => 'socials_feed',
+				'post_type'    => self::POST_TYPE,
 				'post_status'  => 'draft',
-				'tax_input'    => array( 'socials_category' => array( 'twitter' ) ),
+				'tax_input'    => array( self::TAXONOMY => array( 'twitter' ) ),
 				'meta_fields'  => array(
 					'postmeta_image' => ( ! empty( $twitter_post->entities->media[0]->media_url ) ) ? $twitter_post->entities->media[0]->media_url : '',
 					'postmeta_url'   => 'https://twitter/' . $twitter_post->user->name . '/status/' . $twitter_post->id,
@@ -320,17 +339,20 @@ class Socials_Feed {
 		return true;
 	}
 
+
+	public function get_social_posts() {
+
+		$this->get_fb_posts();
+		$this->get_insta_posts();
+		$this->get_twitter_posts();
+	}
+
 	/**
 	 * Insert WP posts
 	 *
 	 * @return bool
 	 */
 	public function insert_posts() {
-
-		$this->get_fb_posts();
-		$this->get_insta_posts();
-		$this->get_twitter_posts();
-
 
 		foreach ( $this->posts as $post ) {
 
@@ -355,7 +377,7 @@ class Socials_Feed {
 	}
 
 	protected function is_exists( $post_title ) {
-		return get_page_by_title( wp_strip_all_tags( $post_title ), OBJECT, 'socials_feed' );
+		return get_page_by_title( wp_strip_all_tags( $post_title ), OBJECT, self::POST_TYPE );
 	}
 
 
