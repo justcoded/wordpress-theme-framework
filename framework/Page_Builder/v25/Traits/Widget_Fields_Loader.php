@@ -13,23 +13,39 @@ trait Widget_Fields_Loader {
 	 */
 	protected function fields_loader() {
 		add_filter( 'siteorigin_widgets_field_class_prefixes', array( $this, 'fields_class_prefixes' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_pb_admin_style' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10, 1 );
 
 		// register ajax for custom fields.
-		add_action( 'wp_ajax_custom_term_search', array( Field_Select_Terms::class, 'ajax_search_terms' ) );
-		add_action( 'wp_ajax_custom_post_search', array( Field_Select_Posts::class, 'ajax_search_posts' ) );
+		add_action( 'wp_ajax_pagebuilder_field_select_terms_search', array( Field_Select_Terms::class, 'ajax_search_terms' ) );
+		add_action( 'wp_ajax_pagebuilder_field_select_posts_search', array( Field_Select_Posts::class, 'ajax_search_posts' ) );
 	}
 
 	/**
-	 * Register and enqueue a custom stylesheet in the WordPress admin.
+	 * Register and enqueue select2 script in the WordPress admin post edit screen.
+	 *
+	 * @param string $hook_suffix The current admin page.
+	 *
+	 * @return boolean
 	 */
-	public function enqueue_pb_admin_style() {
+	public function enqueue_scripts( $hook_suffix ) {
+		if ( 'post.php' !== $hook_suffix && 'post-new.php' !== $hook_suffix ) {
+			return false;
+		}
+
 		wp_enqueue_style(
-			'custom_wp_admin_css',
-			plugin_dir_url( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/css/fields.css',
+			'select2',
+			plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/css/select2.min.css',
 			false,
-			'12.1'
+			'4.0.6-rc.1'
 		);
+
+		wp_enqueue_script(
+			'select2',
+			plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/js/select2.min.js',
+			array( 'jquery' ),
+			'4.0.6-rc.1'
+		);
+		return true;
 	}
 
 	/**
