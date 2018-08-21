@@ -5,7 +5,7 @@ namespace JustCoded\WP\Framework\Page_Builder\v25\Fields;
 /**
  * Class Just_Field_Post
  */
-class Field_Select_Posts extends \SiteOrigin_Widget_Field_Autocomplete {
+class Field_Select_Posts extends \SiteOrigin_Widget_Field_Text_Input_Base {
 
 	/**
 	 * An array of post types to use in the autocomplete query. Only used for posts.
@@ -34,12 +34,12 @@ class Field_Select_Posts extends \SiteOrigin_Widget_Field_Autocomplete {
 		<div class="existing-content-selector">
 
 			<input type="text" class="content-text-search"
-				   data-types="<?php echo esc_attr( $post_type ) ?>"
-				   placeholder="<?php esc_attr_e( 'Search', 'so-widgets-bundle' ) ?>"/>
+					data-types="<?php echo esc_attr( $post_type ); ?>"
+					placeholder="<?php esc_attr_e( 'Search', 'so-widgets-bundle' ); ?>"/>
 			<ul class="items"></ul>
 
 			<div class="buttons">
-				<a href="#" class="button-close button"><?php esc_html_e( 'Close', 'so-widgets-bundle' ) ?></a>
+				<a href="#" class="button-close button"><?php esc_html_e( 'Close', 'so-widgets-bundle' ); ?></a>
 			</div>
 		</div>
 		<?php
@@ -49,14 +49,21 @@ class Field_Select_Posts extends \SiteOrigin_Widget_Field_Autocomplete {
 	 * Enqueue needed js.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'post-js', plugin_dir_url( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/js/post-field.js', array( 'jquery' ), '4.0.1.1' );
+		wp_enqueue_script(
+			'post-js',
+			plugin_dir_url( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/js/post-field.js',
+			array( 'jquery' ),
+			'4.0.1.1'
+		);
 	}
 
 	/**
 	 * Action to handle searching posts
 	 */
 	public static function ajax_search_posts() {
-		if ( empty( $_REQUEST['_widgets_nonce'] ) || ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) {
+		if ( empty( $_REQUEST['_widgets_nonce'] )
+			|| ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' )
+		) {
 			wp_die( __( 'Invalid request.', 'so-widgets-bundle' ), 403 );
 		}
 

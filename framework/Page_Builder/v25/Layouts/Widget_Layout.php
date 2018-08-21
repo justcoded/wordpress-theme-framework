@@ -72,27 +72,9 @@ class Widget_Layout extends Layout {
 	 */
 	public function options() {
 		return array(
-			'mobile_padding'              => 1,
-			'background'                  => 1,
-			'background_image_attachment' => 1,
-			'background_display'          => 1,
-			'id'                          => 1,
-			'class'                       => 1,
-			'row_css'                     => 1,
-			'mobile_css'                  => 1,
-			'padding'                     => 1,
-			'cell_class'                  => 1,
-			'bottom_margin'               => 1,
-			'gutter'                      => 1,
-			'row_stretch'                 => 1,
-			'collapse_behaviour'          => 1,
-			'collapse_order'              => 1,
-			'cell_alignment'              => 1,
-			'widget_css'                  => 1,
-			'font_color'                  => 1,
-			'link_color'                  => 1,
-			'hero_size'                   => 1,
-			'border_color'                => 1,
+			'background'                  => 'disable',
+			'background_image_attachment' => 'disable',
+			'background_display'          => 'disable',
 		);
 	}
 

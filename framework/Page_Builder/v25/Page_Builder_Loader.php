@@ -185,7 +185,7 @@ class Page_Builder_Loader {
 			'collapse_order',
 			'collapse_behaviour',
 			'cell_alignment',
-
+			'border_color',
 		);
 		foreach ( $unset_fields as $field ) {
 			if ( isset( $fields[ $field ] ) ) {
@@ -214,6 +214,11 @@ class Page_Builder_Loader {
 			// layout.
 			'padding',
 			'mobile_padding',
+			'margin',
+			// design.
+			'font_color',
+			'link_color',
+			'border_color',
 		);
 		foreach ( $unset_fields as $field ) {
 			if ( isset( $fields[ $field ] ) ) {

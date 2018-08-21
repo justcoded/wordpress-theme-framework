@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 23/04/18
- * Time: 10:44
- */
 
 namespace JustCoded\WP\Framework\Page_Builder\v25\Traits;
-
 
 use JustCoded\WP\Framework\Page_Builder\v25\Fields\Field_Select_Posts;
 use JustCoded\WP\Framework\Page_Builder\v25\Fields\Field_Select_Terms;
@@ -31,7 +24,12 @@ trait Widget_Fields_Loader {
 	 * Register and enqueue a custom stylesheet in the WordPress admin.
 	 */
 	public function enqueue_pb_admin_style() {
-		wp_enqueue_style( 'custom_wp_admin_css', plugin_dir_url( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/css/fields.css', false, '12.1' );
+		wp_enqueue_style(
+			'custom_wp_admin_css',
+			plugin_dir_url( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/css/fields.css',
+			false,
+			'12.1'
+		);
 	}
 
 	/**

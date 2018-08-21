@@ -50,7 +50,6 @@ trait Widget_Layouts_Loader {
 			unset( $fields['background'] );
 			unset( $fields['background_image_attachment'] );
 			unset( $fields['background_display'] );
-			unset( $fields['border_color'] );
 			return $fields;
 		}
 
