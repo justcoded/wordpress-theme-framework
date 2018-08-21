@@ -6,7 +6,7 @@ use JustCoded\WP\Framework\Objects\Singleton;
 use JustCoded\WP\Framework\Page_Builder\v25\Traits\Html_Cleanup;
 use JustCoded\WP\Framework\Page_Builder\v25\Traits\Row_Layouts_Loader;
 use JustCoded\WP\Framework\Page_Builder\v25\Traits\Widget_Layouts_Loader;
-use JustCoded\WP\Framework\Page_Builder\v25\Traits\Fields_Loader;
+use JustCoded\WP\Framework\Page_Builder\v25\Traits\Widget_Fields_Loader;
 
 /**
  * Class SiteOriginPanelsLoader
@@ -16,7 +16,7 @@ use JustCoded\WP\Framework\Page_Builder\v25\Traits\Fields_Loader;
  */
 class Page_Builder_Loader {
 	use Singleton;
-	use Html_Cleanup, Row_Layouts_Loader, Widget_Layouts_Loader, Fields_Loader;
+	use Html_Cleanup, Row_Layouts_Loader, Widget_Layouts_Loader, Widget_Fields_Loader;
 
 	/**
 	 * Widgets class names to be disabled from SiteOrigin Widgets Bundle

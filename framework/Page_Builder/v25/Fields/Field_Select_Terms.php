@@ -1,9 +1,11 @@
 <?php
 
+namespace JustCoded\WP\Framework\Page_Builder\v25\Fields;
+
 /**
  * Class Just_Field_Taxonomy
  */
-class Just_Field_Taxonomy extends SiteOrigin_Widget_Field_Autocomplete {
+class Field_Select_Terms extends \SiteOrigin_Widget_Field_Autocomplete {
 
 	/**
 	 * This field is responsible for `taxonomy` field in SQL request.
@@ -58,14 +60,14 @@ class Just_Field_Taxonomy extends SiteOrigin_Widget_Field_Autocomplete {
 	/**
 	 * Enqueue needed js.
 	 */
-	function enqueue_scripts() {
+	public function enqueue_scripts() {
 		wp_enqueue_script( 'taxonomy-js', plugin_dir_url( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/js/taxonomy-field.js', array( 'jquery' ), '4.1' );
 	}
 
 	/**
 	 * Action to handle searching taxonomy terms.
 	 */
-	static function action_search_terms() {
+	public static function ajax_search_terms() {
 		if ( empty( $_REQUEST['_widgets_nonce'] ) || ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) {
 			wp_die( __( 'Invalid request.', 'so-widgets-bundle' ), 403 );
 		}

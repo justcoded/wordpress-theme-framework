@@ -1,9 +1,11 @@
 <?php
 
+namespace JustCoded\WP\Framework\Page_Builder\v25\Fields;
+
 /**
  * Class Just_Field_Post
  */
-class Just_Field_Post extends SiteOrigin_Widget_Field_Autocomplete {
+class Field_Select_Posts extends \SiteOrigin_Widget_Field_Autocomplete {
 
 	/**
 	 * An array of post types to use in the autocomplete query. Only used for posts.
@@ -46,14 +48,14 @@ class Just_Field_Post extends SiteOrigin_Widget_Field_Autocomplete {
 	/**
 	 * Enqueue needed js.
 	 */
-	function enqueue_scripts() {
+	public function enqueue_scripts() {
 		wp_enqueue_script( 'post-js', plugin_dir_url( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/js/post-field.js', array( 'jquery' ), '4.0.1.1' );
 	}
 
 	/**
 	 * Action to handle searching posts
 	 */
-	static function action_search_posts() {
+	public static function ajax_search_posts() {
 		if ( empty( $_REQUEST['_widgets_nonce'] ) || ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) {
 			wp_die( __( 'Invalid request.', 'so-widgets-bundle' ), 403 );
 		}

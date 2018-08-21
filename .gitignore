@@ -1,8 +1,4 @@
-
-# Wordpress files
-wordpress/
-
-# editor
+SiteOrigin_Widget_Field_Base# editor
 /nbproject/private/
 /nbproject/
 .project
