@@ -30,6 +30,9 @@ class Page_Builder_Loader {
 		'slider'        => 'SiteOrigin_Widget_Slider_Widget',
 		'features'      => 'SiteOrigin_Widget_Features_Widget',
 		'post-carousel' => 'SiteOrigin_Widget_PostCarousel_Widget',
+		'post-loop'     => 'SiteOrigin_Panels_Widgets_Layout',
+		'page-builder'  => 'SiteOrigin_Panels_Widgets_PostLoop',
+		'post-content'  => 'SiteOrigin_Panels_Widgets_PostContent',
 	);
 
 	/**
@@ -51,6 +54,9 @@ class Page_Builder_Loader {
 		'WP_Widget_Tag_Cloud',
 		'WP_Nav_Menu_Widget',
 		'WP_Widget_Custom_HTML',
+		'WP_Widget_Media_Audio',
+		'WP_Widget_Media_Video',
+		'WP_Widget_Media_Gallery',
 
 		'SiteOrigin_Panels_Widgets_PostContent',
 	);
@@ -119,6 +125,9 @@ class Page_Builder_Loader {
 
 		// add own hook for custom widgets preview.
 		add_action( 'wp_ajax_so_widgets_preview', array( $this, 'widget_preview' ), 5 );
+
+		// filter widget dialog tabs.
+		add_filter( 'siteorigin_panels_widget_dialog_tabs', array( $this, 'update_widgets_dialog_tabs' ), 20 );
 
 		$this->init();
 	}
@@ -261,7 +270,30 @@ class Page_Builder_Loader {
 			}
 		}
 
+		$widgets['SiteOrigin_Widget_Editor_Widget']['groups'] = array( 'theme' );
+
 		return $widgets;
+	}
+
+	/**
+	 * Update widgets dialog tabs list, add new one
+	 *
+	 * @param array $tabs Widgets panel tabs list.
+	 *
+	 * @return array
+	 */
+	public function update_widgets_dialog_tabs( $tabs ) {
+		$tabs[0]['message']              = '';
+		$tabs['page_builder']['message'] = '';
+
+		$sorted_tabs[0]             = $tabs[0];
+		$sorted_tabs['recommended'] = $tabs['recommended'];
+		unset( $tabs[0] );
+		unset( $tabs['recommended'] );
+		unset( $tabs['widgets_bundle'] );
+		$sorted_tabs = array_merge( $sorted_tabs, $tabs );
+
+		return $sorted_tabs;
 	}
 
 	/**
@@ -283,7 +315,8 @@ class Page_Builder_Loader {
 			exit();
 		}
 		if ( empty( $_REQUEST['_widgets_nonce'] )
-			 || ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) {
+			|| ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' )
+		) {
 			return;
 		}
 
@@ -304,10 +337,13 @@ class Page_Builder_Loader {
 		$instance['is_preview'] = true;
 
 		wp_enqueue_style( 'dashicons' );
-		wp_enqueue_style( 'so-widget-preview', plugin_dir_url( SOW_BUNDLE_BASE_FILE ) . 'base/css/preview.css', array(), rand( 0, 65536 ) );
-		wp_enqueue_style( 'jtf-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/css/widget-preview.css', array(), rand( 0, 65536 ) );
+		wp_enqueue_style( 'so-widget-preview', plugin_dir_url( SOW_BUNDLE_BASE_FILE ) . 'base/css/preview.css', array(),
+			rand( 0, 65536 ) );
+		wp_enqueue_style( 'jtf-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/css/widget-preview.css',
+			array(), rand( 0, 65536 ) );
 
-		wp_enqueue_script( 'jtc-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/js/widget-preview.js', array( 'jquery' ) );
+		wp_enqueue_script( 'jtc-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/js/widget-preview.js',
+			array( 'jquery' ) );
 		$sowb = \SiteOrigin_Widgets_Bundle::single();
 		$sowb->register_general_scripts();
 
