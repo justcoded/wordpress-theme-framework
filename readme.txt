@@ -5,7 +5,7 @@ Tags: mvc theme, theme boilerplate, oop theme, mini framework
 Author: JustCoded / Alex Prokopenko
 Author URI: http://justcoded.com/
 Requires at least: 4.7
-Tested up to: 4.9.1
+Tested up to: 4.9.6
 License: GPL3
 Stable tag: trunk
 
@@ -29,6 +29,7 @@ Our mini framework features:
 	* Just Custom Fields
 	* Just TinyMce Custom Styles
 	* Just Responsive Images
+	* Faker Press
 
 We didn't added "Controllers" level, because WordPress has it's own routing system and replacing it with one more level
 	will impact the site speed. So basically it's very close to standard WordPress theme with much better organization
@@ -91,6 +92,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 2.2.0 - 27 June 2018 =
+    * New: Support FakerPress plugin to generate PostTypes data with complex custom fields structure.
 = Version 2.1.1 - 10 January 2017 =
 	* New: Updated View component and layouts wrapping rendering. Replaced `layout_open()`/`layout_close()` methods with `extends()` method. Renamed `render()` method to `include()`
 	* New: Moved Model meta getter methods to separate Postmeta and Termmeta objects.
