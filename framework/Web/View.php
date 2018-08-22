@@ -85,14 +85,14 @@ class View {
 	/**
 	 * Wrap content with another view or layout
 	 *
-	 * @return bool
+	 * @return bool|void
 	 */
 	public function wrap() {
 		if ( empty( $this->extends ) ) {
 			return false;
 		}
 
-		while( ob_get_contents() && $template = array_pop( $this->extends ) ) {
+		while ( ob_get_contents() && $template = array_pop( $this->extends ) ) {
 			$content = ob_get_contents();
 
 			// clean view file buffer.
@@ -149,7 +149,7 @@ class View {
 	}
 
 	/**
-	 * WordPress compatibility option intead of get_sidebar
+	 * WordPress compatibility option instead of get_sidebar
 	 *
 	 * @param string|null $name custom footer name.
 	 */

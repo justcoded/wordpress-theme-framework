@@ -14,6 +14,11 @@ if ( Page_Builder_Loader::widgets_bundle_active() ) {
 	 */
 	class Page_Builder_Widget extends \SiteOrigin_Widget {
 
+		/**
+		 * Preview images theme folder
+		 *
+		 * @var string
+		 */
 		public $preview_folder = 'assets/widgets';
 
 		/**
@@ -130,7 +135,8 @@ if ( Page_Builder_Loader::widgets_bundle_active() ) {
 				<small>* Examples are shown with demo data.</small>
 			</p>
 			<div class="preview-items">
-				<?php foreach ( $images as $img => $caption ) :
+				<?php
+				foreach ( $images as $img => $caption ) :
 					if ( is_numeric( $img ) ) {
 						$img     = $caption;
 						$caption = $this->name;

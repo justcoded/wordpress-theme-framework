@@ -20,7 +20,7 @@ trait Row_Layouts_Loader {
 	protected $_row_layout = null;
 
 	/**
-	 * Row_Layouts_Loader contructor
+	 * Row_Layouts_Loader constructor
 	 * (have to be called inside class constructor)
 	 */
 	public function row_layouts_loader() {
@@ -136,7 +136,7 @@ trait Row_Layouts_Loader {
 	 */
 	public function set_row_attributes( $attributes, $panel_data ) {
 		if ( $this->_row_layout ) {
-			$attributes        = $this->_row_layout->row( $attributes, $panel_data );
+			$attributes = $this->_row_layout->row( $attributes, $panel_data );
 		}
 
 		return $attributes;
@@ -156,6 +156,7 @@ trait Row_Layouts_Loader {
 		if ( $this->_row_layout ) {
 			$this->_row_layout->row_index = $this->_row_index;
 			$this->_row_layout->col_index = $this->_col_index;
+
 			$attributes = $this->_row_layout->row_inner( $attributes, $style_data );
 		}
 
@@ -174,6 +175,7 @@ trait Row_Layouts_Loader {
 		if ( $this->_row_layout ) {
 			$this->_row_layout->col_index  = $this->_col_index;
 			$this->_row_layout->cell_index = $this->_cell_index;
+
 			$attributes = $this->_row_layout->cell( $attributes, $panel_data );
 		}
 

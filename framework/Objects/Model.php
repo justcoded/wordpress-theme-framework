@@ -144,7 +144,7 @@ class Model {
 
 	/**
 	 * Run query and remember it to cache
-	 * In this way you can use magic getter withour reseting query
+	 * In this way you can use magic getter without query reset
 	 *
 	 * @param array  $params Usual WP_Query params array.
 	 * @param string $method Cache key.

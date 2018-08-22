@@ -32,16 +32,18 @@ class Field_Select_Terms extends \SiteOrigin_Widget_Field_Base {
 			] );
 		}
 		?>
-		<select name="<?php echo esc_attr( $this->element_name ) ?>" id="<?php echo esc_attr( $this->element_id ) ?>"
+		<select name="<?php echo esc_attr( $this->element_name ); ?>" id="<?php echo esc_attr( $this->element_id ); ?>"
 				class="widefat jc-widget-field-select-posts"
 				multiple="multiple"
 				data-taxonomies="<?php echo esc_attr( $this->taxonomies ); ?>"
 		>
-			<?php if ( ! empty( $terms ) ) : foreach ( $terms as $term ) : ?>
+			<?php if ( ! empty( $terms ) ) : ?>
+				<?php foreach ( $terms as $term ) : ?>
 				<option value="<?php echo esc_attr( $term->term_id ); ?>" selected="selected">
 					<?php echo esc_html( $this->get_term_caption( $term ) ); ?>
 				</option>
-			<?php endforeach; endif; ?>
+				<?php endforeach; ?>
+			<?php endif; ?>
 		</select>
 		<?php
 	}
@@ -115,7 +117,7 @@ class Field_Select_Terms extends \SiteOrigin_Widget_Field_Base {
 			ORDER BY t.name ASC
 			LIMIT 20
 		", $params );
-		$rows = $wpdb->get_results($query, OBJECT_K );
+		$rows  = $wpdb->get_results( $query, OBJECT_K );
 
 		$results = [];
 		foreach ( $rows as $row ) {

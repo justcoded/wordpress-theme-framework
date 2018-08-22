@@ -36,7 +36,7 @@ class Page_Builder_Loader {
 	);
 
 	/**
-	 * Widgets class names to be disabled from standard Wordpress installation
+	 * Widgets class names to be disabled from standard WordPress installation
 	 *
 	 * @var array
 	 */
@@ -332,18 +332,15 @@ class Page_Builder_Loader {
 		}
 
 		$instance = json_decode( stripslashes_deep( $_POST['data'] ), true );
-		/* @var $widget SiteOrigin_Widget */
+		/* @var \SiteOrigin_Widget $widget */
 		$instance               = $widget->update( $instance, $instance );
 		$instance['is_preview'] = true;
 
 		wp_enqueue_style( 'dashicons' );
-		wp_enqueue_style( 'so-widget-preview', plugin_dir_url( SOW_BUNDLE_BASE_FILE ) . 'base/css/preview.css', array(),
-			rand( 0, 65536 ) );
-		wp_enqueue_style( 'jtf-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/css/widget-preview.css',
-			array(), rand( 0, 65536 ) );
+		wp_enqueue_style( 'so-widget-preview', plugin_dir_url( SOW_BUNDLE_BASE_FILE ) . 'base/css/preview.css', array(), rand( 0, 65536 ) );
+		wp_enqueue_style( 'jtf-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/css/widget-preview.css', array(), rand( 0, 65536 ) );
 
-		wp_enqueue_script( 'jtc-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/js/widget-preview.js',
-			array( 'jquery' ) );
+		wp_enqueue_script( 'jtc-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/js/widget-preview.js', array( 'jquery' ) );
 		$sowb = \SiteOrigin_Widgets_Bundle::single();
 		$sowb->register_general_scripts();
 

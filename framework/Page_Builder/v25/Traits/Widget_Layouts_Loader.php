@@ -28,7 +28,7 @@ trait Widget_Layouts_Loader {
 	protected $_widget_styles = null;
 
 	/**
-	 * Widget_Layouts_Loader contructor
+	 * Widget_Layouts_Loader constructor
 	 * (have to be called inside class constructor)
 	 */
 	public function widget_layouts_loader() {
@@ -75,13 +75,18 @@ trait Widget_Layouts_Loader {
 	 * Register widget layouts available
 	 *
 	 * @param string $class_name relative or absolute class name of Widget Layout to be registered.
+	 * @param string $title optional. to rewrite row layout title.
 	 */
-	public function register_widget_layout( $class_name ) {
+	public function register_widget_layout( $class_name, $title = '' ) {
 		if ( strpos( $class_name, '\\' ) !== 0 ) {
 			$class_name = $this->default_layout_namespace . '\\' . $class_name;
 		}
 
-		$widget_layout                        = new $class_name;
+		$widget_layout = new $class_name();
+		if ( ! empty( $title ) ) {
+			$widget_layout::$TITLE = $title;
+		}
+
 		$this->widgets[ $widget_layout::$ID ] = $widget_layout;
 	}
 
@@ -91,7 +96,7 @@ trait Widget_Layouts_Loader {
 	 * @return array   (id, title) pairs
 	 */
 	protected function get_list_widgets() {
-
+		$list = array();
 		foreach ( $this->widgets as $key => $lt ) {
 			$list[ $key ] = $lt::$TITLE;
 		}
@@ -135,7 +140,7 @@ trait Widget_Layouts_Loader {
 		$this->_widget_layout = $this->check_widget_layout_in_use( $style_data );
 		if ( $this->_widget_layout ) {
 			$this->_widget_layout->widget_index = $this->_widget_index;
-			$attributes  = $this->_widget_layout->widget( $attributes, $style_data );
+			$attributes                         = $this->_widget_layout->widget( $attributes, $style_data );
 		}
 
 		return $attributes;

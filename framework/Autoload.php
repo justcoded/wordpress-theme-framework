@@ -13,18 +13,18 @@ class Autoload {
 	protected $app_namespace;
 
 	/**
-	 * Dirname path to search classes
+	 * Directory name path to search classes
 	 *
 	 * @var string
 	 */
 	protected $app_path;
 
 	/**
-	 * Class contructor
+	 * Class constructor
 	 * register SPL autoload callback functions for App and framework
 	 *
 	 * @param string $app_namespace App namespace.
-	 * @param string $app_path App dirpath.
+	 * @param string $app_path App directory path.
 	 */
 	public function __construct( $app_namespace, $app_path ) {
 		$this->app_namespace = $app_namespace;
@@ -61,7 +61,7 @@ class Autoload {
 		$path = $dir_path . '/' . trim( $class_path, '/' ) . '.php';
 
 		if ( is_file( $path ) ) {
-			require_once( $path );
+			require_once $path;
 		}
 	}
 }

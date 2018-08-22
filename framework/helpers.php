@@ -38,7 +38,7 @@ function parent_assets( $path, $echo = true ) {
  * Alias for plugins_url with pre-defined second parameter
  * Mostly used to set paths for assets
  *
- * @param string $path asset or callback path
+ * @param string $path asset or callback path.
  *
  * @return string
  */
@@ -51,7 +51,7 @@ function jtf_plugin_url( $path ) {
  *
  * @param WP_Query $wp_query Query to use in pagination checks.
  * @param string   $label Content for link text.
- * @param string   $load_more_attr attribute for default load more link. Required options: data-selector="(./#)name", additional options: data-container="(./#)name"
+ * @param string   $load_more_attr attribute for default load more link. Required options: data-selector="(./#)name", additional options: data-container="(./#)name".
  *
  * @return string|void HTML-formatted next posts page link.
  */

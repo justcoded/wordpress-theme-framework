@@ -31,16 +31,18 @@ class Field_Select_Posts extends \SiteOrigin_Widget_Field_Base {
 			] );
 		}
 		?>
-		<select name="<?php echo esc_attr( $this->element_name ) ?>" id="<?php echo esc_attr( $this->element_id ) ?>"
+		<select name="<?php echo esc_attr( $this->element_name ); ?>" id="<?php echo esc_attr( $this->element_id ); ?>"
 				class="widefat jc-widget-field-select-posts"
 				multiple="multiple"
 				data-post_types="<?php echo esc_attr( $this->post_types ); ?>"
 		>
-			<?php if ( ! empty( $posts ) ) : foreach ( $posts as $post ) : ?>
+			<?php if ( ! empty( $posts ) ) : ?>
+				<?php foreach ( $posts as $post ) : ?>
 				<option value="<?php echo esc_attr( $post->ID ); ?>" selected="selected">
 					<?php echo esc_html( $this->get_post_caption( $post ) ); ?>
 				</option>
-			<?php endforeach; endif; ?>
+				<?php endforeach; ?>
+			<?php endif; ?>
 		</select>
 		<?php
 	}

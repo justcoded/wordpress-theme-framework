@@ -1,6 +1,7 @@
 <?php
 
 namespace JustCoded\WP\Framework\Supports;
+
 use jcf\models\Settings;
 use JustCoded\WP\Framework\Objects\Singleton;
 

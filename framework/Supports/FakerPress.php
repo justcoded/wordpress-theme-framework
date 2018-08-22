@@ -38,7 +38,7 @@ class FakerPress {
 	 */
 	public function __construct( $post_type ) {
 		if ( $this->do_fakerpress() ) {
-			$this->ID   = $post_type::$ID;
+			$this->ID        = $post_type::$ID;
 			$this->post_type = $post_type;
 
 			add_action( 'wp_insert_post_data', array( $this, 'pre_insert_post' ), 20, 2 );
@@ -50,11 +50,11 @@ class FakerPress {
 	 * Pre-save post content.
 	 *
 	 * @param array $data    An array of sanitized attachment post data.
-	 * @param array $postarr An array of unsanitized attachment post data.
+	 * @param array $post_data An array of not sanitized attachment post data.
 	 *
 	 * @return array
 	 */
-	public function pre_insert_post( $data, $postarr ) {
+	public function pre_insert_post( $data, $post_data ) {
 		$this->data = $this->post_type->faker();
 
 		if ( $this->ID === $data['post_type'] ) {
@@ -124,7 +124,7 @@ class FakerPress {
 	 * @return bool
 	 */
 	public function do_fakerpress() {
-		if ( isset( $_POST['fakerpress']['view'] ) && $_POST['fakerpress']['view'] === 'posts' ) {
+		if ( isset( $_POST['fakerpress']['view'] ) && 'posts' === $_POST['fakerpress']['view'] ) {
 			return true;
 		} else {
 			return false;

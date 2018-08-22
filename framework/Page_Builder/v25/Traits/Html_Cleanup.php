@@ -54,10 +54,10 @@ trait Html_Cleanup {
 	 */
 	public function panels_data( $panels_data, $post_id ) {
 		// for some reason render is called twice, so we need to reset indexes at render start.
-		$this->_row_index = -1;
-		$this->_col_index = -1;
-		$this->_cell_index = -1;
-		$this->_widget_index = -1;
+		$this->_row_index    = - 1;
+		$this->_col_index    = - 1;
+		$this->_cell_index   = - 1;
+		$this->_widget_index = - 1;
 
 		return $panels_data;
 	}
@@ -200,7 +200,11 @@ trait Html_Cleanup {
 			unset( $attributes['id'] );
 		}
 
-		$class = preg_replace( '/(so-panel\s|widget\s|panel\-|first-child|last-child)/', '', $attributes['class'] );
+		$class               = preg_replace(
+			'/(so-panel\s|widget\s|panel\-|first-child|last-child)/',
+			'',
+			$attributes['class']
+		);
 		$attributes['class'] = 'pb-widget pb-widget-num-' . ( $this->_widget_index + 1 ) . ' ' . trim( $class );
 
 		return $attributes;

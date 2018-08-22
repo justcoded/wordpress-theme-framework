@@ -71,7 +71,7 @@ class Layout {
 					$styles['bg_size']   = 'background-size:cover';
 					break;
 			}
-		} // End if().
+		}
 
 		$styles = implode( ';', $styles );
 

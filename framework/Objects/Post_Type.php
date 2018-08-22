@@ -1,8 +1,7 @@
 <?php
+
 namespace JustCoded\WP\Framework\Objects;
 
-use JustCoded\WP\Framework\Web\View;
-use JustCoded\WP\Framework\Web\Views_Rule;
 use JustCoded\WP\Framework\Supports\FakerPress;
 
 /**
@@ -30,45 +29,45 @@ abstract class Post_Type {
 	 */
 	public static $SLUG;
 
-	const STATUS_ANY = 'any';
-	const STATUS_DRAFT = 'draft';
-	const STATUS_PENDING = 'pending';
-	const STATUS_PUBLISH = 'publish';
-	const STATUS_FUTURE = 'future';
+	const STATUS_ANY        = 'any';
+	const STATUS_DRAFT      = 'draft';
+	const STATUS_PENDING    = 'pending';
+	const STATUS_PUBLISH    = 'publish';
+	const STATUS_FUTURE     = 'future';
 	const STATUS_AUTO_DRAFT = 'auto-draft';
-	const STATUS_PRIVATE = 'private';
-	const STATUS_INHERIT = 'inherit';
+	const STATUS_PRIVATE    = 'private';
+	const STATUS_INHERIT    = 'inherit';
 
-	const SORT_ASC = 'asc';
+	const SORT_ASC  = 'asc';
 	const SORT_DESC = 'desc';
 
-	const ORDERBY_NONE = 'none';
-	const ORDERBY_ID = 'ID';
-	const ORDERBY_AUTHOR = 'author';
-	const ORDERBY_TITLE = 'title';
-	const ORDERBY_SLUG = 'name';
-	const ORDERBY_TYPE = 'type';
-	const ORDERBY_DATE = 'date';
-	const ORDERBY_MODIFIED = 'modified';
-	const ORDERBY_PARENT = 'parent';
-	const ORDERBY_RAND = 'rand';
-	const ORDERBY_COMMENTS = 'comment_count';
-	const ORDERBY_WEIGHT = 'menu_order';
-	const ORDERBY_META = 'meta_value';
+	const ORDERBY_NONE         = 'none';
+	const ORDERBY_ID           = 'ID';
+	const ORDERBY_AUTHOR       = 'author';
+	const ORDERBY_TITLE        = 'title';
+	const ORDERBY_SLUG         = 'name';
+	const ORDERBY_TYPE         = 'type';
+	const ORDERBY_DATE         = 'date';
+	const ORDERBY_MODIFIED     = 'modified';
+	const ORDERBY_PARENT       = 'parent';
+	const ORDERBY_RAND         = 'rand';
+	const ORDERBY_COMMENTS     = 'comment_count';
+	const ORDERBY_WEIGHT       = 'menu_order';
+	const ORDERBY_META         = 'meta_value';
 	const ORDERBY_META_NUMERIC = 'meta_value_num';
-	const ORDERBY_POST_IN = 'post__in';
+	const ORDERBY_POST_IN      = 'post__in';
 
-	const SUPPORTS_TITLE = 'title';
-	const SUPPORTS_EDITOR = 'editor';
-	const SUPPORTS_AUTHOR = 'author';
+	const SUPPORTS_TITLE          = 'title';
+	const SUPPORTS_EDITOR         = 'editor';
+	const SUPPORTS_AUTHOR         = 'author';
 	const SUPPORTS_FEATURED_IMAGE = 'thumbnail';
-	const SUPPORTS_EXCERPT = 'excerpt';
-	const SUPPORTS_TRACKBACKS = 'trackbacks';
-	const SUPPORTS_CUSTOM_FIELDS = 'custom-fields';
-	const SUPPORTS_COMMENTS = 'comments';  // (also will see comment count balloon on edit screen)
-	const SUPPORTS_REVISIONS = 'revisions';
-	const SUPPORTS_ORDER = 'page-attributes'; // (menu order, hierarchical must be true to show Parent option)
-	const SUPPORTS_POST_FORMATS = 'post-formats';
+	const SUPPORTS_EXCERPT        = 'excerpt';
+	const SUPPORTS_TRACKBACKS     = 'trackbacks';
+	const SUPPORTS_CUSTOM_FIELDS  = 'custom-fields';
+	const SUPPORTS_COMMENTS       = 'comments';  // (also will see comment count balloon on edit screen)
+	const SUPPORTS_REVISIONS      = 'revisions';
+	const SUPPORTS_ORDER          = 'page-attributes'; // (menu order, hierarchical must be true to show Parent option)
+	const SUPPORTS_POST_FORMATS   = 'post-formats';
 
 	/**
 	 * Single Post Type label
@@ -266,29 +265,24 @@ abstract class Post_Type {
 		$labels = array_merge( $labels, $this->labels );
 
 		$args = array(
-			'labels'       => $labels,
-			'hierarchical' => $this->is_hierarchical,
-
+			'labels'              => $labels,
+			'hierarchical'        => $this->is_hierarchical,
 			'public'              => $this->has_single,
 			'publicly_queryable'  => $this->has_single || $this->is_searchable || $this->redirect,
 			'show_in_nav_menus'   => $this->has_single,
 			'exclude_from_search' => ! $this->is_searchable,
 			'has_archive'         => $this->has_archive,
-
-			'show_ui'       => ! empty( $this->has_admin_menu ),
-			'show_in_menu'  => $this->has_admin_menu,
-			'menu_position' => $this->admin_menu_pos,
-			'menu_icon'     => $this->admin_menu_icon,
-
-			'capability_type' => $this->admin_capability,
-
-			'supports' => $this->supports,
-
-			'rewrite'   => array(
+			'show_ui'             => ! empty( $this->has_admin_menu ),
+			'show_in_menu'        => $this->has_admin_menu,
+			'menu_position'       => $this->admin_menu_pos,
+			'menu_icon'           => $this->admin_menu_icon,
+			'capability_type'     => $this->admin_capability,
+			'supports'            => $this->supports,
+			'rewrite'             => array(
 				'slug'       => $this::$SLUG,
 				'with_front' => ( ! $this->rewrite_singular || $this->redirect ),
 			),
-			'query_var' => $this->query_var,
+			'query_var'           => $this->query_var,
 		);
 
 		if ( ! empty( $this->taxonomies ) && is_array( $this->taxonomies ) ) {
@@ -323,16 +317,16 @@ abstract class Post_Type {
 	 * By default point all inner CPT pages to views/{cpt}/single.php
 	 * You can write your own rules here
 	 *
-	 * @param string $template  Standard template file to be loaded.
+	 * @param string $template Standard template file to be loaded.
 	 *
-	 * @return string  Modified template file path
+	 * @return string Modified template file path
 	 */
 	public function views( $template ) {
 		/**
 		 * Example of overwrite:
 		 *  if ( is_singular( $this::$ID ) ) {
 		 *     $template = View::locate('section/template');
-		 * 	}
+		 *    }
 		 */
 
 		return $template;

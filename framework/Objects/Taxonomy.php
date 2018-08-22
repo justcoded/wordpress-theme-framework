@@ -185,22 +185,18 @@ abstract class Taxonomy {
 		);
 
 		$args = array(
-			'labels'       => $labels,
-			'hierarchical' => $this->is_hierarchical,
-
-			'public'            => $this->has_single,
-			'show_in_nav_menus' => $this->has_single,
-
-			'show_tagcloud' => $this->has_tag_cloud,
-
+			'labels'             => $labels,
+			'hierarchical'       => $this->is_hierarchical,
+			'public'             => $this->has_single,
+			'show_in_nav_menus'  => $this->has_single,
+			'show_tagcloud'      => $this->has_tag_cloud,
 			'show_ui'            => $this->has_admin_menu,
 			'show_admin_column'  => $this->admin_posts_column,
 			'show_in_quick_edit' => $this->is_quick_editable,
-
-			'query_var' => $this->query_var,
-			'rewrite'   => array(
-				'slug' => $this::$SLUG,
-				'with_front' => ! $this->rewrite_singular,
+			'query_var'          => $this->query_var,
+			'rewrite'            => array(
+				'slug'         => $this::$SLUG,
+				'with_front'   => ! $this->rewrite_singular,
 				'hierarchical' => $this->rewrite_hierarchical,
 			),
 		);
