@@ -17,7 +17,8 @@
           return {
             action: 'pagebuilder_field_select_posts_search',
             term: params.term,
-            types: $$.find('select').data('post_types')
+            types: $$.find('select').data('post_types'),
+            selected: $$.find('select').val()
           };
         },
         dataType: 'json'

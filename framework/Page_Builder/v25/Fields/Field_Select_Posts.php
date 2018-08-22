@@ -10,50 +10,57 @@ class Field_Select_Posts extends \SiteOrigin_Widget_Field_Base {
 	/**
 	 * An array of post types to use in the autocomplete query. Only used for posts.
 	 *
-	 * @access protected
 	 * @var array
 	 */
-	protected $post_types;
+	protected $post_types = '';
 
 	/**
-	 * @param mixed $value
-	 * @param array $instance
+	 * Render field HTML
+	 *
+	 * @param mixed $value Widget values.
+	 * @param array $instance Widget instance.
 	 *
 	 * @return mixed|void
 	 */
 	protected function render_field( $value, $instance ) {
-		// TODO: print selected values.
+		$posts = array();
+		if ( ! empty( $value ) ) {
+			$posts = get_posts( [
+				'post__in'            => $value,
+				'ignore_sticky_posts' => true,
+			] );
+		}
 		?>
-		<select id="<?php esc_attr( $this->element_id ); ?>" name="<?php esc_attr( $this->element_name ); ?>[]"
+		<select name="<?php echo esc_attr( $this->element_name ) ?>" id="<?php echo esc_attr( $this->element_id ) ?>"
 				class="widefat jc-widget-field-select-posts"
 				multiple="multiple"
-				data-post_types="post"
+				data-post_types="<?php echo esc_attr( $this->post_types ); ?>"
 		>
-			<option value="first" selected>First</option>
+			<?php if ( ! empty( $posts ) ) : foreach ( $posts as $post ) : ?>
+				<option value="<?php echo esc_attr( $post->ID ); ?>" selected="selected">
+					<?php echo esc_html( $this->get_post_caption( $post ) ); ?>
+				</option>
+			<?php endforeach; endif; ?>
 		</select>
 		<?php
 	}
 
 	/**
-	 * @param mixed $value
-	 * @param array $instance
+	 * Sanitize the input received from their HTML form field.
+	 *
+	 * @param mixed $value Value from user input.
+	 * @param array $instance Widget instance.
 	 *
 	 * @return array|mixed
 	 */
 	protected function sanitize_field_input( $value, $instance ) {
-		// TODO: finalize this method.
-		$values          = is_array( $value ) ? $value : array( $value );
-		$keys            = array_keys( $this->options );
-		$sanitized_value = array();
-		foreach ( $values as $value ) {
-			if ( ! in_array( $value, $keys ) ) {
-				$sanitized_value[] = isset( $this->default ) ? $this->default : false;
-			} else {
-				$sanitized_value[] = $value;
-			}
+		$values = array();
+		if ( ! is_null( $value ) ) {
+			$values = is_array( $value ) ? $value : array( $value );
+			$values = array_map( 'intval', $values );
 		}
 
-		return count( $sanitized_value ) == 1 ? $sanitized_value[0] : $sanitized_value;
+		return $values;
 	}
 
 	/**
@@ -90,9 +97,14 @@ class Field_Select_Posts extends \SiteOrigin_Widget_Field_Base {
 			) );
 			$post_types     = array_intersect( explode( ',', $_REQUEST['types'] ), $registered_cpt );
 			if ( ! empty( $post_types ) ) {
-				$filter .= 'AND post_type IN (' . trim( str_repeat( '%s,', count( $post_types ) ), ',' ) . ')';
-				$params = array_merge( $params, $post_types );
+				$filter .= ' AND post_type IN (' . trim( str_repeat( '%s,', count( $post_types ) ), ',' ) . ')';
+				$params  = array_merge( $params, $post_types );
 			}
+		}
+
+		if ( ! empty( $_REQUEST['selected'] ) ) {
+			$filter .= ' AND `ID` NOT IN (' . trim( str_repeat( '%d,', count( $_REQUEST['selected'] ) ), ',' ) . ')';
+			$params  = array_merge( $params, $_REQUEST['selected'] );
 		}
 
 		$rows = $wpdb->get_results( $wpdb->prepare( "
@@ -104,16 +116,28 @@ class Field_Select_Posts extends \SiteOrigin_Widget_Field_Base {
 				{$filter}
 			ORDER BY post_modified DESC
 			LIMIT 20
-		", $params ), ARRAY_A );
+		", $params ), OBJECT_K );
 
 		$results = [];
 		foreach ( $rows as $row ) {
 			$results[] = [
-				'id'   => $row['ID'],
-				'text' => $row['post_title'] . " ({$row['post_type']})",
+				'id'   => $row->ID,
+				'text' => self::get_post_caption( $row ),
 			];
 		}
 
 		wp_send_json( array( 'results' => $results ) );
+		exit;
+	}
+
+	/**
+	 * Generate caption to display in select box
+	 *
+	 * @param \WP_Post $post Post to generate caption for.
+	 *
+	 * @return string
+	 */
+	protected static function get_post_caption( $post ) {
+		return "$post->post_title ({$post->post_type})";
 	}
 }

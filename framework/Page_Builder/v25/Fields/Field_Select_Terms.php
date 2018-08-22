@@ -5,104 +5,139 @@ namespace JustCoded\WP\Framework\Page_Builder\v25\Fields;
 /**
  * Class Just_Field_Taxonomy
  */
-class Field_Select_Terms extends \SiteOrigin_Widget_Field_Autocomplete {
+class Field_Select_Terms extends \SiteOrigin_Widget_Field_Base {
 
 	/**
-	 * This field is responsible for `taxonomy` field in SQL request.
+	 * This field is responsible for filter by `taxonomy`.
 	 *
-	 * @access protected
 	 * @var string
 	 */
-	protected $taxonomy;
+	protected $taxonomies;
+
 
 	/**
-	 * The CSS classes to be applied to the rendered text input.
+	 * Render field HTML
+	 *
+	 * @param mixed $value Widget values.
+	 * @param array $instance Widget instance.
+	 *
+	 * @return mixed|void
 	 */
-	protected function get_input_classes() {
-		return array( 'widefat', 'siteorigin-widget-input', 'siteorigin-widget-taxonomy-input' );
+	protected function render_field( $value, $instance ) {
+		$terms = array();
+		if ( ! empty( $value ) ) {
+			$terms = get_terms( [
+				'include'    => $value,
+				'hide_empty' => false,
+			] );
+		}
+		?>
+		<select name="<?php echo esc_attr( $this->element_name ) ?>" id="<?php echo esc_attr( $this->element_id ) ?>"
+				class="widefat jc-widget-field-select-posts"
+				multiple="multiple"
+				data-taxonomies="<?php echo esc_attr( $this->taxonomies ); ?>"
+		>
+			<?php if ( ! empty( $terms ) ) : foreach ( $terms as $term ) : ?>
+				<option value="<?php echo esc_attr( $term->term_id ); ?>" selected="selected">
+					<?php echo esc_html( $this->get_term_caption( $term ) ); ?>
+				</option>
+			<?php endforeach; endif; ?>
+		</select>
+		<?php
 	}
 
 	/**
-	 * Method is used to render html after field.
+	 * Sanitize the input received from their HTML form field.
 	 *
-	 * @param mixed $value - Value.
-	 * @param mixed $instance - Instance.
+	 * @param mixed $value Value from user input.
+	 * @param array $instance Widget instance.
+	 *
+	 * @return array|mixed
 	 */
-	protected function render_after_field( $value, $instance ) {
-
-		$post_types = ! empty( $this->post_types ) && is_array( $this->post_types ) ? implode( ',', $this->post_types ) : '';
-		if ( empty( $this->taxonomy ) ) {
-			$this->taxonomy = $this->get_default_options()['taxonomy'];
+	protected function sanitize_field_input( $value, $instance ) {
+		$values = array();
+		if ( ! is_null( $value ) ) {
+			$values = is_array( $value ) ? $value : array( $value );
+			$values = array_map( 'intval', $values );
 		}
 
-		if ( ! in_array( $this->taxonomy, get_taxonomies(), true ) && null !== $this->taxonomy ) {
-			echo '<script>alert("No such taxonomy: ' . $this->taxonomy . '");</script>';
-
-			return;
-		}
-		?>
-		<div class="existing-content-selector">
-
-			<input type="text" class="content-text-search"
-				   data-post-types="<?php echo esc_attr( $post_types ) ?>"
-				   data-taxonomy="<?php echo esc_attr( $this->taxonomy ); ?>"
-				   placeholder="<?php esc_attr_e( 'Search', 'so-widgets-bundle' ) ?>"/>
-
-			<ul class="items"></ul>
-
-			<div class="buttons">
-				<a href="#" class="button-close button"><?php esc_html_e( 'Close', 'so-widgets-bundle' ) ?></a>
-			</div>
-		</div>
-		<?php
+		return $values;
 	}
 
 	/**
 	 * Enqueue needed js.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'taxonomy-js', plugin_dir_url( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/js/taxonomy-field.js', array( 'jquery' ), '4.1' );
+		wp_enqueue_script(
+			'pagebuilder-widget-field-select-terms',
+			plugin_dir_url( JTF_PLUGIN_FILE ) . 'framework/Page_Builder/v25/Fields/js/select-terms.js',
+			array( 'jquery', 'select2' ),
+			'1.0'
+		);
 	}
 
 	/**
-	 * Action to handle searching taxonomy terms.
+	 * Action to handle searching posts
 	 */
 	public static function ajax_search_terms() {
-		if ( empty( $_REQUEST['_widgets_nonce'] ) || ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) {
+		if ( empty( $_REQUEST['_widgets_nonce'] )
+			|| ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' )
+		) {
 			wp_die( __( 'Invalid request.', 'so-widgets-bundle' ), 403 );
 		}
 
 		global $wpdb;
-		$taxonomy = ! empty( $_REQUEST['taxonomy'] ) ? stripslashes( $_REQUEST['taxonomy'] ) : '';
-		if ( $taxonomy ) {
-			$query = $wpdb->prepare( "
-		SELECT terms.slug AS 'value', terms.term_id AS 'term_id', terms.name AS 'label', termtaxonomy.taxonomy AS 'type'
-		FROM $wpdb->terms AS terms
-		JOIN $wpdb->term_taxonomy AS termtaxonomy ON terms.term_id = termtaxonomy.term_id
-		WHERE
-			termtaxonomy.taxonomy LIKE '%s'
-	", '%' . $taxonomy . '%' );
-		} else {
-			$query = $wpdb->prepare( "
-		SELECT terms.slug AS 'value', terms.term_id AS 'term_id', terms.name AS 'label', termtaxonomy.taxonomy AS 'type'
-		FROM $wpdb->terms AS terms
-		JOIN $wpdb->term_taxonomy AS termtaxonomy ON terms.term_id = termtaxonomy.term_id
-	" );
+
+		$filter = '';
+		$params = array(
+			'%' . $wpdb->esc_like( $_REQUEST['term'] ) . '%',
+		);
+		if ( ! empty( $_REQUEST['taxonomies'] ) ) {
+			$taxonomies = explode( ',', $_REQUEST['taxonomies'] );
+			if ( ! empty( $taxonomies ) ) {
+				$filter .= ' AND tax.taxonomy IN (' . trim( str_repeat( '%s,', count( $taxonomies ) ), ',' ) . ')';
+				$params  = array_merge( $params, $taxonomies );
+			}
 		}
 
-
-		$results = array();
-
-		foreach ( $wpdb->get_results( $query ) as $result ) {
-			$results[] = array(
-				'value' => $result->value,
-				'label' => $result->label,
-				'type'  => $result->type,
-				'id'    => $result->term_id,
-			);
+		if ( ! empty( $_REQUEST['selected'] ) ) {
+			$filter .= ' AND `t`.`term_id` NOT IN (' . trim( str_repeat( '%d,', count( $_REQUEST['selected'] ) ), ',' ) . ')';
+			$params  = array_merge( $params, $_REQUEST['selected'] );
 		}
-		wp_send_json( $results );
 
+		$query = $wpdb->prepare( "
+			SELECT t.term_id, t.name, tax.taxonomy
+			FROM {$wpdb->terms} AS t
+			INNER JOIN {$wpdb->term_taxonomy} AS tax ON tax.term_id = t.term_id
+			WHERE
+				t.name LIKE %s
+				{$filter}
+			ORDER BY t.name ASC
+			LIMIT 20
+		", $params );
+		$rows = $wpdb->get_results($query, OBJECT_K );
+
+		$results = [];
+		foreach ( $rows as $row ) {
+			$results[] = [
+				'id'   => $row->term_id,
+				'text' => self::get_term_caption( $row ),
+			];
+		}
+
+		wp_send_json( array( 'results' => $results ) );
+		exit;
+	}
+
+	/**
+	 * Generate caption to display in select box
+	 *
+	 * @param \WP_Term $term Post to generate caption for.
+	 *
+	 * @return string
+	 */
+	protected static function get_term_caption( $term ) {
+		return "$term->name ({$term->taxonomy})";
 	}
 
 }
