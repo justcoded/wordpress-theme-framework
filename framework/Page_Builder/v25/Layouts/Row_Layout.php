@@ -69,7 +69,7 @@ class Row_Layout extends Layout {
 	 *                    'No',
 	 *                    'Yes',
 	 *                ),
-	 *                'priority' => 15,        // order weigth
+	 *                'priority' => 15,        // order weight
 	 *            ),
 	 *
 	 * By default we unset Design and Theme tabs. (1 assigned to values, because of empty() check in SO plugin)
@@ -79,8 +79,8 @@ class Row_Layout extends Layout {
 	public function options() {
 		return array(
 			// To disable field completely you need to specify "disable" as value.
-			//'background'                  => 'disable',
-			//'background_image_attachment' => 'disable',
+			// 'background'                  => 'disable',
+			// 'background_image_attachment' => 'disable',
 			'background_display' => 'disable',
 		);
 	}

@@ -163,7 +163,7 @@ abstract class Theme {
 	 * Remove default stylesheet
 	 */
 	public function remove_base_stylesheet() {
-		/* @var $theme \WP_Theme */
+		/* @var \WP_Theme $theme */
 		$theme      = wp_get_theme();
 		$stylesheet = $theme->get_stylesheet();
 

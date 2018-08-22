@@ -39,5 +39,6 @@ class Just_Responsive_Images {
 				return include $file;
 			}
 		}
+		return array();
 	}
 }

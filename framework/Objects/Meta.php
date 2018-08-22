@@ -5,7 +5,6 @@ namespace JustCoded\WP\Framework\Objects;
 /**
  * Meta is the base class for acquiring data from custom fields.
  */
-
 abstract class Meta {
 
 	/**
@@ -143,10 +142,10 @@ abstract class Meta {
 				throw new \Exception( get_class( $this ) . "::get_value() : Unsupported custom fields plugin \"{$this->custom_fields_plugin}\"" );
 			}
 
-			$this->_meta[ $object_id ][ $field_name ] = $value;
+			static::$_meta[ $object_id ][ $field_name ] = $value;
 		}
 
-		return $this->_meta[ $object_id ][ $field_name ];
+		return static::$_meta[ $object_id ][ $field_name ];
 	}
 
 }

@@ -62,7 +62,7 @@ class Widget_Layout extends Layout {
 	 *                    'No',
 	 *                    'Yes',
 	 *                ),
-	 *                'priority' => 15,        // order weigth
+	 *                'priority' => 15,        // order weight
 	 *            ),
 	 *
 	 *

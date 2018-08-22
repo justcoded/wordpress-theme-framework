@@ -4,9 +4,9 @@ namespace JustCoded\WP\Framework\Supports;
 use JustCoded\WP\Framework\Objects\Singleton;
 
 /**
- * Class AutoOptimize
- * AutoOptimize plugin extention which allows to add advanced configuration of this plugin.
- * Also add patches for multisite and "/cms" folder installation
+ * Class Autoptimize
+ * Autoptimize plugin extension which allows to add advanced configuration of this plugin.
+ * Also add patches for multiSite and "/cms" folder installation
  */
 class Autoptimize {
 	use Singleton;
@@ -20,7 +20,7 @@ class Autoptimize {
 
 	/**
 	 * Cached string of current blog url
-	 * Multisite only
+	 * MultiSite only
 	 *
 	 * @var string
 	 */
@@ -38,7 +38,7 @@ class Autoptimize {
 	 * AutoOptimize constructor.
 	 */
 	protected function __construct() {
-		// autooptimize patches.
+		// autoptimize patches.
 		add_filter( 'autoptimize_filter_js_unmovable', array( $this, 'js_is_unmovable' ) );
 		add_filter( 'autoptimize_filter_js_domove', array( $this, 'js_move_first' ) );
 		add_filter( 'autoptimize_filter_js_movelast', array( $this, 'js_move_last' ) );
@@ -132,9 +132,9 @@ class Autoptimize {
 
 	/**
 	 * Patch autoOptimize function to get correct script URLs.
-	 * For multisite we have another folder with "cms" that in real URL
+	 * For MultiSite we have another folder with "cms" that in real URL
 	 *
-	 * @param string $url URL to be replaced with real URL on multisites.
+	 * @param string $url URL to be replaced with real URL on MultiSites.
 	 *
 	 * @return mixed
 	 */
@@ -201,7 +201,7 @@ class Autoptimize {
 	 *
 	 * @param string $exclude_js Comma separated list to be excluded from processing.
 	 *
-	 * @return array
+	 * @return string
 	 */
 	public function js_exclude( $exclude_js ) {
 		return $exclude_js;

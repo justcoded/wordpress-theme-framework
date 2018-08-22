@@ -100,7 +100,7 @@ class Contact_Form7 extends Post_Type {
 		$form_request = $_POST;
 
 		foreach ( $form_request as $key => $val ) {
-			if ( in_array( $key, $this->system_fields ) ) {
+			if ( in_array( $key, $this->system_fields, true ) ) {
 				unset( $form_request[ $key ] );
 			}
 		}
@@ -169,7 +169,7 @@ class Contact_Form7 extends Post_Type {
 			case 'form_title':
 				$form_id    = wp_get_post_parent_id( $post->ID );
 				$form_title = get_the_title( $form_id );
-				echo wp_kses( $form_title, '' );
+				echo wp_kses( $form_title, array() );
 				break;
 			case 'remote_addr':
 				echo esc_html( get_post_meta( $post->ID, 'remote_addr', true ) );
@@ -191,14 +191,15 @@ class Contact_Form7 extends Post_Type {
 
 		$forms_list = get_posts( array(
 			'post_type' => 'wpcf7_contact_form',
-			)
-		);
+		) );
 
-		$select = '<select name="parent_form">';
-		$select .= '<option value="">All Forms</option>';
+		$select       = '<select name="parent_form">';
+		$select      .= '<option value="">All Forms</option>';
 		$current_form = ! empty( $_GET['parent_form'] ) ? $_GET['parent_form'] : '';
 		foreach ( $forms_list as $form ) {
-			$select .= '<option value="' . $form->ID . '" ' . selected( $form->ID, $current_form, false ) . '>' . esc_html( $form->post_title ) . '</option>';
+			$select .= '<option value="' . $form->ID . '" '
+				. selected( $form->ID, $current_form, false )
+				. '>' . esc_html( $form->post_title ) . '</option>';
 		}
 		$select .= '</select>';
 
@@ -214,7 +215,7 @@ class Contact_Form7 extends Post_Type {
 	 */
 	public function apply_filter_query( $query ) {
 		global $pagenow;
-		if ( $pagenow !== 'edit.php' || $query->query_vars['post_type'] !== self::$ID || empty( $_GET['parent_form'] ) ) {
+		if ( 'edit.php' !== $pagenow || self::$ID !== $query->query_vars['post_type'] || empty( $_GET['parent_form'] ) ) {
 			return false;
 		}
 
@@ -245,7 +246,7 @@ class Contact_Form7 extends Post_Type {
 			esc_html_e( 'Unable to decode the response.', $this->textdomain );
 		}
 
-		$output = '';
+		$output  = '';
 		$output .= '<table class="form-table">';
 
 		foreach ( $form_request as $key => $field ) {
@@ -253,7 +254,7 @@ class Contact_Form7 extends Post_Type {
 				continue;
 			}
 
-			$key = ucwords( str_replace( array( '-', '_' ), ' ', $key ) );
+			$key     = ucwords( str_replace( array( '-', '_' ), ' ', $key ) );
 			$output .= '<tr>';
 			$output .= $this->print_field_label( $key );
 			if ( is_array( $field ) ) {

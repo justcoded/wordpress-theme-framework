@@ -1,6 +1,6 @@
 jQuery(document).ready(function () {
   initLoadMore();
-})
+});
 
 function initLoadMore() {
   var loading = false;

@@ -17,7 +17,7 @@
       if ( ! $next.next().length ) {
         $(this).hide();
       }
-    })
+    });
     $(document).on('click', '.preview-nav .prev', function(){
       var $current = $('.preview-item:visible');
       var $prev    = $current.prev();

@@ -59,13 +59,13 @@ class Just_Load_More {
 	 */
 	public function ob_get_clean( $html ) {
 		$text = '';
-		if ( isset( $_POST[ 'jtf_selector' ] ) ) {
-			$selector  = trim( $_POST[ 'jtf_selector' ] );
+		if ( isset( $_POST['jtf_selector'] ) ) {
+			$selector  = trim( $_POST['jtf_selector'] );
 			$attribute = substr( $selector, 0, 1 );
-			if ( $attribute == '.' || $attribute == '#' ) {
+			if ( '.' === $attribute || '#' === $attribute ) {
 				$selector = substr( $selector, 1 );
 			}
-			$attribute                = ( $attribute == '#' ) ? $attribute = 'id' : $attribute = 'class';
+			$attribute                = ( '#' === $attribute ) ? $attribute = 'id' : $attribute = 'class';
 			$doc                      = new \DOMDocument();
 			$doc->recover             = true;
 			$doc->strictErrorChecking = false;

@@ -129,7 +129,6 @@ class Template_Hierarchy {
 	 * @return array
 	 */
 	protected function get_page_templates( $std_templates ) {
-		$templates = array();
 		if ( $custom_view = get_page_template_slug() ) {
 			$templates = array(
 				$custom_view,
@@ -255,7 +254,7 @@ class Template_Hierarchy {
 	 * @return array
 	 */
 	public function scan_post_templates( $depth ) {
-		/* @var $wp_theme \WP_Theme */
+		/* @var \WP_Theme $wp_theme */
 		$wp_theme = wp_get_theme();
 		if ( $wp_theme->errors() && $wp_theme->errors()->get_error_codes() !== array( 'theme_parent_invalid' ) ) {
 			return array();
@@ -300,7 +299,7 @@ class Template_Hierarchy {
 			}
 
 			wp_cache_add( "post_templates-depth{$depth}-{$cache_hash}", $post_templates, 'themes', 1800 );
-		} // End if().
+		}
 
 		return $post_templates;
 	}
