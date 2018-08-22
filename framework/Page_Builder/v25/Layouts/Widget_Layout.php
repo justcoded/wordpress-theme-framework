@@ -92,6 +92,8 @@ class Widget_Layout extends Layout {
 			$attributes['class'][] = $style_class;
 		}
 
+		$attributes['style'] = $this->generate_inline_styles( $style_data, $style_class );
+
 		return $attributes;
 	}
 

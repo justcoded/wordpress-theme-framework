@@ -2,16 +2,16 @@
 
 (function ($) {
 
-	$(document).on('sowsetupformfield', '.siteorigin-widget-field-type-select-posts', function (e) {
-		var $$ = $(this);
+  $(document).on('sowsetupformfield', '.siteorigin-widget-field-type-select-posts', function (e) {
+    var $$ = $(this);
 
-		if ($$.data('initialized')) {
-			return;
-		}
-		
-		$$.find('select').select2({
+    if ($$.data('initialized')) {
+      return;
+    }
+
+    $$.find('select').select2({
       minimumInputLength: 2,
-			ajax: {
+      ajax: {
         url: soWidgets.ajaxurl,
         data: function (params) {
           return {
@@ -23,9 +23,9 @@
         },
         dataType: 'json'
       }
-		});
+    });
 
-		$$.data('initialized', true);
-	});
+    $$.data('initialized', true);
+  });
 
 })(jQuery);

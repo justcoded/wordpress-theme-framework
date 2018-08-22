@@ -78,7 +78,7 @@ class Row_Layout extends Layout {
 	 */
 	public function options() {
 		return array(
-			// To disable field completely you need to specify "1" as value.
+			// To disable field completely you need to specify "disable" as value.
 			//'background'                  => 'disable',
 			//'background_image_attachment' => 'disable',
 			'background_display' => 'disable',
@@ -110,6 +110,8 @@ class Row_Layout extends Layout {
 		if ( ! empty( $style_data['background_image_attachment'] ) ) {
 			$attributes['class'][] = $style_class;
 		}
+
+		$attributes['style'] = $this->generate_inline_styles( $style_data, $style_class );
 
 		return $attributes;
 	}
