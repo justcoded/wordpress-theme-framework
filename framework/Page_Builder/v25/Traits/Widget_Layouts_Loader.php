@@ -75,13 +75,18 @@ trait Widget_Layouts_Loader {
 	 * Register widget layouts available
 	 *
 	 * @param string $class_name relative or absolute class name of Widget Layout to be registered.
+	 * @param string $title optional. to rewrite row layout title.
 	 */
-	public function register_widget_layout( $class_name ) {
+	public function register_widget_layout( $class_name, $title = '' ) {
 		if ( strpos( $class_name, '\\' ) !== 0 ) {
 			$class_name = $this->default_layout_namespace . '\\' . $class_name;
 		}
 
-		$widget_layout                        = new $class_name();
+		$widget_layout = new $class_name();
+		if ( ! empty( $title ) ) {
+			$widget_layout::$TITLE = $title;
+		}
+
 		$this->widgets[ $widget_layout::$ID ] = $widget_layout;
 	}
 
