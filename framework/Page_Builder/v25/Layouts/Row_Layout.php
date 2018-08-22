@@ -1,4 +1,5 @@
 <?php
+
 namespace JustCoded\WP\Framework\Page_Builder\v25\Layouts;
 
 /**
@@ -61,27 +62,34 @@ class Row_Layout extends Layout {
 	 * Field element should has a format similar to this:
 	 *
 	 *      '{field}' => array(
-	 *				'name'     => '{Field Title}',
-	 *				'type'     => 'select',  // available: text, select, color, measurement
-	 *				'group'    => 'layout',  // available: attributes, layout, design
-	 *				'options'  => array(     // select options
-	 *				    'No',
-	 *				    'Yes',
-	 *			    ),
-	 *				'priority' => 15,        // order weigth
-	 *			),
+	 *                'name'     => '{Field Title}',
+	 *                'type'     => 'select',  // available: text, select, color, measurement
+	 *                'group'    => 'layout',  // available: attributes, layout, design
+	 *                'options'  => array(     // select options
+	 *                    'No',
+	 *                    'Yes',
+	 *                ),
+	 *                'priority' => 15,        // order weigth
+	 *            ),
+	 *
+	 * By default we unset Design and Theme tabs. (1 assigned to values, because of empty() check in SO plugin)
 	 *
 	 * @return array
 	 */
 	public function options() {
-		return array();
+		return array(
+			// To disable field completely you need to specify "disable" as value.
+			//'background'                  => 'disable',
+			//'background_image_attachment' => 'disable',
+			'background_display' => 'disable',
+		);
 	}
 
 	/**
 	 * Adjust html attributes for row wrapper div
 	 *
-	 * @param array $attributes  container attributes.
-	 * @param array $panel_data  panel data settings.
+	 * @param array $attributes container attributes.
+	 * @param array $panel_data panel data settings.
 	 *
 	 * @return array    update attributes
 	 */
@@ -102,15 +110,17 @@ class Row_Layout extends Layout {
 		if ( ! empty( $style_data['background_image_attachment'] ) ) {
 			$attributes['class'][] = $style_class;
 		}
+
 		$attributes['style'] = $this->generate_inline_styles( $style_data, $style_class );
+
 		return $attributes;
 	}
 
 	/**
 	 * Adjust html attributes for cell wrapper
 	 *
-	 * @param array $attributes  container attributes.
-	 * @param array $panel_data  panel data settings.
+	 * @param array $attributes container attributes.
+	 * @param array $panel_data panel data settings.
 	 *
 	 * @return array    update attributes
 	 */
@@ -134,9 +144,9 @@ class Row_Layout extends Layout {
 	 * Adjust custom html which can be inserted before row
 	 * Default is null
 	 *
-	 * @param string $html  Row HTML.
+	 * @param string $html Row HTML.
 	 * @param array  $panel_data panel data array.
-	 * @param array  $grid_data  grid data options.
+	 * @param array  $grid_data grid data options.
 	 *
 	 * @return string
 	 */
@@ -148,9 +158,9 @@ class Row_Layout extends Layout {
 	 * Adjust custom html which can be inserted after row
 	 * Default is null
 	 *
-	 * @param string $html  Row HTML.
+	 * @param string $html Row HTML.
 	 * @param array  $panel_data panel data array.
-	 * @param array  $grid_data  grid data options.
+	 * @param array  $grid_data grid data options.
 	 *
 	 * @return string
 	 */

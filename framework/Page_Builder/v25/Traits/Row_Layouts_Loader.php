@@ -45,12 +45,11 @@ trait Row_Layouts_Loader {
 	 * @return array modified fields.
 	 */
 	public function add_row_options( $fields ) {
-		$layouts                = $this->get_list_layouts();
+		$layouts = $this->get_list_layouts();
 		if ( empty( $layouts ) ) {
 			unset( $fields['background'] );
 			unset( $fields['background_image_attachment'] );
 			unset( $fields['background_display'] );
-			unset( $fields['border_color'] );
 			return $fields;
 		}
 
@@ -83,7 +82,7 @@ trait Row_Layouts_Loader {
 			$class_name = $this->default_layout_namespace . '\\' . $class_name;
 		}
 
-		$layout = new $class_name;
+		$layout = new $class_name();
 
 		if ( ! empty( $title ) ) {
 			$layout::$TITLE = $title;

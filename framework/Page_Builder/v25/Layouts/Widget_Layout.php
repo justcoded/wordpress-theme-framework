@@ -1,4 +1,5 @@
 <?php
+
 namespace JustCoded\WP\Framework\Page_Builder\v25\Layouts;
 
 /**
@@ -54,27 +55,34 @@ class Widget_Layout extends Layout {
 	 * Field element should has a format similar to this:
 	 *
 	 *      '{field}' => array(
-	 *				'name'     => '{Field Title}',
-	 *				'type'     => 'select',  // available: text, select, color, measurement
-	 *				'group'    => 'layout',  // available: attributes, layout, design
-	 *				'options'  => array(     // select options
-	 *				    'No',
-	 *				    'Yes',
-	 *			    ),
-	 *				'priority' => 15,        // order weigth
-	 *			),
+	 *                'name'     => '{Field Title}',
+	 *                'type'     => 'select',  // available: text, select, color, measurement
+	 *                'group'    => 'layout',  // available: attributes, layout, design
+	 *                'options'  => array(     // select options
+	 *                    'No',
+	 *                    'Yes',
+	 *                ),
+	 *                'priority' => 15,        // order weigth
+	 *            ),
+	 *
+	 *
+	 * By default we unset Design and Theme tabs. (1 assigned to values, because of empty() check in SO plugin)
 	 *
 	 * @return array
 	 */
 	public function options() {
-		return array();
+		return array(
+			'background'                  => 'disable',
+			'background_image_attachment' => 'disable',
+			'background_display'          => 'disable',
+		);
 	}
 
 	/**
 	 * Adjust html attributes widget row div
 	 *
-	 * @param array $attributes  html attributes.
-	 * @param array $style_data  widget settings.
+	 * @param array $attributes html attributes.
+	 * @param array $style_data widget settings.
 	 *
 	 * @return array    update attributes
 	 */
@@ -83,7 +91,9 @@ class Widget_Layout extends Layout {
 		if ( ! empty( $style_data['background_image_attachment'] ) ) {
 			$attributes['class'][] = $style_class;
 		}
+
 		$attributes['style'] = $this->generate_inline_styles( $style_data, $style_class );
+
 		return $attributes;
 	}
 

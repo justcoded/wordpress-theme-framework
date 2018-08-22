@@ -1,10 +1,12 @@
 <?php
+
 namespace JustCoded\WP\Framework\Page_Builder\v25;
 
 use JustCoded\WP\Framework\Objects\Singleton;
 use JustCoded\WP\Framework\Page_Builder\v25\Traits\Html_Cleanup;
 use JustCoded\WP\Framework\Page_Builder\v25\Traits\Row_Layouts_Loader;
 use JustCoded\WP\Framework\Page_Builder\v25\Traits\Widget_Layouts_Loader;
+use JustCoded\WP\Framework\Page_Builder\v25\Traits\Widget_Fields_Loader;
 
 /**
  * Class SiteOriginPanelsLoader
@@ -14,7 +16,7 @@ use JustCoded\WP\Framework\Page_Builder\v25\Traits\Widget_Layouts_Loader;
  */
 class Page_Builder_Loader {
 	use Singleton;
-	use Html_Cleanup, Row_Layouts_Loader, Widget_Layouts_Loader;
+	use Html_Cleanup, Row_Layouts_Loader, Widget_Layouts_Loader, Widget_Fields_Loader;
 
 	/**
 	 * Widgets class names to be disabled from SiteOrigin Widgets Bundle
@@ -22,12 +24,15 @@ class Page_Builder_Loader {
 	 * @var array
 	 */
 	public $disabled_siteorigin_widgets = array(
-		'editor' => 'SiteOrigin_Widget_Editor_Widget',
-		'button' => 'SiteOrigin_Widget_Button_Widget',
-		'image' => 'SiteOrigin_Widget_Image_Widget',
-		'slider' => 'SiteOrigin_Widget_Slider_Widget',
-		'features' => 'SiteOrigin_Widget_Features_Widget',
+		'editor'        => 'SiteOrigin_Widget_Editor_Widget',
+		'button'        => 'SiteOrigin_Widget_Button_Widget',
+		'image'         => 'SiteOrigin_Widget_Image_Widget',
+		'slider'        => 'SiteOrigin_Widget_Slider_Widget',
+		'features'      => 'SiteOrigin_Widget_Features_Widget',
 		'post-carousel' => 'SiteOrigin_Widget_PostCarousel_Widget',
+		'post-loop'     => 'SiteOrigin_Panels_Widgets_Layout',
+		'page-builder'  => 'SiteOrigin_Panels_Widgets_PostLoop',
+		'post-content'  => 'SiteOrigin_Panels_Widgets_PostContent',
 	);
 
 	/**
@@ -49,6 +54,9 @@ class Page_Builder_Loader {
 		'WP_Widget_Tag_Cloud',
 		'WP_Nav_Menu_Widget',
 		'WP_Widget_Custom_HTML',
+		'WP_Widget_Media_Audio',
+		'WP_Widget_Media_Video',
+		'WP_Widget_Media_Gallery',
 
 		'SiteOrigin_Panels_Widgets_PostContent',
 	);
@@ -89,10 +97,18 @@ class Page_Builder_Loader {
 	protected $_widget_index = - 1;
 
 	/**
+	 * Whether we need elements to be indexed.
+	 *
+	 * @var int
+	 */
+	protected $index_elements = false;
+
+	/**
 	 * Main class constructor
 	 * Set WordPress actions and filters
 	 */
 	protected function __construct() {
+		$this->fields_loader();
 		$this->html_cleanup();
 		$this->row_layouts_loader();
 		$this->widget_layouts_loader();
@@ -109,6 +125,9 @@ class Page_Builder_Loader {
 
 		// add own hook for custom widgets preview.
 		add_action( 'wp_ajax_so_widgets_preview', array( $this, 'widget_preview' ), 5 );
+
+		// filter widget dialog tabs.
+		add_filter( 'siteorigin_panels_widget_dialog_tabs', array( $this, 'update_widgets_dialog_tabs' ), 20 );
 
 		$this->init();
 	}
@@ -175,13 +194,14 @@ class Page_Builder_Loader {
 			'collapse_order',
 			'collapse_behaviour',
 			'cell_alignment',
-
+			'border_color',
 		);
 		foreach ( $unset_fields as $field ) {
 			if ( isset( $fields[ $field ] ) ) {
 				unset( $fields[ $field ] );
 			}
 		}
+
 		return $fields;
 	}
 
@@ -203,19 +223,25 @@ class Page_Builder_Loader {
 			// layout.
 			'padding',
 			'mobile_padding',
+			'margin',
+			// design.
+			'font_color',
+			'link_color',
+			'border_color',
 		);
 		foreach ( $unset_fields as $field ) {
 			if ( isset( $fields[ $field ] ) ) {
 				unset( $fields[ $field ] );
 			}
 		}
+
 		return $fields;
 	}
 
 	/**
 	 * Remove hard-coded widgets from the "Add Widget" page builder popup
 	 *
-	 * @param array $widgets  widgets available for page builder.
+	 * @param array $widgets widgets available for page builder.
 	 *
 	 * @return array
 	 */
@@ -244,7 +270,30 @@ class Page_Builder_Loader {
 			}
 		}
 
+		$widgets['SiteOrigin_Widget_Editor_Widget']['groups'] = array( 'theme' );
+
 		return $widgets;
+	}
+
+	/**
+	 * Update widgets dialog tabs list, add new one
+	 *
+	 * @param array $tabs Widgets panel tabs list.
+	 *
+	 * @return array
+	 */
+	public function update_widgets_dialog_tabs( $tabs ) {
+		$tabs[0]['message']              = '';
+		$tabs['page_builder']['message'] = '';
+
+		$sorted_tabs[0]             = $tabs[0];
+		$sorted_tabs['recommended'] = $tabs['recommended'];
+		unset( $tabs[0] );
+		unset( $tabs['recommended'] );
+		unset( $tabs['widgets_bundle'] );
+		$sorted_tabs = array_merge( $sorted_tabs, $tabs );
+
+		return $sorted_tabs;
 	}
 
 	/**
@@ -266,7 +315,8 @@ class Page_Builder_Loader {
 			exit();
 		}
 		if ( empty( $_REQUEST['_widgets_nonce'] )
-		     || ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) {
+			|| ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' )
+		) {
 			return;
 		}
 
@@ -287,10 +337,13 @@ class Page_Builder_Loader {
 		$instance['is_preview'] = true;
 
 		wp_enqueue_style( 'dashicons' );
-		wp_enqueue_style( 'so-widget-preview', plugin_dir_url( SOW_BUNDLE_BASE_FILE ) . 'base/css/preview.css', array(), rand( 0,65536 ) );
-		wp_enqueue_style( 'jtf-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/css/widget-preview.css', array(), rand( 0,65536 ) );
+		wp_enqueue_style( 'so-widget-preview', plugin_dir_url( SOW_BUNDLE_BASE_FILE ) . 'base/css/preview.css', array(),
+			rand( 0, 65536 ) );
+		wp_enqueue_style( 'jtf-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/css/widget-preview.css',
+			array(), rand( 0, 65536 ) );
 
-		wp_enqueue_script( 'jtc-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/js/widget-preview.js', array( 'jquery' ) );
+		wp_enqueue_script( 'jtc-widget-preview', plugin_dir_url( JTF_PLUGIN_FILE ) . 'assets/js/widget-preview.js',
+			array( 'jquery' ) );
 		$sowb = \SiteOrigin_Widgets_Bundle::single();
 		$sowb->register_general_scripts();
 

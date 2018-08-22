@@ -5,7 +5,7 @@ Tags: mvc theme, theme boilerplate, oop theme, mini framework
 Author: JustCoded / Alex Prokopenko
 Author URI: http://justcoded.com/
 Requires at least: 4.7
-Tested up to: 4.9.6
+Tested up to: 4.9.8
 License: GPL3
 Stable tag: trunk
 
@@ -92,6 +92,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 2.3.0 - 22 Aug 2018 =
+    * New: Page Builder updates and new builder fields for autocomplete of Posts and Terms.
 = Version 2.2.0 - 27 June 2018 =
     * New: Support FakerPress plugin to generate PostTypes data with complex custom fields structure.
 = Version 2.1.1 - 10 January 2017 =

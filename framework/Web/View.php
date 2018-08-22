@@ -4,8 +4,10 @@ namespace JustCoded\WP\Framework\Web;
 use JustCoded\WP\Framework\Objects\Singleton;
 
 /**
- * Views base class.
+ * View base class.
  * Used for layouts and render partials
+ *
+ * @method View instance()
  */
 class View {
 	use Singleton;
