@@ -78,7 +78,7 @@ trait Widget_Layouts_Loader {
 	 * @param string $title optional. to rewrite row layout title.
 	 */
 	public function register_widget_layout( $class_name, $title = '' ) {
-		if ( strpos( $class_name, '\\' ) !== 0 ) {
+		if ( ! class_exists( $class_name ) && strpos( $class_name, '\\' ) !== 0 ) {
 			$class_name = $this->default_layout_namespace . '\\' . $class_name;
 		}
 
