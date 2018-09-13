@@ -1,0 +1,27 @@
+.acf-fields .jc_acf_fields {
+    float: left;
+    clear: none;
+}
+
+.acf-fields .jc_acf_fields_25 {
+    width: 25%;
+}
+
+.acf-fields .jc_acf_fields_33 {
+    width: 33%;
+}
+
+.acf-fields .jc_acf_fields_50 {
+    width: 50%;
+}
+
+.acf-fields .jc_acf_fields_75 {
+    width: 75%;
+}
+
+.acf-fields .jc_acf_fields_100 {
+    width: 100%;
+    margin: 0;
+    float: none;
+    clear: both;
+}

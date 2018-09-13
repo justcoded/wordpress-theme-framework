@@ -8,30 +8,44 @@ use StoutLogic\AcfBuilder\FieldsBuilder;
 
 trait Has_ACF_Fields {
 	/**
-	 * @var FieldBuilder[]
+	 * @var FieldsBuilder[]
 	 */
 	protected $fields;
 
 	/**
 	 * Add field definition to internal stack.
 	 *
-	 * @param FieldBuilder ...$fields FieldsBuilder objects to be added.
+	 * @param FieldsBuilder ...$fields FieldsBuilder objects to be added.
 	 */
 	public function has( ...$fields ) {
-		/* @var FieldBuilder[] $args */
+		/* @var FieldsBuilder[] $args */
 		$args = func_get_args();
 
-		foreach ( $args as $field ) {
-			$field = $field->getRootContext();
-			// TODO: preprocess widths into classes.
-			$this->fields[ $field->getName() ] = $field;
+		foreach ( $args as $group ) {
+
+			$group = $group->getRootContext();
+			foreach ( $group->getFields() as $field ) {
+				$wrapper = $field->getWrapper();
+				$width   = ( isset( $wrapper['width'] ) ? $wrapper['width'] : '100%' );
+				if ( false !== strpos( $width, '%' ) ) {
+					$width = trim( $width, '%' );
+					// Set attr class.
+					$field->setAttr( 'class', 'jc_acf_fields jc_acf_fields_' . $width );
+					// Set block layout for responsive.
+					$field->setConfig( 'layout', 'block' );
+					// Clear field width.
+					$field->setWidth( '' );
+				}
+			}
+
+			$this->fields[ $group->getName() ] = $group;
 		}
 	}
 
 	/**
 	 * Build a fields group configuration object
 	 *
-	 * @param string|null $name Group name.
+	 * @param string|null $name         Group name.
 	 * @param array       $group_config Group config.
 	 *
 	 * @return FieldsBuilder
@@ -45,6 +59,7 @@ trait Has_ACF_Fields {
 				$name = $class_short_name;
 			}
 		}
+
 		return new FieldsBuilder( $name, $group_config );
 	}
 }

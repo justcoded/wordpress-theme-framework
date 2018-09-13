@@ -14,7 +14,7 @@ class Thememeta extends Meta {
 	 * @return false|int
 	 */
 	public function get_object_id() {
-		return 'options';
+		return 'option';
 	}
 
 	/**
