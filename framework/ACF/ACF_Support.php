@@ -14,7 +14,6 @@ class ACF_Support {
 	public function __construct() {
 		add_filter( 'acf/input/admin_head', array( $this, 'register_assets' ) );
 		add_action( 'admin_menu', array( $this, 'acf_remove_ui' ) );
-		add_action( 'init', array( $this, 'hide_content_box' ) );
 	}
 
 	/**
@@ -32,14 +31,6 @@ class ACF_Support {
 	 */
 	public function acf_remove_ui() {
 		remove_menu_page( 'edit.php?post_type=acf-field-group' );
-	}
-
-	/**
-	 * Hide content box for Post and Page.
-	 */
-	public function hide_content_box() {
-		remove_post_type_support( 'page', 'editor' );
-		remove_post_type_support( 'post', 'editor' );
 	}
 
 	/**

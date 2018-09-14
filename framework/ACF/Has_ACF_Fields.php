@@ -24,7 +24,21 @@ trait Has_ACF_Fields {
 		foreach ( $args as $group ) {
 
 			$group = $group->getRootContext();
-			foreach ( $group->getFields() as $field ) {
+
+			$this->fields_width( $group->getFields() );
+
+			$this->fields[ $group->getName() ] = $group;
+		}
+	}
+
+	/**
+	 * Update fields wrapper for responsive.
+	 *
+	 * @param array $fields Group fields.
+	 */
+	public function fields_width( $fields ) {
+		if ( ! empty( $fields ) ) {
+			foreach ( $fields as $field ) {
 				$wrapper = $field->getWrapper();
 				$width   = ( isset( $wrapper['width'] ) ? $wrapper['width'] : '100%' );
 				if ( false !== strpos( $width, '%' ) ) {
@@ -37,8 +51,6 @@ trait Has_ACF_Fields {
 					$field->setWidth( '' );
 				}
 			}
-
-			$this->fields[ $group->getName() ] = $group;
 		}
 	}
 
