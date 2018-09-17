@@ -22,7 +22,6 @@ trait Has_ACF_Fields {
 		$args = func_get_args();
 
 		foreach ( $args as $group ) {
-
 			$group = $group->getRootContext();
 
 			$this->set_responsive_width_classes( $group->getFields() );

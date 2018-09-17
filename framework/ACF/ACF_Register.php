@@ -17,23 +17,13 @@ abstract class ACF_Register {
 	use Has_ACF_Fields;
 
 	/**
-	 * Post Type for hide content.
-	 *
-	 * @var $hide_content
-	 */
-	public $hide_content;
-
-	/**
 	 * ACF_Register constructor.
 	 * - run init method to set fields configuration.
 	 * - define acf hook to register fields
 	 */
 	protected function __construct() {
 		$this->init();
-		// init WordPress hook for hide content box.
-		add_action( 'init', function() {
-			remove_post_type_support( $this->hide_content, 'editor' );
-		});
+
 		// init ACF hook for register fields.
 		add_action( 'acf/init', array( $this, 'register' ) );
 	}
