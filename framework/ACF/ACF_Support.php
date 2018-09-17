@@ -39,6 +39,6 @@ class ACF_Support {
 	 * @return bool
 	 */
 	public static function check_requirements() {
-		return is_plugin_active( 'advanced-custom-fields-pro/acf.php' );
+		return class_exists( 'ACF' );
 	}
 }

@@ -25,7 +25,7 @@ trait Has_ACF_Fields {
 
 			$group = $group->getRootContext();
 
-			$this->fields_width( $group->getFields() );
+			$this->set_responsive_width_classes( $group->getFields() );
 
 			$this->fields[ $group->getName() ] = $group;
 		}
@@ -34,13 +34,13 @@ trait Has_ACF_Fields {
 	/**
 	 * Update fields wrapper for responsive.
 	 *
-	 * @param array $fields Group fields.
+	 * @param FieldBuilder[] $fields Group fields.
 	 */
-	public function fields_width( $fields ) {
+	public function set_responsive_width_classes( $fields ) {
 		if ( ! empty( $fields ) ) {
 			foreach ( $fields as $field ) {
 				$wrapper = $field->getWrapper();
-				$width   = ( isset( $wrapper['width'] ) ? $wrapper['width'] : '100%' );
+				$width   = isset( $wrapper['width'] ) ? $wrapper['width'] : '100%';
 				if ( false !== strpos( $width, '%' ) ) {
 					$width = trim( $width, '%' );
 					// Set attr class.

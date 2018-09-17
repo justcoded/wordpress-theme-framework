@@ -55,6 +55,17 @@ abstract class ACF_Register {
 	}
 
 	/**
+	 * Remove standard editor from post edit screen.
+	 *
+	 * @param string $post_type Post type ID to remove editor from.
+	 */
+	protected function remove_content_editor( $post_type ) {
+		add_action( 'init', function () use ( $post_type ) {
+			remove_post_type_support( $post_type, 'editor' );
+		} );
+	}
+
+	/**
 	 * ACF add_options_page function wrapper to check for exists.
 	 *
 	 * @param string $name Page name.

@@ -66,10 +66,7 @@ abstract class ACF_Definition {
 			$name = key( $self->fields );
 		}
 
-		if ( isset( $self->fields[ $name ] ) ) {
-			return $self->fields[ $name ];
-		} else {
-			throw new \InvalidArgumentException( get_class( $self ) . ": Field definition missing for \"{$name}\"." );
-		}
+		// use magic getter to not duplicate code here.
+		return $self->$name;
 	}
 }
