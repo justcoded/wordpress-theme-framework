@@ -1,0 +1,52 @@
+.acf-fields .jc_acf_fields {
+    float: left;
+    clear: none;
+}
+
+.acf-fields .jc_acf_fields_100 {
+    width: 100%;
+    margin: 0;
+    float: none;
+    clear: both;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .acf-fields .jc_acf_fields_25, .jc_acf_fields_33, .jc_acf_fields_50, .jc_acf_fields_66, .jc_acf_fields_75 {
+        width: 100% !important;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .acf-fields .jc_acf_fields_25, .jc_acf_fields_33, .jc_acf_fields_50, .jc_acf_fields_66, .jc_acf_fields_75 {
+        width: 100% !important;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .acf-fields .jc_acf_fields_25, .jc_acf_fields_33, .jc_acf_fields_50, .jc_acf_fields_66, .jc_acf_fields_75 {
+        width: 50% !important;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .acf-fields .jc_acf_fields_25 {
+        width: 25% !important;
+    }
+
+    .acf-fields .jc_acf_fields_33 {
+        width: 33% !important;
+    }
+
+    .acf-fields .jc_acf_fields_50 {
+        width: 50% !important;
+    }
+
+    .acf-fields .jc_acf_fields_66 {
+        width: 66% !important;
+    }
+
+    .acf-fields .jc_acf_fields_75 {
+        width: 75% !important;
+    }
+}
