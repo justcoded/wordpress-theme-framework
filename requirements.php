@@ -62,7 +62,7 @@ if ( ! class_exists( 'Just_Theme_Framework_Checker' ) ) {
 		private function __construct() {
 			global $pagenow;
 			if ( ! is_admin() && 'wp-login.php' !== $pagenow && ! $this->check_requirements() ) {
-				throw new Exception( 'Your theme requires Just Theme Framework and Titan Framework plugins to be installed and activated.' );
+				throw new Exception( 'Your theme requires WordPress Theme Framework plugin to be installed and activated.' );
 			}
 			add_action( 'admin_notices', array( $this, 'display_requirements_admin_notice' ) );
 		}
@@ -124,7 +124,17 @@ if ( ! class_exists( 'Just_Theme_Framework_Checker' ) ) {
 			$html = '<div class="error"><h3>Please fix the errors below to use current activated theme:</h3><p>'
 				. implode( '</p><p>', $warnings )
 				. '</p></div>';
-			echo wp_kses( $html, array( 'div', 'h3', 'p' ) );
+			echo wp_kses( $html, array(
+				'div' => [
+					'class' => true,
+				],
+				'h3'  => true,
+				'p'   => true,
+				'a'   => [
+					'href'   => true,
+					'target' => true,
+				],
+			) );
 		}
 	}
 
