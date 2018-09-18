@@ -7,7 +7,7 @@ Author URI: http://justcoded.com/
 Requires at least: 4.7
 Tested up to: 4.9.8
 License: GPL3
-Stable tag: trunk
+Stable tag: 3.0
 
 Lightweight theme framework base with Model-View concept for developers who want to better organize their own custom themes.
 
@@ -92,6 +92,9 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 3.0 - 18 Sep 2018 =
+    * New: ACF code fields registration support
+    * New: https://github.com/StoutLogic/acf-builder package dependency and class wrappers
 = Version 2.3.0 - 22 Aug 2018 =
     * New: Page Builder updates and new builder fields for autocomplete of Posts and Terms.
 = Version 2.2.0 - 27 June 2018 =
