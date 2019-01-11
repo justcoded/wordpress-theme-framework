@@ -108,6 +108,15 @@ abstract class Post_Type {
 	protected $is_hierarchical = false;
 
 	/**
+	 * Ability to enable the Gutenberg editor
+	 * Please be aware that this makes the post_type to show up in the REST API
+	 * affect: show_in_rest
+	 *
+	 * @var boolean
+	 */
+	protected $enable_gutenberg = false;
+
+	/**
 	 * Specify where to redirect singular post type page
 	 * IF has_singular == false AND is_searchable == true THEN we need to redirect page from search results to some other page
 	 * custom property: auto-redirect to some URL
@@ -134,7 +143,7 @@ abstract class Post_Type {
 
 	/**
 	 * Admin menu vertical position
-	 * Be very carefull and do not add more than 5 Post Types to same number!
+	 * Be very careful and do not add more than 5 Post Types to same number!
 	 * affect: menu_position
 	 *
 	 * @var integer
@@ -264,6 +273,10 @@ abstract class Post_Type {
 		);
 		$labels = array_merge( $labels, $this->labels );
 
+		if ( ! in_array( 'editor', $this->supports ) && $this->enable_gutenberg ) {
+			$this->supports = array_push($this->supports, 'editor');
+		}
+
 		$args = array(
 			'labels'              => $labels,
 			'hierarchical'        => $this->is_hierarchical,
@@ -283,6 +296,7 @@ abstract class Post_Type {
 				'with_front' => ( ! $this->rewrite_singular || $this->redirect ),
 			),
 			'query_var'           => $this->query_var,
+			'show_in_rest'        => $this->enable_gutenberg,
 		);
 
 		if ( ! empty( $this->taxonomies ) && is_array( $this->taxonomies ) ) {
