@@ -59,6 +59,7 @@ abstract class Post_Type {
 
 	const SUPPORTS_TITLE          = 'title';
 	const SUPPORTS_EDITOR         = 'editor';
+	const SUPPORTS_GUTENBERG      = self::SUPPORTS_EDITOR;
 	const SUPPORTS_AUTHOR         = 'author';
 	const SUPPORTS_FEATURED_IMAGE = 'thumbnail';
 	const SUPPORTS_EXCERPT        = 'excerpt';
@@ -108,13 +109,13 @@ abstract class Post_Type {
 	protected $is_hierarchical = false;
 
 	/**
-	 * Ability to enable the Gutenberg editor
-	 * Please be aware that this makes the post_type to show up in the REST API
+	 * Ability to display the CPT in the REST API
+	 * Please be aware that this enable the CPT to use Gutenberg if supporting editor in WP 5.0 and up
 	 * affect: show_in_rest
 	 *
 	 * @var boolean
 	 */
-	protected $enable_gutenberg = false;
+	protected $has_rest_api = false;
 
 	/**
 	 * Specify where to redirect singular post type page
@@ -273,8 +274,9 @@ abstract class Post_Type {
 		);
 		$labels = array_merge( $labels, $this->labels );
 
-		if ( ! in_array( 'editor', $this->supports ) && $this->enable_gutenberg ) {
-			$this->supports = array_push($this->supports, 'editor');
+		// If we should support gutenberg, we need to enable the rest api.
+		if ( self::SUPPORTS_GUTENBERG === 'editor' && ! $this->has_rest_api ) {
+			$this->has_rest_api = true;
 		}
 
 		$args = array(
@@ -296,7 +298,7 @@ abstract class Post_Type {
 				'with_front' => ( ! $this->rewrite_singular || $this->redirect ),
 			),
 			'query_var'           => $this->query_var,
-			'show_in_rest'        => $this->enable_gutenberg,
+			'show_in_rest'        => $this->has_rest_api,
 		);
 
 		if ( ! empty( $this->taxonomies ) && is_array( $this->taxonomies ) ) {
