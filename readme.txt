@@ -92,6 +92,8 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 3.0.1 - 21 Feb 2019 =
+    * Bugfix: Faker generated images doesn't have thumbnails.
 = Version 3.0 - 18 Sep 2018 =
     * New: ACF code fields registration support
     * New: https://github.com/StoutLogic/acf-builder package dependency and class wrappers

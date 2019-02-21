@@ -218,7 +218,9 @@ class FakerContent {
 		);
 
 		// Insert the attachment.
-		$attach_id = wp_insert_attachment( $attachment, $upload['file'], 0 );
+		$attach_id   = wp_insert_attachment( $attachment, $upload['file'], 0 );
+		$attach_path = get_attached_file( $attach_id );
+		wp_update_attachment_metadata( $attach_id, wp_generate_attachment_metadata( $attach_id, $attach_path ) );
 
 		return $attach_id;
 	}
