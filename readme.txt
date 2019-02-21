@@ -92,8 +92,10 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
-= Version 3.0.1 - 21 Feb 2019 =
+= Version 3.0.2 - 21 Feb 2019 =
     * Bugfix: Faker generated images doesn't have thumbnails.
+= Version 3.0.1 - 14 Jan 2019 =
+    * Hotfix: Added support for Gutenberg and REST API for Custom Post Types..    
 = Version 3.0 - 18 Sep 2018 =
     * New: ACF code fields registration support
     * New: https://github.com/StoutLogic/acf-builder package dependency and class wrappers
