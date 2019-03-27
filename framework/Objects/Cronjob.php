@@ -4,50 +4,53 @@
 namespace JustCoded\WP\Framework\Objects;
 
 /**
- * Class Cron
+ * Class Cronjob
  * @package JustCoded\WP\Framework\Objects
+ *
+ * @method Cronjob instance() static
  */
-abstract class Cron {
+abstract class Cronjob {
 	use Singleton;
 
-	const FREQUENCY_MANUAL      = 'manual';
-	const FREQUENCY_ONCE        = 'single';
-	const FREQUENCY_HOURLY      = 'hourly';
-	const FREQUENCY_TWICE_DAILY = 'twicedaily';
-	const FREQUENCY_DAILY       = 'daily';
+	/**
+	 * Constant for single cron
+	 */
+	const FREQUENCY_ONCE = 'single';
 
 	/**
 	 * @var string
 	 */
-	public $ID;
+	protected $ID;
+
+	/**
+	 * @var int|string
+	 */
+	protected $start;
+
+	/**
+	 * @var string
+	 */
+	protected $schedule;
+
+	/**
+	 * @var string
+	 */
+	protected $schedule_description;
 
 	/**
 	 * @var int
 	 */
-	public $timestamp;
+	protected $interval;
 
 	/**
-	 * @var string
+	 * @var array
 	 */
-	public $frequency;
-
-	/**
-	 * @var string
-	 */
-	public $description;
-
-	/**
-	 * @var int
-	 */
-	public $interval;
-
-	/**
-	 * @var string
-	 */
-	public $schedule;
+	private $frequency = [ 'hourly', 'twicedaily', 'daily' ];
 
 	/**
 	 * Cronjob constructor.
+	 *
+	 * @throws \Exception
 	 */
 	protected function __construct() {
 		if ( empty( $this->ID ) ) {
@@ -57,17 +60,18 @@ abstract class Cron {
 		// register action hook.
 		add_action( $this->ID, [ $this, 'run' ] );
 
-		if ( static::FREQUENCY_ONCE !== $this->frequency ) {
+		if ( static::FREQUENCY_ONCE !== $this->schedule ) {
 			// deactivation hook for repeatable event.
 			add_action( 'switch_theme', [ $this, 'deactivate' ] );
 		}
 
-		if ( static::FREQUENCY_MANUAL === $this->schedule ) {
+		if ( ! in_array( $this->schedule, $this->frequency, true ) ) {
 			if ( empty( $this->interval ) || ! is_numeric( $this->interval ) ) {
-				throw new \Exception( static::class . ' class: $interval property is required and must be numeric if you use custom schedules' );
+				throw new \Exception( static::class . ' class: $interval property is required and must be numeric if you use custom schedule' );
 			}
-			// register custom schedules.
-			add_filter( 'cron_schedules', [ $this, 'register_custom_schedules' ] );
+
+			// register custom schedule.
+			add_filter( 'cron_schedules', [ $this, 'register_custom_schedule' ], 99, 1 );
 		}
 
 		// register cron.
@@ -76,32 +80,35 @@ abstract class Cron {
 	}
 
 	/**
-	 * Registers cron with custom interval
+	 * Register_custom_schedule
+	 *
+	 * @param array $schedule Non-default schedule.
+	 *
+	 * @return array
 	 */
-	public function register_custom_schedules( $schedules ) {
-
-		$schedules[ $this->frequency ] = array(
+	public function register_custom_schedule( $schedule ) {
+		$schedule[ $this->schedule ] = array(
 			'interval' => $this->interval,
-			'display'  => $this->description ?? $this->ID . ' : ' . $this->frequency
+			'display'  => $this->schedule_description ?? $this->ID . ' : ' . $this->schedule
 		);
 
-		return $schedules;
+		return $schedule;
 	}
 
 	/**
 	 * Registers cron with interval
 	 */
 	public function register() {
-		if ( empty( $this->timestamp ) ) {
-			$this->timestamp = time();
-		} elseif ( ! is_numeric( $this->timestamp ) && is_string( $this->timestamp ) ) {
-			$this->timestamp = strtotime( $this->timestamp );
+		if ( empty( $this->start ) ) {
+			$this->start = time();
+		} elseif ( ! is_numeric( $this->start ) && is_string( $this->start ) ) {
+			$this->start = strtotime( $this->start );
 		}
 
-		if ( static::FREQUENCY_ONCE === $this->frequency ) {
-			wp_schedule_single_event( $this->timestamp, $this->ID );
+		if ( static::FREQUENCY_ONCE === $this->schedule ) {
+			wp_schedule_single_event( $this->start, $this->ID );
 		} elseif ( ! wp_next_scheduled( $this->ID ) ) {
-			wp_schedule_event( $this->timestamp, $this->frequency, $this->ID );
+			wp_schedule_event( $this->start, $this->schedule, $this->ID );
 		}
 
 	}
@@ -110,8 +117,8 @@ abstract class Cron {
 	 * Deactivate cron on theme deactivate.
 	 */
 	public function deactivate() {
-		if ( $timestamp = wp_next_scheduled( $this->ID ) ) {
-			wp_unschedule_event( $timestamp, $this->ID );
+		if ( $start = wp_next_scheduled( $this->ID ) ) {
+			wp_unschedule_event( $start, $this->ID );
 		}
 	}
 
