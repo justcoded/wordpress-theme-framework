@@ -43,6 +43,16 @@ abstract class Cronjob {
 	protected $interval;
 
 	/**
+	 * @var bool $debug Debug status. Default 'false'. Accepts 'true', 'false'.
+	 */
+	protected $debug = false;
+
+	/**
+	 * @var string $debug_type Debug type. Default 'manual'. Accepts 'auto', 'manual'.
+	 */
+	protected $debug_type = 'manual';
+
+	/**
 	 * @var array
 	 */
 	private $frequency = [ 'hourly', 'twicedaily', 'daily' ];
@@ -60,6 +70,11 @@ abstract class Cronjob {
 		// register action hook.
 		add_action( $this->ID, [ $this, 'run' ] );
 
+		// debug cronjob
+		if ( isset( $this->debug ) && true === $this->debug ) {
+			$this->cron_debug();
+		}
+
 		if ( static::FREQUENCY_ONCE !== $this->schedule ) {
 			// deactivation hook for repeatable event.
 			add_action( 'switch_theme', [ $this, 'deactivate' ] );
@@ -76,7 +91,6 @@ abstract class Cronjob {
 
 		// register cron.
 		add_action( 'init', [ $this, 'register' ] );
-
 	}
 
 	/**
@@ -110,7 +124,6 @@ abstract class Cronjob {
 		} elseif ( ! wp_next_scheduled( $this->ID ) ) {
 			wp_schedule_event( $this->start, $this->schedule, $this->ID );
 		}
-
 	}
 
 	/**
@@ -120,6 +133,69 @@ abstract class Cronjob {
 		if ( $start = wp_next_scheduled( $this->ID ) ) {
 			wp_unschedule_event( $start, $this->ID );
 		}
+	}
+
+	/**
+	 * Get_cron_data
+	 *
+	 * @return array
+	 */
+	protected function get_cron_data() {
+		$crons     = _get_cron_array();
+		$cron_data = [];
+
+		foreach ( $crons as $time => $cron ) {
+			foreach ( $cron as $hook => $dings ) {
+
+				if ( $this->ID !== $hook ) {
+					continue;
+				}
+
+				foreach ( $dings as $sig => $data ) {
+					$cron_data[] = (object) array(
+						'hook'     => $hook,
+						'time'     => $time,
+						'sig'      => $sig,
+						'args'     => $data['args'],
+						'schedule' => $data['schedule'],
+						'interval' => isset( $data['interval'] ) ? $data['interval'] : null,
+					);
+				}
+			}
+		}
+
+		return $cron_data;
+	}
+
+	/**
+	 * Debug
+	 *
+	 * @return bool
+	 */
+	protected function cron_debug() {
+		if ( ! defined( 'WP_DEBUG' ) || false === WP_DEBUG ) {
+			return false;
+		}
+
+		// Check type of debug.
+		if ( 'manual' === $this->debug_type ) {
+			remove_action( $this->ID, [ $this, 'run' ] );
+			add_action( 'init', [ $this, 'run' ] );
+
+			return true;
+		}
+
+		$cron_data = $this->get_cron_data();
+
+		if ( empty( $cron_data ) || count( $cron_data ) > 1 ) {
+			return false;
+		}
+
+		delete_transient( 'doing_cron' );
+		wp_schedule_single_event( time() - 1, $cron_data[0]->hook, $cron_data[0]->args );
+		spawn_cron();
+
+		return true;
 	}
 
 	/**
