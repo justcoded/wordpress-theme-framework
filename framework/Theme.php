@@ -114,6 +114,13 @@ abstract class Theme {
 	);
 
 	/**
+	 * Disable gutenberg for posts and custom post type.
+	 *
+	 * @var array $disable_gutenberg_post_type
+	 */
+	public $disable_gutenberg_post_type = [];
+
+	/**
 	 * Init actions and hooks
 	 */
 	protected function __construct() {
@@ -257,6 +264,12 @@ abstract class Theme {
 
 		if ( ! empty( $this->html5 ) && is_array( $this->html5 ) ) {
 			add_theme_support( 'html5', $this->html5 );
+		}
+
+		if ( ! empty( $this->disable_gutenberg_post_type ) && is_array( $this->disable_gutenberg_post_type ) ) {
+			foreach ( $this->disable_gutenberg_post_type as $post_type ) {
+				add_filter( 'use_block_editor_for_' . $post_type, '__return_false', 10 );
+			}
 		}
 
 		/**
