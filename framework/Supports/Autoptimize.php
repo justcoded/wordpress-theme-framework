@@ -1,4 +1,5 @@
 <?php
+
 namespace JustCoded\WP\Framework\Supports;
 
 use JustCoded\WP\Framework\Objects\Singleton;
@@ -54,7 +55,7 @@ class Autoptimize {
 			}
 		}
 		add_filter( 'autoptimize_filter_html_before_minify', array( $this, 'add_dns_prefetch' ) );
-		add_filter( 'autoptimize_filter_html_before_minify', array( $this, 'add_target_rel' ) );
+		add_filter( 'autoptimize_filter_html_before_minify', array( $this, 'add_external_links_target_rel' ) );
 	}
 
 	/**
@@ -136,39 +137,32 @@ class Autoptimize {
 	 *
 	 * @return string
 	 */
-	public function add_target_rel( $content ) {
-		$tags_matches = [];
-
-		if ( preg_match_all( '#<a.*>.*<\/a>#Usmi', $content, $matches ) ) {
-			$tags_matches = array_merge( $tags_matches, $matches[0] );
-		}
-
-		if ( empty( $tags_matches ) ) {
+	public function add_external_links_target_rel( $content ) {
+		if ( ! preg_match_all( '#<a.*>.*<\/a>#Usmi', $content, $matches ) ) {
 			return $content;
 		}
 
 		preg_match( '#http(s)?\:\/\/(([a-z0-9\_\-\.]+)\.([a-z0-9]{2,5}))\/?#', site_url(), $site_domain );
 
-		foreach ( $tags_matches as $tag ) {
-			if ( preg_match( '#href="(http\:\/\/|https\:\/\/|\/\/)(([a-z0-9\_\-\.]+)\.([a-z0-9]{2,5})).*"#', $tag, $domain ) ) {
+		foreach ( $matches[0] as $tag ) {
+			if ( preg_match( '#href="(http\:\/\/|https\:\/\/|\/\/)(([a-z0-9\_\-\.]+)\.([a-z0-9]{2,5}))"#Usmi', $tag, $domain ) ) {
 				if ( false !== strpos( $domain[2], $site_domain[2] ) ) {
 					continue;
 				}
 
 				$basic_tag = $tag;
 
-				if ( ! preg_match( '#rel="(.*)"#', $basic_tag, $rel_domain ) ) {
+				if ( ! preg_match( '#rel="(.*)"#Usmi', $basic_tag, $rel_domain ) ) {
 					$tag = str_replace( $domain[0], $domain[0] . ' rel="noopener noreferrer"', $tag );
 				}
 
-				if ( ! preg_match( '#target="(.*)"#', $basic_tag, $target_domain ) ) {
+				if ( ! preg_match( '#target="(.*)"#Usmi', $basic_tag, $target_domain ) ) {
 					$tag = str_replace( $domain[0], $domain[0] . ' target="_blank"', $tag );
 				}
 
 				$content = str_replace( $basic_tag, $tag, $content );
 			}
 		}
-
 
 		return $content;
 	}
