@@ -1,10 +1,10 @@
 <?php
 
-
 namespace JustCoded\WP\Framework\Objects;
 
 /**
  * Class Cronjob
+ *
  * @package JustCoded\WP\Framework\Objects
  *
  * @method Cronjob instance() static
@@ -18,6 +18,23 @@ abstract class Cronjob {
 	const FREQUENCY_ONCE = 'single';
 
 	/**
+	 * Constant for hourly cron
+	 */
+	const FREQUENCY_HOURLY = 'hourly';
+
+	/**
+	 * Constant for twicedaily cron
+	 */
+	const FREQUENCY_TWICEDAILY = 'twicedaily';
+
+	/**
+	 * Constant for daily cron
+	 */
+	const FREQUENCY_DAILY = 'daily';
+
+	/**
+	 * Cron id
+	 *
 	 * @var string
 	 */
 	protected $ID;
@@ -43,21 +60,6 @@ abstract class Cronjob {
 	protected $interval;
 
 	/**
-	 * @var bool $debug Debug status. Default 'false'. Accepts 'true', 'false'.
-	 */
-	protected $debug = false;
-
-	/**
-	 * @var string $debug_type Debug type. Default 'manual'. Accepts 'auto', 'manual'.
-	 */
-	protected $debug_type = 'manual';
-
-	/**
-	 * @var array
-	 */
-	private $frequency = [ 'hourly', 'twicedaily', 'daily' ];
-
-	/**
 	 * Cronjob constructor.
 	 *
 	 * @throws \Exception
@@ -68,19 +70,16 @@ abstract class Cronjob {
 		}
 
 		// register action hook.
-		add_action( $this->ID, [ $this, 'run' ] );
+		add_action( $this->ID, [ $this, 'handle' ] );
 
-		// debug cronjob
-		if ( isset( $this->debug ) && true === $this->debug ) {
-			$this->cron_debug();
-		}
+		$this->cron_debug();
 
 		if ( static::FREQUENCY_ONCE !== $this->schedule ) {
 			// deactivation hook for repeatable event.
 			add_action( 'switch_theme', [ $this, 'deactivate' ] );
 		}
 
-		if ( ! in_array( $this->schedule, $this->frequency, true ) ) {
+		if ( ! in_array( $this->schedule, $this->get_all_frequency(), true ) ) {
 			if ( empty( $this->interval ) || ! is_numeric( $this->interval ) ) {
 				throw new \Exception( static::class . ' class: $interval property is required and must be numeric if you use custom schedule' );
 			}
@@ -101,10 +100,10 @@ abstract class Cronjob {
 	 * @return array
 	 */
 	public function register_custom_schedule( $schedule ) {
-		$schedule[ $this->schedule ] = array(
+		$schedule[ $this->schedule ] = [
 			'interval' => $this->interval,
-			'display'  => $this->schedule_description ?? $this->ID . ' : ' . $this->schedule
-		);
+			'display'  => $this->schedule_description ?? $this->ID . ' : ' . $this->schedule,
+		];
 
 		return $schedule;
 	}
@@ -136,35 +135,16 @@ abstract class Cronjob {
 	}
 
 	/**
-	 * Get_cron_data
+	 * Get all frequency
 	 *
 	 * @return array
 	 */
-	protected function get_cron_data() {
-		$crons     = _get_cron_array();
-		$cron_data = [];
-
-		foreach ( $crons as $time => $cron ) {
-			foreach ( $cron as $hook => $dings ) {
-
-				if ( $this->ID !== $hook ) {
-					continue;
-				}
-
-				foreach ( $dings as $sig => $data ) {
-					$cron_data[] = (object) array(
-						'hook'     => $hook,
-						'time'     => $time,
-						'sig'      => $sig,
-						'args'     => $data['args'],
-						'schedule' => $data['schedule'],
-						'interval' => isset( $data['interval'] ) ? $data['interval'] : null,
-					);
-				}
-			}
-		}
-
-		return $cron_data;
+	protected function get_all_frequency() {
+		return [
+			self::FREQUENCY_HOURLY,
+			self::FREQUENCY_TWICEDAILY,
+			self::FREQUENCY_DAILY,
+		];
 	}
 
 	/**
@@ -177,29 +157,18 @@ abstract class Cronjob {
 			return false;
 		}
 
-		// Check type of debug.
-		if ( 'manual' === $this->debug_type ) {
-			remove_action( $this->ID, [ $this, 'run' ] );
-			add_action( 'init', [ $this, 'run' ] );
-
-			return true;
-		}
-
-		$cron_data = $this->get_cron_data();
-
-		if ( empty( $cron_data ) || count( $cron_data ) > 1 ) {
+		if ( ! isset( $_GET['do_cron'] ) || $_GET['do_cron'] !== $this->ID ) {
 			return false;
 		}
 
-		delete_transient( 'doing_cron' );
-		wp_schedule_single_event( time() - 1, $cron_data[0]->hook, $cron_data[0]->args );
-		spawn_cron();
+		remove_action( $this->ID, [ $this, 'handle' ] );
+		add_action( 'init', [ $this, 'handle' ] );
 
 		return true;
 	}
 
 	/**
-	 * Run action
+	 * Handle function
 	 */
-	abstract public function run();
+	abstract public function handle();
 }
