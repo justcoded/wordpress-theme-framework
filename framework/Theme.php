@@ -116,9 +116,12 @@ abstract class Theme {
 	/**
 	 * Disable gutenberg for posts and custom post type.
 	 *
-	 * @var array $disable_gutenberg_post_type
+	 * Set TRUE to disable it totally.
+	 * Set ARRAY to disable only specific ones.
+	 *
+	 * @var array|bool $disable_gutenberg
 	 */
-	public $disable_gutenberg_post_type = [];
+	public $disable_gutenberg;
 
 	/**
 	 * Init actions and hooks
@@ -266,9 +269,15 @@ abstract class Theme {
 			add_theme_support( 'html5', $this->html5 );
 		}
 
-		if ( ! empty( $this->disable_gutenberg_post_type ) && is_array( $this->disable_gutenberg_post_type ) ) {
-			foreach ( $this->disable_gutenberg_post_type as $post_type ) {
-				add_filter( 'use_block_editor_for_' . $post_type, '__return_false', 10 );
+		if ( isset( $this->disable_gutenberg ) ) {
+			if ( is_bool( $this->disable_gutenberg ) && ! empty( $this->disable_gutenberg ) ) {
+				add_filter( 'use_block_editor_for_post_type', '__return_false', 10 );
+			}
+
+			if ( is_array( $this->disable_gutenberg ) ) {
+				add_filter( 'use_block_editor_for_post_type', function ( $use_block_editor, $post_type ) {
+					return ! in_array( $post_type, $this->disable_gutenberg, true );
+				}, 10, 2 );
 			}
 		}
 
@@ -350,7 +359,8 @@ abstract class Theme {
 		}
 
 		foreach ( $scripts as $filename ) {
-			wp_enqueue_script( '_jmvt-' . preg_replace( '/(\.(.+?))$/', '', $filename ), $base_uri . $filename, $dependencies, $this->version, true );
+			wp_enqueue_script( '_jmvt-' . preg_replace( '/(\.(.+?))$/', '', $filename ), $base_uri . $filename, $dependencies,
+				$this->version, true );
 		}
 	}
 
