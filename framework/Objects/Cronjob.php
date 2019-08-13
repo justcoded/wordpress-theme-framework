@@ -13,48 +13,56 @@ abstract class Cronjob {
 	use Singleton;
 
 	/**
-	 * Constant for single cron
+	 * Constant for single cron.
 	 */
 	const FREQUENCY_ONCE = 'single';
 
 	/**
-	 * Constant for hourly cron
+	 * Constant for hourly cron.
 	 */
 	const FREQUENCY_HOURLY = 'hourly';
 
 	/**
-	 * Constant for twicedaily cron
+	 * Constant for twicedaily cron.
 	 */
 	const FREQUENCY_TWICEDAILY = 'twicedaily';
 
 	/**
-	 * Constant for daily cron
+	 * Constant for daily cron.
 	 */
 	const FREQUENCY_DAILY = 'daily';
 
 	/**
-	 * Cron id
+	 * Cron id.
 	 *
 	 * @var string
 	 */
 	protected $ID;
 
 	/**
+	 * Start time.
+	 *
 	 * @var int|string
 	 */
 	protected $start;
 
 	/**
+	 * Schedule name.
+	 *
 	 * @var string
 	 */
 	protected $schedule;
 
 	/**
+	 * Cronjob schedule description.
+	 *
 	 * @var string
 	 */
 	protected $schedule_description;
 
 	/**
+	 * Interval in seconds.
+	 *
 	 * @var int
 	 */
 	protected $interval;
@@ -81,7 +89,7 @@ abstract class Cronjob {
 
 		if ( ! in_array( $this->schedule, $this->get_all_frequency(), true ) ) {
 			if ( empty( $this->interval ) || ! is_numeric( $this->interval ) ) {
-				throw new \Exception( static::class . ' class: $interval property is required and must be numeric if you use custom schedule' );
+				throw new \Exception( static::class . ' class: $interval property is required and must be numeric if you use a custom schedule' );
 			}
 
 			// register custom schedule.
