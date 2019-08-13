@@ -163,7 +163,10 @@ abstract class Cronjob {
 		}
 
 		remove_action( $this->ID, [ $this, 'handle' ] );
-		add_action( 'init', [ $this, 'handle' ] );
+		add_action( 'init', function () {
+			$this->handle();
+			wp_die( 'Finished cronjob <code>' . esc_attr__( $this->ID ) . '</code>' );
+		}, 99 );
 
 		return true;
 	}
