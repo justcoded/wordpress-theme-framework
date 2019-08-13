@@ -13,27 +13,27 @@ abstract class Cronjob {
 	use Singleton;
 
 	/**
-	 * Constant for single cron.
+	 * Constant for single cron
 	 */
 	const FREQUENCY_ONCE = 'single';
 
 	/**
-	 * Constant for hourly cron.
+	 * Constant for hourly cron
 	 */
 	const FREQUENCY_HOURLY = 'hourly';
 
 	/**
-	 * Constant for twicedaily cron.
+	 * Constant for twicedaily cron
 	 */
 	const FREQUENCY_TWICEDAILY = 'twicedaily';
 
 	/**
-	 * Constant for daily cron.
+	 * Constant for daily cron
 	 */
 	const FREQUENCY_DAILY = 'daily';
 
 	/**
-	 * Cron id.
+	 * Cron id
 	 *
 	 * @var string
 	 */
@@ -47,18 +47,11 @@ abstract class Cronjob {
 	protected $start;
 
 	/**
-	 * Schedule name.
+	 * Frequency name.
 	 *
 	 * @var string
 	 */
-	protected $schedule;
-
-	/**
-	 * Cronjob schedule description.
-	 *
-	 * @var string
-	 */
-	protected $schedule_description;
+	protected $frequency;
 
 	/**
 	 * Interval in seconds.
@@ -82,12 +75,12 @@ abstract class Cronjob {
 
 		$this->cron_debug();
 
-		if ( static::FREQUENCY_ONCE !== $this->schedule ) {
+		if ( static::FREQUENCY_ONCE !== $this->frequency ) {
 			// deactivation hook for repeatable event.
 			add_action( 'switch_theme', [ $this, 'deactivate' ] );
 		}
 
-		if ( ! in_array( $this->schedule, $this->get_all_frequency(), true ) ) {
+		if ( ! in_array( $this->frequency, $this->get_standard_frequencies(), true ) ) {
 			if ( empty( $this->interval ) || ! is_numeric( $this->interval ) ) {
 				throw new \Exception( static::class . ' class: $interval property is required and must be numeric if you use a custom schedule' );
 			}
@@ -101,19 +94,19 @@ abstract class Cronjob {
 	}
 
 	/**
-	 * Register_custom_schedule
+	 * Register custom schedule.
 	 *
-	 * @param array $schedule Non-default schedule.
+	 * @param array $schedules Non-default schedule.
 	 *
 	 * @return array
 	 */
-	public function register_custom_schedule( $schedule ) {
-		$schedule[ $this->schedule ] = [
+	public function register_custom_schedule( $schedules ) {
+		$schedules[ $this->frequency ] = [
 			'interval' => $this->interval,
-			'display'  => $this->schedule_description ?? $this->ID . ' : ' . $this->schedule,
+			'display'  => $this->frequency,
 		];
 
-		return $schedule;
+		return $schedules;
 	}
 
 	/**
@@ -126,10 +119,10 @@ abstract class Cronjob {
 			$this->start = strtotime( $this->start );
 		}
 
-		if ( static::FREQUENCY_ONCE === $this->schedule ) {
+		if ( static::FREQUENCY_ONCE === $this->frequency ) {
 			wp_schedule_single_event( $this->start, $this->ID );
 		} elseif ( ! wp_next_scheduled( $this->ID ) ) {
-			wp_schedule_event( $this->start, $this->schedule, $this->ID );
+			wp_schedule_event( $this->start, $this->frequency, $this->ID );
 		}
 	}
 
@@ -147,7 +140,7 @@ abstract class Cronjob {
 	 *
 	 * @return array
 	 */
-	protected function get_all_frequency() {
+	protected function get_standard_frequencies() {
 		return [
 			self::FREQUENCY_HOURLY,
 			self::FREQUENCY_TWICEDAILY,
