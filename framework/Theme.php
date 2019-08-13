@@ -359,8 +359,7 @@ abstract class Theme {
 		}
 
 		foreach ( $scripts as $filename ) {
-			wp_enqueue_script( '_jmvt-' . preg_replace( '/(\.(.+?))$/', '', $filename ), $base_uri . $filename, $dependencies,
-				$this->version, true );
+			wp_enqueue_script( '_jmvt-' . preg_replace( '/(\.(.+?))$/', '', $filename ), $base_uri . $filename, $dependencies, $this->version, true );
 		}
 	}
 
