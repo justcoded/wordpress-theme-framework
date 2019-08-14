@@ -114,12 +114,12 @@ abstract class Rest_Controller extends \WP_REST_Controller {
 	abstract public function init();
 
 	/**
-	 * Get_permalink
+	 * Get permalink
 	 *
-	 * @param string $slug_key .
+	 * @param string $alias .
 	 * @param array  $args .
 	 *
-	 * @return string|bool
+	 * @return string
 	 */
 	public static function get_permalink( $alias, $args = array() ) {
 		if ( is_array( $alias ) ) {
@@ -128,39 +128,22 @@ abstract class Rest_Controller extends \WP_REST_Controller {
 
 		$instance = static::instance();
 
-		$data       = [];
-		$route      = $instance->routes[ $alias ]['route'];
-		$slug_regex = str_replace( [ '(', ')' ], [ '_*(', ')*_' ], $route );
-		$rest_url   = rest_url( $instance->namespace . '/' . $instance->resource_name );
+		$data         = [];
+		$route        = $instance->routes[ $alias ]['route'];
+		$slug_convert = preg_replace( '/(\(\?\w+<(\w+)>(.*?)\))/i', '{$2}', $route );
+		$rest_url     = rest_url( $instance->namespace . '/' . $instance->resource_name );
 
-
-		if ( ! preg_match_all( '/<(\w+)>/i', $route, $args_matches ) ) {
-			return $rest_url;
-		}
-
-		if ( ! preg_match_all( '/_\*(.*?)\*_/i', $slug_regex, $data_matches ) ) {
-			return $rest_url;
-		}
-
-		foreach ( $args_matches[1] as $match ) {
-			if ( array_key_exists( $match, $args ) ) {
-				$data[ $match ] = $args[ $match ];
-				unset( $args[ $match ] );
-			}
-		}
-
-		$query_args = add_query_arg( [ $args ] );
-
-		foreach ( $data_matches[1] as $match ) {
-			if ( ! preg_match( '/<(\w+)>/i', $match, $key_match ) ) {
+		foreach ( $args as $key => $value ) {
+			if ( false === strpos( $slug_convert, $key ) ) {
 				continue;
 			}
-
-			if ( ! empty( $data[ $key_match[1] ] ) ) {
-				$route = str_replace( $match, $data[ $key_match[1] ], $route );
-			}
+			$data[ '{' . $key . '}' ] = $value;
+			unset( $args[ $key ] );
 		}
 
-		return $rest_url . $route . $query_args;
+		$route    = strtr( $slug_convert, $data );
+		$rest_url = add_query_arg( [ $args ], $rest_url . $route );
+
+		return $rest_url;
 	}
 }
