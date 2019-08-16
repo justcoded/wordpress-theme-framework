@@ -104,20 +104,21 @@ abstract class Rest_Controller extends \WP_REST_Controller {
 	}
 
 	/**
-	 * This function will update the ACF value in the database.
+	 * Update_acf_value
 	 *
-	 * @param int    $post_id Post ID.
-	 * @param string $selector The value to save in the database.
-	 * @param mixed  $values Post ID.
+	 * @param int   $post_id Post ID.
+	 * @param array $args Arguments.
 	 *
 	 * @return \WP_Error|bool
 	 */
-	protected function update_acf_fields( $post_id, $selector, $values ) {
-		if ( empty( $values ) || empty( $selector ) ) {
-			return new \WP_Error( 'rest_employee_empty_selector_values', __( 'Empty selector or values.' ), array( 'status' => 500 ) );
+	protected function update_acf_fields( $post_id, $args ) {
+		if ( empty( $args ) ) {
+			return new \WP_Error( 'rest_employee_empty_args', __( 'Empty custom args.' ), array( 'status' => 500 ) );
 		}
 
-		update_field( $selector, $values, $post_id );
+		foreach ( $args as $selector => $value ) {
+			update_field( $selector, $value, $post_id );
+		}
 
 		return true;
 	}
