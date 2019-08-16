@@ -34,7 +34,7 @@ abstract class Rest_Controller extends \WP_REST_Controller {
 	 *
 	 * @var array
 	 */
-	private $routes = [];
+	protected $routes = [];
 
 	/**
 	 * Constructor
@@ -101,6 +101,25 @@ abstract class Rest_Controller extends \WP_REST_Controller {
 	 */
 	protected function response( $data, $status = 200, $headers = [] ) {
 		return new \WP_REST_Response( $data, $status, $headers );
+	}
+
+	/**
+	 * This function will update the ACF value in the database.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $selector The value to save in the database.
+	 * @param mixed  $values Post ID.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	protected function update_acf_fields( $post_id, $selector, $values ) {
+		if ( empty( $values ) || empty( $selector ) ) {
+			return new \WP_Error( 'rest_employee_empty_selector_values', __( 'Empty selector or values.' ), array( 'status' => 500 ) );
+		}
+
+		update_field( $selector, $values, $post_id );
+
+		return true;
 	}
 
 	/**
