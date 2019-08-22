@@ -5,7 +5,7 @@ Tags: mvc theme, theme boilerplate, oop theme, mini framework
 Author: JustCoded / Alex Prokopenko
 Author URI: http://justcoded.com/
 Requires at least: 4.7
-Tested up to: 4.9.8
+Tested up to: 5.2.2
 License: GPL3
 Stable tag: 3.0
 
@@ -92,6 +92,11 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 3.1 - 22 Aug 2019 =
+    * New: Theme class property to disable gutenberg for the whole site or specific post types.
+    * New: Autoptimize post-content filter to add link rel nofollow to external links.
+    * New: Base class for Cron jobs, which wraps WordPress Cron API and simplify its usage.
+    * New: Base class for REST Controller, which wraps WordPress REST Controller and simplify its usage. 
 = Version 3.0.2 - 21 Feb 2019 =
     * Bugfix: Faker generated images doesn't have thumbnails.
 = Version 3.0.1 - 14 Jan 2019 =
