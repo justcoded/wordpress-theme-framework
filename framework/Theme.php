@@ -130,6 +130,7 @@ abstract class Theme {
 		$this->register_post_types();
 		$this->register_taxonomies();
 		$this->init_views_templates();
+		$this->register_api_endpoints();
 
 		/**
 		 * Pretty standard theme hooks
@@ -402,6 +403,17 @@ abstract class Theme {
 	 * Each Taxonomy register it's own action hook
 	 */
 	public function register_taxonomies() {
+	}
+
+	/**
+	 * Register API Endpoints
+	 * Usage:
+	 *      new \namespace\App\Endpoints\MyEndpoint();
+	 *
+	 * Each endpoint register it's own action hook
+	 */
+	public function register_api_endpoints() {
+
 	}
 
 	/**
