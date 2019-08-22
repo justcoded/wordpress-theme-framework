@@ -114,12 +114,23 @@ abstract class Theme {
 	);
 
 	/**
+	 * Disable gutenberg for posts and custom post type.
+	 *
+	 * Set TRUE to disable it totally.
+	 * Set ARRAY to disable only specific ones.
+	 *
+	 * @var array|bool $disable_gutenberg
+	 */
+	public $disable_gutenberg;
+
+	/**
 	 * Init actions and hooks
 	 */
 	protected function __construct() {
 		$this->register_post_types();
 		$this->register_taxonomies();
 		$this->init_views_templates();
+		$this->register_api_endpoints();
 
 		/**
 		 * Pretty standard theme hooks
@@ -259,6 +270,18 @@ abstract class Theme {
 			add_theme_support( 'html5', $this->html5 );
 		}
 
+		if ( isset( $this->disable_gutenberg ) ) {
+			if ( is_bool( $this->disable_gutenberg ) && ! empty( $this->disable_gutenberg ) ) {
+				add_filter( 'use_block_editor_for_post_type', '__return_false', 10 );
+			}
+
+			if ( is_array( $this->disable_gutenberg ) ) {
+				add_filter( 'use_block_editor_for_post_type', function ( $use_block_editor, $post_type ) {
+					return ! in_array( $post_type, $this->disable_gutenberg, true );
+				}, 10, 2 );
+			}
+		}
+
 		/**
 		 * Remove global content width.
 		 * This can affect "width" attribute for images. If required can be overwritten in app file.
@@ -380,6 +403,17 @@ abstract class Theme {
 	 * Each Taxonomy register it's own action hook
 	 */
 	public function register_taxonomies() {
+	}
+
+	/**
+	 * Register API Endpoints
+	 * Usage:
+	 *      new \namespace\App\Endpoints\MyEndpoint();
+	 *
+	 * Each endpoint register it's own action hook
+	 */
+	public function register_api_endpoints() {
+
 	}
 
 	/**
