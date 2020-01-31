@@ -145,7 +145,7 @@ class Autoptimize {
 		preg_match( '#http(s)?\:\/\/(([a-z0-9\_\-\.]+)\.([a-z0-9]{2,5}))\/?#', site_url(), $site_domain );
 
 		foreach ( $matches[0] as $tag ) {
-			if ( preg_match( '#href="(http\:\/\/|https\:\/\/|\/\/)(([a-z0-9\_\-\.]+)\.([a-z0-9]{2,5}))"#Usmi', $tag, $domain ) ) {
+			if ( preg_match( '#href="(http\:\/\/|https\:\/\/|\/\/)(([a-z0-9\_\-\.]+)\.([a-z0-9]{2,5}))\/#Usmi', $tag, $domain ) ) {
 				if ( false !== strpos( $domain[2], $site_domain[2] ) ) {
 					continue;
 				}
