@@ -157,7 +157,7 @@ class Autoptimize {
 				}
 
 				if ( ! preg_match( '#target="(.*)"#Usmi', $basic_tag, $target_domain ) ) {
-					$tag = str_replace( $domain[0], ' target="_blank"' . $domain[0], $tag );
+					$tag = str_replace( $domain[0], 'target="_blank" ' . $domain[0], $tag );
 				}
 
 				$content = str_replace( $basic_tag, $tag, $content );
