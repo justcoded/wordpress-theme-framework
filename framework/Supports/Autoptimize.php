@@ -145,7 +145,7 @@ class Autoptimize {
 		preg_match( '#http(s)?\:\/\/(([a-z0-9\_\-\.]+)\.([a-z0-9]{2,5}))\/?#', site_url(), $site_domain );
 
 		foreach ( $matches[0] as $tag ) {
-			if ( preg_match( '#href="(http\:\/\/|https\:\/\/|\/\/)(([a-z0-9\_\-\.]+)\.([a-z0-9]{2,5}))\/#Usmi', $tag, $domain ) ) {
+			if ( preg_match( '#href="(http\:\/\/|https\:\/\/|\/\/)(([a-z0-9\_\-\.]+)\.([a-z0-9]{2,5}))(\/|\")#Usmi', $tag, $domain ) ) {
 				if ( false !== strpos( $domain[2], $site_domain[2] ) ) {
 					continue;
 				}
@@ -153,11 +153,11 @@ class Autoptimize {
 				$basic_tag = $tag;
 
 				if ( ! preg_match( '#rel="(.*)"#Usmi', $basic_tag, $rel_domain ) ) {
-					$tag = str_replace( $domain[0], $domain[0] . ' rel="noopener noreferrer"', $tag );
+					$tag = str_replace( $domain[0], 'rel="noopener noreferrer" ' . $domain[0], $tag );
 				}
 
 				if ( ! preg_match( '#target="(.*)"#Usmi', $basic_tag, $target_domain ) ) {
-					$tag = str_replace( $domain[0], $domain[0] . ' target="_blank"', $tag );
+					$tag = str_replace( $domain[0], ' target="_blank"' . $domain[0], $tag );
 				}
 
 				$content = str_replace( $basic_tag, $tag, $content );
