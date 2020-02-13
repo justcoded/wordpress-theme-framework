@@ -124,6 +124,13 @@ abstract class Theme {
 	public $disable_gutenberg;
 
 	/**
+	 * Name of frontend assets folder.
+	 *
+	 * @var string $assets_folder_name
+	 */
+	public $assets_folder_name = 'assets';
+
+	/**
 	 * Init actions and hooks
 	 */
 	protected function __construct() {
@@ -329,7 +336,7 @@ abstract class Theme {
 			$styles = array( $styles );
 		}
 		if ( is_null( $base_uri ) ) {
-			$base_uri = get_template_directory_uri() . '/assets/css/';
+			$base_uri = get_template_directory_uri() . '/' . $this->assets_folder_name . '/css/';
 		}
 
 		foreach ( $styles as $filename ) {
@@ -356,7 +363,7 @@ abstract class Theme {
 		}
 
 		if ( is_null( $base_uri ) ) {
-			$base_uri = get_template_directory_uri() . '/assets/js/';
+			$base_uri = get_template_directory_uri() . '/' . $this->assets_folder_name . '/js/';
 		}
 
 		foreach ( $scripts as $filename ) {
