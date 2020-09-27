@@ -12,6 +12,7 @@ use JustCoded\WP\Framework\Web\Template_Hierarchy;
 use JustCoded\WP\Framework\Supports\Just_Load_More;
 use JustCoded\WP\Framework\Web\View;
 
+
 /**
  * Main base class for theme.
  * Init main path rewrite operations and activate / register hooks
