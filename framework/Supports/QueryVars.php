@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JustCoded\WP\Framework\Supports;
+namespace tcs\Theme\Supports;
 
 /**
  * Class QueryVars
@@ -51,7 +51,8 @@ class QueryVars {
 	/**
 	 * QueryVars constructor.
 	 */
-	public function __construct() {}
+	public function __construct() {
+	}
 
 	/**
 	 * Configure
@@ -71,27 +72,31 @@ class QueryVars {
 	 *
 	 * @return bool
 	 */
-	public function no_sanitize() : bool {
+	public function no_sanitize(): bool {
 		return $this->sanitizing = false;
 	}
 
 	/**
 	 * Get query vars
 	 *
-	 * @param string $method .
+	 * @param string $method Methods: post, get.
 	 * @param string $var .
 	 *
 	 * @return mixed
 	 */
-	public function get_query_vars( $method = '', $var = '' ) {
+	public function get_query_vars( $method = 'any', $var = '' ) {
 		$this->verify_query_vars();
 
-		if ( ! empty( $var ) && isset( $this->query_data[ $method ][ $var ] ) ) {
-			return $this->query_data[ $method ][ $var ];
+		if ( 'any' !== $method && empty( $var ) ) {
+			return $this->query_data[ $method ];
 		}
 
-		if ( ! empty( $method ) ) {
-			return $this->query_data[ $method ];
+		if ( 'any' !== $method && ! empty( $var ) ) {
+			if ( ! isset( $this->query_data[ $method ] ) || ! isset( $this->query_data[ $method ][ $var ] ) ) {
+				return null;
+			}
+
+			return $this->query_data[ $method ][ $var ];
 		}
 
 		return $this->query_data;
@@ -100,13 +105,21 @@ class QueryVars {
 	/**
 	 * Add dynamic query var
 	 *
-	 * @param string $var .
+	 * @param string|array $var .
 	 *
 	 * @return array
 	 */
-	public function add_query_var( $var ) : array {
-		if ( ! empty( $var ) && ! in_array( $var, $this->query_vars, true ) ) {
+	public function add_query_var( $var ): array {
+		if ( ! empty( $var ) && ! is_array( $var ) && ! in_array( $var, $this->query_vars, true ) ) {
 			$this->query_vars[] = $var;
+		}
+
+		if ( ! empty( $var ) && is_array( $var ) ) {
+			foreach ( $var as $item ) {
+				if ( ! in_array( $item, $this->query_vars, true ) ) {
+					$this->query_vars[] = $item;
+				}
+			}
 		}
 
 		return $this->query_vars;
@@ -117,7 +130,7 @@ class QueryVars {
 	 *
 	 * @return array
 	 */
-	protected function verify_query_vars() : array {
+	protected function verify_query_vars(): array {
 		$methods = array(
 			'post' => $_POST,
 			'get'  => $_GET,
@@ -126,6 +139,8 @@ class QueryVars {
 		$_query_data = array();
 
 		foreach ( $methods as $method => $_vars ) {
+			$_query_data[ $method ] = array();
+
 			if ( isset( $_vars[ $this->nonce_name ] ) ) {
 				if ( ! wp_verify_nonce( $_vars[ $this->nonce_name ], $this->nonce_action ) ) {
 					$_query_data = array( $method => 'nonce error' );
