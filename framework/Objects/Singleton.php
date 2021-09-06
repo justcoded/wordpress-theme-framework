@@ -31,7 +31,8 @@ trait Singleton {
 	 *
 	 * @return void
 	 */
-	final private function __clone() {
+	final public function __clone() {
+		throw new \RuntimeException(static::class . ' is singleton and cannot be cloned/serialized.');
 	}
 
 	/**
@@ -40,7 +41,8 @@ trait Singleton {
 	 *
 	 * @return void
 	 */
-	final private function __wakeup() {
+	final public function __wakeup() {
+		throw new \RuntimeException(static::class . ' is singleton and cannot be cloned/serialized.');
 	}
 
 }
