@@ -5,7 +5,7 @@ Tags: mvc theme, theme boilerplate, oop theme, mini framework
 Author: JustCoded / Alex Prokopenko
 Author URI: http://justcoded.com/
 Requires at least: 4.7
-Tested up to: 5.5
+Tested up to: 5.8
 License: GPL3
 Stable tag: 3.0
 
@@ -92,6 +92,9 @@ To upgrade remove the old plugin folder. After than follow the installation step
 
 == Changelog ==
 
+= Version 3.1.5 - 6 Sep 2021 =
+    * PHP 8 support
+    * Tested with WordPress 5.8
 = Version 3.1 - 22 Aug 2019 =
     * New: Theme class property to disable gutenberg for the whole site or specific post types.
     * New: Autoptimize post-content filter to add link rel nofollow to external links.
