@@ -2,9 +2,11 @@
 
 namespace JustCoded\WP\Framework\ACF;
 
-
 use JustCoded\WP\Framework\Objects\Singleton;
 
+/**
+ * Class ACF_Gutenberg
+ */
 abstract class ACF_Gutenberg {
 	use Singleton;
 
@@ -60,35 +62,27 @@ abstract class ACF_Gutenberg {
 	/**
 	 * Register ACF Gutenberg Block.
 	 */
-	public function register_block() {
+	public function register_block(): void {
 		$block_defaults = array(
 			'category' => 'formatting',
 			'icon'     => 'admin-generic',
 		);
 
-		add_filter( 'jc_register_acf_gutenberg_block', function ( $blocks, $block_defaults ) {
-			array_push( $blocks, array(
-				'name'            => $this->slug,
-				'title'           => $this->title,
-				'description'     => $this->description,
-				'icon'            => $this->icon,
-				'keywords'        => $this->keywords,
-				'render_template' => get_stylesheet_directory() . '/views/blocks/' . $this->slug . '.php',
-			) );
+		$block = array(
+			'name'            => $this->slug,
+			'title'           => $this->title,
+			'description'     => $this->description,
+			'icon'            => $this->icon,
+			'keywords'        => $this->keywords,
+			'render_template' => get_stylesheet_directory() . '/views/blocks/' . $this->slug . '.php',
+		);
 
-			return $blocks;
-		}, 10, 2 );
+		$block = wp_parse_args( $block, $block_defaults );
 
-		$blocks = apply_filters( 'jc_register_acf_gutenberg_block', array(), $block_defaults );
+		acf_register_block( $block );
 
-		foreach ( $blocks as $block ) {
-			$block = wp_parse_args( $block, $block_defaults );
-
-			acf_register_block( $block );
-
-			if ( isset( $block['fields'] ) ) {
-				acf_add_local_field_group( $block['fields'] );
-			}
+		if ( isset( $block['fields'] ) ) {
+			acf_add_local_field_group( $block['fields'] );
 		}
 	}
 }
