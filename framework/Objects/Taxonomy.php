@@ -90,6 +90,12 @@ abstract class Taxonomy {
 	 */
 	protected $has_admin_menu = true;
 
+	/**
+	 * Show taxonomy in REST
+	 *
+	 * @var bool
+	 */
+	protected $show_in_rest = true;
 
 	/**
 	 * Optional properties to make full compatibility with standard taxonomy registration
@@ -193,6 +199,7 @@ abstract class Taxonomy {
 			'show_ui'            => $this->has_admin_menu,
 			'show_admin_column'  => $this->admin_posts_column,
 			'show_in_quick_edit' => $this->is_quick_editable,
+			'show_in_rest'       => $this->show_in_rest,
 			'query_var'          => $this->query_var,
 			'rewrite'            => array(
 				'slug'         => $this::$SLUG,
