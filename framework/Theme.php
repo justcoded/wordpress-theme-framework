@@ -157,6 +157,9 @@ abstract class Theme {
 
 		add_filter( 'image_size_names_choose', array( $this, 'image_size_names_choose' ) );
 
+		// Custom SMTP settings.
+		add_action( 'phpmailer_init', array( $this, 'phpmailer_init_smtp' ), 20 );
+
 		/**
 		 * Remove Unnecessary Code from wp_head
 		 */
@@ -309,6 +312,24 @@ abstract class Theme {
 	 */
 	public function image_size_names_choose( $sizes ) {
 		return $this->available_image_sizes;
+	}
+
+	/**
+	 * Redefine certain PHPMailer options with our custom ones.
+	 *
+	 * @param \PHPMailer $phpmailer The PHPMailer instance (passed by reference).
+	 */
+	public function phpmailer_init_smtp( $phpmailer ) {
+		if ( empty( JC_MAIL_USERNAME ) || empty( JC_MAIL_PASSWORD ) ) {
+			return;
+		}
+
+		$phpmailer->isSMTP();
+		$phpmailer->Host     = JC_MAIL_HOST;
+		$phpmailer->SMTPAuth = true;
+		$phpmailer->Port     = JC_MAIL_PORT;
+		$phpmailer->Username = JC_MAIL_USERNAME;
+		$phpmailer->Password = JC_MAIL_PASSWORD;
 	}
 
 	/**
